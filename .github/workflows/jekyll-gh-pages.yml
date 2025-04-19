@@ -20,29 +20,24 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.1'
           bundler-cache: true
+
       - name: Setup Pages
-        uses: actions/configure-pages@v3
+        id: pages
+        uses: actions/configure-pages@v5
+
       - name: Build with Jekyll
-        run: |
-          bundle exec jekyll build
-          ls -la ./_site
+        run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
         env:
           JEKYLL_ENV: production
+
       - name: Upload artifact
-        uses: actions/upload-artifact@v3.1.2
-        with:
-          name: jekyll-site
-          path: ./_site/
-          retention-days: 1
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v2
-        with:
-          path: ./_site/
+        uses: actions/upload-pages-artifact@v3
 
   deploy:
     needs: build
@@ -51,13 +46,6 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v3.0.2
-        with:
-          name: jekyll-site
-          path: ./_site
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2
-
-# Trigger redeploy: Updated to force workflow run
+        uses: actions/deploy-pages@v4
