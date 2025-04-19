@@ -5,15 +5,15 @@ email: urmail2ss@gmail.com
 baseurl: "" # Leave empty for root
 url: "https://shanmuga-sundaram-n.github.io" # Updated with correct GitHub Pages URL
 
-theme: minima # Ensure the theme is correctly specified
+theme: minima # Ensure the theme matches the Gemfile
 
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-sitemap
 
-markdown: kramdown
-highlighter: rouge
+markdown: kramdown # Compatible with Jekyll 3.9.3
+highlighter: rouge # Supported by GitHub Pages
 
 # Navigation links
 nav_links:
