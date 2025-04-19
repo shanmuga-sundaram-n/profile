@@ -4,4 +4,3 @@ gem "github-pages", "~> 228" # Ensure compatibility with GitHub Pages
 gem "jekyll", "~> 3.9.3" # Matches the GitHub Pages-supported Jekyll version
 gem "html-proofer", "~> 3.19.4"
 gem "webrick", "~> 1.8"
-gem "creative-theme-jekyll"
