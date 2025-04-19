@@ -5,7 +5,7 @@ date: 2023-01-01 12:00:00 +0000
 categories: tech
 ---
 
-This is a sample technical blog post. You can write about programming, software engineering, or any technical topic of your choice.
+Welcome to my first technical blog post! Here, I share insights on programming, software engineering, and more.
 
 Here is an example of a code snippet:
 

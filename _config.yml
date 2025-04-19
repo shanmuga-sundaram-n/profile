@@ -1,12 +1,11 @@
 title: "Shan's Personal Website"
 description: "A professional personal website with technical blogs."
 author: Shan
-email: your-email@example.com
+email: urmail2ss@gmail.com
 baseurl: "" # Leave empty for root
-url: "https://yourusername.github.io" # Update with your GitHub Pages URL
+url: "https://shanmuga-sundaram-n.github.io" # Updated with correct GitHub Pages URL
 
-# Remove the theme reference since we will use a local theme
-# theme: feeling-responsive
+theme: minima
 
 plugins:
   - jekyll-feed
@@ -28,8 +27,8 @@ nav_links:
 # Social links (optional)
 social_links:
   - name: "GitHub"
-    url: "https://github.com/yourusername"
+    url: "https://github.com/shanmuga-sundaram-n" # Updated GitHub link
     icon: "fab fa-github"
   - name: "LinkedIn"
-    url: "https://linkedin.com/in/yourusername"
+    url: "https://linkedin.com/in/shanmuga-sundaram-n" # Updated LinkedIn link
     icon: "fab fa-linkedin"

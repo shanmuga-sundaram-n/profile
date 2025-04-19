@@ -1,4 +1,11 @@
-## Welcome to GitHub Pages
+---
+layout: home
+title: "Welcome to Shan's Personal Website"
+---
+
+## Welcome to Shan's Personal Website
+
+Explore technical blogs, projects, and more. Stay tuned for updates!
 
 You can use the [editor on GitHub](https://github.com/urmail2ss/shan_profile/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
 
