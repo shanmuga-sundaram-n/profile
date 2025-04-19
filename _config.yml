@@ -5,7 +5,9 @@ email: your-email@example.com
 baseurl: "" # Leave empty for root
 url: "https://yourusername.github.io" # Update with your GitHub Pages URL
 
-theme: feeling-responsive
+# Remove the theme reference since we will use a local theme
+# theme: feeling-responsive
+
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
