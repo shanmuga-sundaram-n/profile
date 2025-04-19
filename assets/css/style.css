@@ -1,8 +1,17 @@
 /* Existing styles */
 
 header, .site-header {
-  background-color: #123456 !important; /* Replace with your desired color */
-  color: #ffffff !important;            /* Replace with your desired text color */
+  background: linear-gradient(90deg, #123456 0%, #3a7bd5 100%) !important;
+  color: #ffffff !important;
+  border-radius: 0 0 18px 18px;
+  box-shadow: 0 4px 16px rgba(18, 52, 86, 0.15);
+  padding: 24px 40px 28px 40px;
+  transition: box-shadow 0.3s, background 0.3s;
+}
+
+header:hover, .site-header:hover {
+  box-shadow: 0 8px 32px rgba(18, 52, 86, 0.25);
+  background: linear-gradient(90deg, #3a7bd5 0%, #123456 100%) !important;
 }
 
 /* Additional styles */
