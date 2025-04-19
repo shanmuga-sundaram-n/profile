@@ -1,0 +1,8 @@
+/* Existing styles */
+
+header, .site-header {
+  background-color: #123456 !important; /* Replace with your desired color */
+  color: #ffffff !important;            /* Replace with your desired text color */
+}
+
+/* Additional styles */
