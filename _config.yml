@@ -5,10 +5,11 @@ email: your-email@example.com
 baseurl: "" # Leave empty for root
 url: "https://yourusername.github.io" # Update with your GitHub Pages URL
 
-theme: minima
+theme: feeling-responsive
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
+  - jekyll-sitemap
 
 markdown: kramdown
 highlighter: rouge
@@ -21,3 +22,12 @@ nav_links:
     url: "/blog/"
   - title: "About"
     url: "/about/"
+
+# Social links (optional)
+social_links:
+  - name: "GitHub"
+    url: "https://github.com/yourusername"
+    icon: "fab fa-github"
+  - name: "LinkedIn"
+    url: "https://linkedin.com/in/yourusername"
+    icon: "fab fa-linkedin"
