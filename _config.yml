@@ -3,19 +3,19 @@ description: "A professional personal website with technical blogs."
 author: Shan
 email: urmail2ss@gmail.com
 baseurl: "" # Leave empty for root
-url: "https://shanmuga-sundaram-n.github.io" # Updated with correct GitHub Pages URL
+url: "https://shanmuga-sundaram-n.github.io"
 
-theme: minima # Ensure the theme matches the Gemfile
+theme: creative-theme-jekyll
 
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-sitemap
 
-markdown: kramdown # Compatible with Jekyll 3.9.3
-highlighter: rouge # Supported by GitHub Pages
+markdown: kramdown
+highlighter: rouge
 
-# Navigation links
+# Navigation links (update as needed for creative-theme-jekyll)
 nav_links:
   - title: "Home"
     url: "/"
@@ -27,8 +27,8 @@ nav_links:
 # Social links (optional)
 social_links:
   - name: "GitHub"
-    url: "https://github.com/shanmuga-sundaram-n" # Updated GitHub link
+    url: "https://github.com/shanmuga-sundaram-n"
     icon: "fab fa-github"
   - name: "LinkedIn"
-    url: "https://linkedin.com/in/shanmuga-sundaram-n" # Updated LinkedIn link
+    url: "https://linkedin.com/in/shanmuga-sundaram-n"
     icon: "fab fa-linkedin"
