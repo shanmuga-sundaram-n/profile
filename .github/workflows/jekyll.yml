@@ -71,7 +71,9 @@ jobs:
             --allow-hash-href
       
       - name: Upload artifact
-        uses: actions/upload-artifact@v3.1.2 # Updated to the correct version
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: ./_site
 
   # Deployment job
   deploy:
