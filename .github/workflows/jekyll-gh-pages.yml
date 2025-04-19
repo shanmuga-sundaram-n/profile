@@ -31,8 +31,16 @@ jobs:
         run: bundle exec jekyll build
         env:
           JEKYLL_ENV: production
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: github-pages
+          path: _site
+          if-no-files-found: error
       - name: Upload pages artifact
         uses: actions/upload-pages-artifact@v2
+        with:
+          path: _site
 
   deploy:
     needs: build
@@ -41,6 +49,10 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: github-pages
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
