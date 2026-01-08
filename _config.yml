@@ -2,7 +2,7 @@ title: "Shanmuga Sundaram Natarajan's Personal Website"
 description: "A professional personal website with technical blogs."
 author: Shanmuga Sundaram Natarajan
 email: urmail2ss@gmail.com
-baseurl: "/profile" # GitHub Pages subdirectory
+baseurl: "" # GitHub Pages root directory
 url: "https://shanmuga-sundaram-n.github.io"
 
 # Disable default theme to use custom CSS
