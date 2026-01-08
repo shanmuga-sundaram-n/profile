@@ -816,6 +816,17 @@ strong {
   margin-bottom: var(--space-lg);
 }
 
+.mt-xl {
+  margin-top: var(--space-xl);
+}
+
+.lead {
+  font-size: var(--font-size-xl);
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  margin-bottom: var(--space-xl);
+}
+
 /* ============================================
    MEDIA QUERIES
    ============================================ */
