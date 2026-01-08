@@ -5,8 +5,6 @@ email: urmail2ss@gmail.com
 baseurl: "" # Leave empty for root
 url: "https://shanmuga-sundaram-n.github.io"
 
-theme: minima
-
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
@@ -15,16 +13,21 @@ plugins:
 markdown: kramdown
 highlighter: rouge
 
-# Navigation links (update as needed for creative-theme-jekyll)
-nav_links:
-  - title: "Home"
-    url: "/"
-  - title: "Blog"
-    url: "/blog/"
-  - title: "About"
-    url: "/about/"
+# Permalink structure
+permalink: /blog/:year/:month/:day/:title/
 
-# Social links (optional)
+# Pagination
+paginate: 10
+paginate_path: "/blog/page:num/"
+
+# Exclude files from build
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+
+# Social links
 social_links:
   - name: "GitHub"
     url: "https://github.com/shanmuga-sundaram-n"

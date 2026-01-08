@@ -1,6 +1,5 @@
 source "https://rubygems.org"
 
-gem "github-pages", "~> 228"
-gem "jekyll", "~> 3.9.3"
-gem "html-proofer", "~> 3.19.4"
+# GitHub Pages will use this to build the site
+gem "github-pages", "~> 228", group: :jekyll_plugins
 gem "webrick", "~> 1.8"

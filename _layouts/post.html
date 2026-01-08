@@ -1,0 +1,60 @@
+---
+layout: default
+---
+
+<div class="hero" style="min-height: 40vh; padding-top: 120px;">
+    <div class="hero-background"></div>
+    <div class="hero-gradient"></div>
+
+    <div class="hero-content container">
+        <div class="post-meta" style="justify-content: center; margin-bottom: var(--space-md);">
+            <span><i class="far fa-calendar"></i> {{ page.date | date: "%B %d, %Y" }}</span>
+            <span><i class="far fa-clock"></i> {{ content | reading_time }} min read</span>
+            {% if page.categories %}
+            <span><i class="fas fa-folder"></i> {{ page.categories | join: ', ' }}</span>
+            {% endif %}
+        </div>
+        <h1 class="hero-title" style="font-size: var(--font-size-4xl);">{{ page.title }}</h1>
+    </div>
+</div>
+
+<article class="section">
+    <div class="container" style="max-width: 800px;">
+        <div class="card" style="padding: var(--space-2xl);">
+            <div class="post-content">
+                {{ content }}
+            </div>
+
+            {% if page.tags %}
+            <div class="tags mt-xl">
+                {% for tag in page.tags %}
+                <span class="tag">{{ tag }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="mt-xl" style="padding-top: var(--space-xl); border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-md);">
+                    {% if page.previous.url %}
+                    <a href="{{ page.previous.url | relative_url }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Previous Post
+                    </a>
+                    {% endif %}
+
+                    {% if page.next.url %}
+                    <a href="{{ page.next.url | relative_url }}" class="btn btn-secondary">
+                        Next Post <i class="fas fa-arrow-right"></i>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-xl">
+            <a href="{{ '/blog/' | relative_url }}" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Back to Blog
+            </a>
+        </div>
+    </div>
+</article>

@@ -1,0 +1,62 @@
+- title: "Personal Finance Tracker"
+  description: "A comprehensive web application for tracking personal expenses and income with monthly reports, category breakdowns, and INR currency support. Built with modern web technologies."
+  image: "/assets/images/projects/finance-tracker.png"
+  technologies:
+    - React
+    - Node.js
+    - PostgreSQL
+    - Express
+  github: "https://github.com/shanmuga-sundaram-n/finance-tracker"
+  demo: ""
+
+- title: "RAG Application"
+  description: "A Retrieval-Augmented Generation (RAG) application with web-based UI featuring vector store visualization, document processing, and intelligent query responses."
+  image: "/assets/images/projects/rag-app.png"
+  technologies:
+    - Python
+    - LangChain
+    - Vector DB
+    - FastAPI
+  github: "https://github.com/shanmuga-sundaram-n/rag-app"
+  demo: ""
+
+- title: "AWS Study Guide"
+  description: "Comprehensive study notes and guide for AWS Solutions Architect Associate certification, covering all major AWS services, best practices, and architectural patterns."
+  image: "/assets/images/projects/aws-notes.png"
+  technologies:
+    - AWS
+    - Documentation
+    - Markdown
+  github: "https://github.com/shanmuga-sundaram-n/aws-notes"
+  demo: ""
+
+- title: "Resume Generator"
+  description: "Python-based resume generation tool that creates professional resumes in both DOCX and PDF formats from structured data."
+  image: "/assets/images/projects/resume-gen.png"
+  technologies:
+    - Python
+    - Pandoc
+    - Document Processing
+  github: "https://github.com/shanmuga-sundaram-n/resume-generator"
+  demo: ""
+
+- title: "Portfolio Website"
+  description: "Modern, responsive personal portfolio website built with Jekyll and hosted on GitHub Pages. Features a clean design with blog integration."
+  image: "/assets/images/projects/portfolio.png"
+  technologies:
+    - Jekyll
+    - SCSS
+    - GitHub Pages
+    - Responsive Design
+  github: "https://github.com/shanmuga-sundaram-n/profile"
+  demo: "https://shanmuga-sundaram-n.github.io"
+
+- title: "Sample Project"
+  description: "Add your own projects here! This is a placeholder to show how projects are displayed. Replace with your actual work."
+  image: "/assets/images/projects/placeholder.png"
+  technologies:
+    - Technology 1
+    - Technology 2
+    - Technology 3
+  github: ""
+  demo: ""

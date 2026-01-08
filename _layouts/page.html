@@ -1,0 +1,23 @@
+---
+layout: default
+---
+
+<div class="hero" style="min-height: 40vh; padding-top: 120px;">
+    <div class="hero-background"></div>
+    <div class="hero-gradient"></div>
+
+    <div class="hero-content container">
+        <h1 class="hero-title" style="font-size: var(--font-size-4xl);">{{ page.title }}</h1>
+        {% if page.description %}
+        <p class="hero-description">{{ page.description }}</p>
+        {% endif %}
+    </div>
+</div>
+
+<section class="section">
+    <div class="container">
+        <article class="content">
+            {{ content }}
+        </article>
+    </div>
+</section>

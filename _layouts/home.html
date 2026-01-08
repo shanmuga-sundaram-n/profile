@@ -1,0 +1,196 @@
+---
+layout: default
+---
+
+<div class="hero">
+    <div class="hero-background"></div>
+    <div class="hero-gradient"></div>
+
+    <div class="hero-content container">
+        <p class="hero-subtitle">Welcome to my digital space</p>
+        <h1 class="hero-title">Hi, I'm {{ site.author }}</h1>
+        <p class="hero-description">
+            Software Engineer | Problem Solver | Tech Enthusiast<br>
+            Building innovative solutions and sharing knowledge through code
+        </p>
+        <div class="hero-cta">
+            <a href="{{ '/projects/' | relative_url }}" class="btn btn-primary">
+                <i class="fas fa-code"></i> View Projects
+            </a>
+            <a href="{{ '/contact/' | relative_url }}" class="btn btn-secondary">
+                <i class="fas fa-envelope"></i> Get in Touch
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- About Preview -->
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">About Me</h2>
+            <p class="section-subtitle">Passionate about technology and continuous learning</p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card card-glass">
+                <h3><i class="fas fa-laptop-code"></i> What I Do</h3>
+                <p>I specialize in building scalable web applications, working with modern technologies, and solving
+                    complex technical challenges. My focus is on writing clean, maintainable code and creating
+                    exceptional user experiences.</p>
+            </div>
+
+            <div class="card card-glass">
+                <h3><i class="fas fa-lightbulb"></i> My Approach</h3>
+                <p>I believe in continuous learning, best practices, and collaboration. Whether it's exploring new
+                    frameworks, contributing to open source, or sharing knowledge through technical writing, I'm always
+                    eager to grow.</p>
+            </div>
+        </div>
+
+        <div class="text-center mt-xl">
+            <a href="{{ '/about/' | relative_url }}" class="btn btn-outline">
+                Learn More About Me <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Skills Preview -->
+<section class="section" style="background: var(--color-bg-secondary);">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Skills & Technologies</h2>
+            <p class="section-subtitle">Tools and technologies I work with</p>
+        </div>
+
+        <div class="skills-grid">
+            <div class="skill-item">
+                <div class="skill-icon"><i class="fab fa-python"></i></div>
+                <div class="skill-name">Python</div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-icon"><i class="fab fa-js"></i></div>
+                <div class="skill-name">JavaScript</div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-icon"><i class="fab fa-react"></i></div>
+                <div class="skill-name">React</div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-icon"><i class="fab fa-node"></i></div>
+                <div class="skill-name">Node.js</div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-icon"><i class="fab fa-docker"></i></div>
+                <div class="skill-name">Docker</div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-icon"><i class="fab fa-aws"></i></div>
+                <div class="skill-name">AWS</div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-icon"><i class="fab fa-git-alt"></i></div>
+                <div class="skill-name">Git</div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-icon"><i class="fas fa-database"></i></div>
+                <div class="skill-name">Databases</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Projects -->
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Featured Projects</h2>
+            <p class="section-subtitle">Some of my recent work</p>
+        </div>
+
+        <div class="grid grid-3">
+            {% for project in site.data.projects limit:3 %}
+            <div class="project-card">
+                <img src="{{ project.image | relative_url }}" alt="{{ project.title }}" class="project-image">
+                <div class="project-content">
+                    <h3 class="project-title">{{ project.title }}</h3>
+                    <p class="project-description">{{ project.description }}</p>
+                    <div class="tags">
+                        {% for tech in project.technologies %}
+                        <span class="tag">{{ tech }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="project-links">
+                        {% if project.github %}
+                        <a href="{{ project.github }}" class="btn btn-secondary btn-sm" target="_blank">
+                            <i class="fab fa-github"></i> Code
+                        </a>
+                        {% endif %}
+                        {% if project.demo %}
+                        <a href="{{ project.demo }}" class="btn btn-primary btn-sm" target="_blank">
+                            <i class="fas fa-external-link-alt"></i> Demo
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-xl">
+            <a href="{{ '/projects/' | relative_url }}" class="btn btn-outline">
+                View All Projects <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Latest Blog Posts -->
+<section class="section" style="background: var(--color-bg-secondary);">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Latest Blog Posts</h2>
+            <p class="section-subtitle">Thoughts, tutorials, and insights</p>
+        </div>
+
+        <div class="grid grid-2">
+            {% for post in site.posts limit:4 %}
+            <article class="post-card">
+                <div class="post-meta">
+                    <span><i class="far fa-calendar"></i> {{ post.date | date: "%B %d, %Y" }}</span>
+                    <span><i class="far fa-clock"></i> {{ post.content | reading_time }}</span>
+                </div>
+                <h3 class="post-title">
+                    <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+                </h3>
+                <p class="post-excerpt">{{ post.excerpt | strip_html | truncate: 150 }}</p>
+                <a href="{{ post.url | relative_url }}" class="read-more">
+                    Read More <i class="fas fa-arrow-right"></i>
+                </a>
+            </article>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-xl">
+            <a href="{{ '/blog/' | relative_url }}" class="btn btn-outline">
+                View All Posts <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="section">
+    <div class="container">
+        <div class="card card-glass text-center" style="padding: var(--space-2xl);">
+            <h2 class="text-gradient">Let's Work Together</h2>
+            <p style="font-size: var(--font-size-lg); margin-bottom: var(--space-xl);">
+                I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
+            </p>
+            <a href="{{ '/contact/' | relative_url }}" class="btn btn-primary">
+                <i class="fas fa-paper-plane"></i> Get in Touch
+            </a>
+        </div>
+    </div>
+</section>
