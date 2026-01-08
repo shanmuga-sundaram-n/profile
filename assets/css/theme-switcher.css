@@ -119,9 +119,10 @@
     }
 
     .theme-toggle-btn {
-        width: 36px;
-        height: 36px;
-        font-size: 1rem;
+        width: auto;
+        height: auto;
+        font-size: 0.9rem;
+        padding: var(--space-xs) var(--space-sm);
     }
 
     .theme-menu {
