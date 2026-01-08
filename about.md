@@ -69,6 +69,88 @@ I specialize in guiding cross-functional teams to decouple legacy monoliths and 
 
 <div class="mt-xl">
     <div class="section-header">
+        <h2 class="section-title">Professional Experience</h2>
+        <p class="section-subtitle">A journey of technical leadership and architectural excellence</p>
+    </div>
+    
+    <div class="grid grid-1">
+        <!-- Thoughtworks -->
+        <div class="card card-glass">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--space-sm);">
+                <div>
+                    <h3 style="margin-bottom: 0;">Lead Consultant / Technical Partner</h3>
+                    <p style="color: var(--color-accent-primary); font-weight: 600; margin-bottom: var(--space-xs);">Thoughtworks</p>
+                </div>
+                <div style="text-align: right;">
+                    <small style="display: block; font-weight: 600;">Aug 2023 — Present</small>
+                    <small style="color: var(--color-text-muted);">Coimbatore, TN, India</small>
+                </div>
+            </div>
+            <ul class="footer-links" style="margin-top: var(--space-md);">
+                <li>As Technical Partner, architected and led multiple teams to engineer a hybrid crypto-fiat payment orchestration platform in Azure Cloud for a logistics giant. Applied Strategic Domain-Driven Design to define clear Bounded Contexts, isolating core ledger logic from volatile third-party integrations.</li>
+                <li>Led an internal "Software Delivery with AI" initiative. Integrated tools like CursorAI into daily workflows, improving developer efficiency by 30% and accelerating deployment cycles for a greenfield payment project.</li>
+                <li>As Lead Consultant, architected and developed a modernized Marketing Newsletter Platform on GCP using a Serverless, Event-Driven Architecture. This re-architecture reduced campaign turnaround time by 98%, tripling customer engagement for over 15 million users.</li>
+            </ul>
+        </div>
+
+        <!-- Fidelity -->
+        <div class="card card-glass">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--space-sm);">
+                <div>
+                    <h3 style="margin-bottom: 0;">Principal Software Engineer</h3>
+                    <p style="color: var(--color-accent-primary); font-weight: 600; margin-bottom: var(--space-xs);">Fidelity Investments</p>
+                </div>
+                <div style="text-align: right;">
+                    <small style="display: block; font-weight: 600;">Apr 2020 — Jul 2023</small>
+                    <small style="color: var(--color-text-muted);">Chennai, TN, India</small>
+                </div>
+            </div>
+            <ul class="footer-links" style="margin-top: var(--space-md);">
+                <li>Architected and developed an Event-sourced post-trading ecosystem handling high-velocity, enterprise-scale transaction throughput. Implemented a resilient microservices architecture with active-active redundancy, securing 99.99% SLA compliance.</li>
+                <li>Identified bottlenecks in existing infrastructure and led optimization efforts that improved overall system efficiency by 40%, significantly cutting cloud costs while supporting higher transaction volumes.</li>
+            </ul>
+        </div>
+
+        <!-- Cognizant -->
+        <div class="card card-glass">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--space-sm);">
+                <div>
+                    <h3 style="margin-bottom: 0;">Senior Associate</h3>
+                    <p style="color: var(--color-accent-primary); font-weight: 600; margin-bottom: var(--space-xs);">Cognizant Technology Solutions</p>
+                </div>
+                <div style="text-align: right;">
+                    <small style="display: block; font-weight: 600;">Jun 2011 — Apr 2020</small>
+                    <small style="color: var(--color-text-muted);">India & USA</small>
+                </div>
+            </div>
+            <ul class="footer-links" style="margin-top: var(--space-md);">
+                <li>Led the cloud modernization for a Global scientific publishing giant. Applied DDD principles to decouple a complex legacy application and migrate it to a scalable AWS architecture managed by Terraform.</li>
+                <li>Developed a standardized "Standard Counter Reporting" widget adopted across multiple internal teams, saving approximately 400 developer hours annually by unifying reporting standards.</li>
+                <li>Served as Technical Lead for an insurance provider, modernizing customer-facing applications and ensuring the backend stability of over 700 daily Maestro batch jobs for critical Tier-1 business flows.</li>
+            </ul>
+        </div>
+
+        <!-- L-Cube -->
+        <div class="card card-glass">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--space-sm);">
+                <div>
+                    <h3 style="margin-bottom: 0;">Sr. Software Engineer</h3>
+                    <p style="color: var(--color-accent-primary); font-weight: 600; margin-bottom: var(--space-xs);">L-Cube Innovative Solutions</p>
+                </div>
+                <div style="text-align: right;">
+                    <small style="display: block; font-weight: 600;">Jun 2007 — Jun 2011</small>
+                    <small style="color: var(--color-text-muted);">Chennai, TN, India</small>
+                </div>
+            </div>
+            <ul class="footer-links" style="margin-top: var(--space-md);">
+                <li>Led an 8-member team in developing core modules for the GlaceEMR system. Successfully navigated the complex audit process to achieve CCHIT and ONC-ATCB healthcare certifications.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="mt-xl">
+    <div class="section-header">
         <h2 class="section-title">My Philosophy</h2>
         <p class="section-subtitle">Core values and architectural principles</p>
     </div>
