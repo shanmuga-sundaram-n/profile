@@ -51,12 +51,3 @@
   github: "https://github.com/shanmuga-sundaram-n/profile"
   demo: "https://shanmuga-sundaram-n.github.io"
 
-- title: "Sample Project"
-  description: "Add your own projects here! This is a placeholder to show how projects are displayed. Replace with your actual work."
-  image: "/assets/images/projects/placeholder.png"
-  technologies:
-    - Technology 1
-    - Technology 2
-    - Technology 3
-  github: ""
-  demo: ""

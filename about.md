@@ -7,76 +7,69 @@ permalink: /about/
 
 ## Who I Am
 
-Hello! I'm **Shan**, a passionate software engineer with a love for building innovative solutions and solving complex problems. I specialize in full-stack development, cloud technologies, and creating scalable applications that make a difference.
+I am a **Hands-on Architect and Technical Leader** with over **18 years of experience** designing and delivering scalable, multi-tenant distributed systems for global enterprises. My expertise spans across Finance, Insurance, Healthcare, and Media sectors.
+
+I specialize in guiding cross-functional teams to decouple legacy monoliths and deliver fault-tolerant, cloud-native solutions. As an active practitioner of **AI-First Software Delivery**, I integrate GenAI tools to solve actual developer friction points and drive engineering efficiency.
 
 ## Professional Background
 
-With experience in modern web development and cloud infrastructure, I've worked on various projects ranging from enterprise applications to personal side projects. My journey in tech has been driven by curiosity and a constant desire to learn and grow.
+Throughout my career, I have combined strategic architectural leadership with hands-on execution to ensure delivery excellence. I am passionate about building systems that are not just functional, but also resilient and future-proof.
 
 ### What I Do
 
-- **Full-Stack Development**: Building end-to-end web applications using modern frameworks and best practices
-- **Cloud Architecture**: Designing and deploying scalable solutions on AWS and other cloud platforms
-- **Problem Solving**: Tackling complex technical challenges with creative and efficient solutions
-- **Technical Writing**: Sharing knowledge through blog posts and documentation
+- **Architectural Leadership**: Designing complex distributed systems and microservices architectures.
+- **AI-First SDLC**: Leveraging tools like CursorAI, GitHub Copilot, and Claude to optimize the software development lifecycle.
+- **Cloud-Native Solutions**: Expert in AWS, GCP, and Azure environments, focusing on EKS, Serverless, and Event-Driven designs.
+- **Technical Mentorship**: Leading and growing high-performing engineering teams through technical strategy and stakeholder management.
 
 ## Technical Expertise
 
-### Programming Languages
-- **Python** - Backend development, data processing, automation
-- **JavaScript/TypeScript** - Frontend and backend development
-- **SQL** - Database design and optimization
+### Development Stack
+- **Languages**: Java, Spring Boot, Node.js, TypeScript, Python
+- **Frontend**: React, RESTful APIs
+- **Databases**: SQL, NoSQL (DynamoDB), Redis
+- **Observability**: Datadog, JIRA
 
-### Frameworks & Tools
-- **Frontend**: React, Next.js, Vue.js
-- **Backend**: Node.js, Express, Django, Flask
-- **Databases**: PostgreSQL, MongoDB, Redis
-- **Cloud**: AWS (EC2, S3, Lambda, RDS, CloudFormation)
-- **DevOps**: Docker, Kubernetes, CI/CD, GitHub Actions
+### Architecture & Cloud
+- **Patterns**: Microservices, Event-Driven (Kafka), Domain-Driven Design (DDD), Serverless, 12-Factor App
+- **Cloud Platforms**: 
+  - **AWS**: EKS, Lambda, S3, DynamoDB, Redshift
+  - **GCP**: Cloud Run, Pub/Sub, BigQuery
+  - **Azure**: Infrastructure and services
+- **DevOps**: Jenkins, Docker, Kubernetes, CI/CD
 
-### Areas of Interest
-- Microservices Architecture
-- Serverless Computing
-- API Design & Development
-- Database Optimization
-- System Design
-- Cloud Infrastructure
+### AI & Machine Learning
+- **GenAI for SDLC**: Practitioner of CursorAI, GitHub Copilot, Claude
+- **RAG Pipelines**: Designing Retrieval-Augmented Generation systems
 
 ## Education & Certifications
 
 ### Education
-- **Bachelor's Degree in Computer Science** (or your actual degree)
-- Relevant coursework in algorithms, data structures, software engineering, and distributed systems
+- **Post Graduate in Artificial Intelligence & Machine Learning**
+  McCombs School of Business, USA/India - 2024
+- **Master of Computer Application (MCA)**
+  Kongu Engineering College, Anna University, India - 2007
+- **Bachelor of Science - Information Technology (BSc IT)**
+  Mahendra Engineering College, Periyar University, India - 2004
 
 ### Certifications
-- AWS Solutions Architect Associate
-- (Add your actual certifications here)
-
-## Beyond Code
-
-When I'm not coding, you'll find me:
-- 📚 Reading technical blogs and staying updated with the latest tech trends
-- 🎯 Contributing to open-source projects
-- ✍️ Writing technical articles and tutorials
-- 🌱 Learning new technologies and frameworks
-- 🤝 Mentoring aspiring developers
+- **Certified AWS Solutions Architect**
+- **Senior Java Developer**
+- **API Designer & Security Architect**
+- **SAFe 4.0 Practitioner**
 
 ## My Philosophy
 
-I believe in:
-- **Continuous Learning**: Technology evolves rapidly, and staying curious is key
-- **Clean Code**: Writing maintainable, well-documented code that others can understand
-- **Collaboration**: The best solutions come from working together and sharing knowledge
-- **User-Centric Design**: Building applications that solve real problems and provide value
+I believe that the best architectural decisions are made at the intersection of strategic vision and hands-on reality. My approach is driven by:
+- **Pragmatic AI Integration**: Using AI to solve real-world engineering friction.
+- **Scalability by Design**: Building systems that grow seamlessly with the business.
+- **Continuous Evolution**: Staying at the forefront of technology to drive innovation.
 
 ## Let's Connect
 
-I'm always interested in connecting with fellow developers, discussing new ideas, or exploring collaboration opportunities. Feel free to reach out through any of the following channels:
+I'm always interested in discussing complex architectural challenges, AI-First delivery, or exploring new opportunities.
 
 - **Email**: [{{ site.email }}](mailto:{{ site.email }})
+- **LinkedIn**: [linkedin.com/in/shan-profile](https://www.linkedin.com/in/shan-profile/)
 - **GitHub**: [github.com/shanmuga-sundaram-n](https://github.com/shanmuga-sundaram-n)
-- **LinkedIn**: [linkedin.com/in/shanmuga-sundaram-n](https://linkedin.com/in/shanmuga-sundaram-n)
 
----
-
-> **Note**: This is a template. Please update the content with your actual background, experience, education, and certifications to make it truly yours!
