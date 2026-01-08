@@ -6,11 +6,11 @@ permalink: /about/
 ---
 
 <div class="lead">
-I am a <strong>Hands-on Architect and Technical Leader</strong> with over <strong>18 years of experience</strong> designing and delivering scalable, multi-tenant distributed systems for global enterprises. My expertise spans across Finance, Insurance, Healthcare, and Media sectors.
+I am a Hands-on Architect and Technical Leader with over 18 years of experience designing and delivering scalable, multi-tenant distributed systems for global enterprises. My expertise spans across Finance, Insurance, Healthcare, and Media sectors.
 </div>
 
 <div class="lead">
-I specialize in guiding cross-functional teams to decouple legacy monoliths and deliver fault-tolerant, cloud-native solutions. As an active practitioner of **AI-First Software Delivery**, I integrate GenAI tools to solve actual developer friction points and drive engineering efficiency.
+I specialize in guiding cross-functional teams to decouple legacy monoliths and deliver fault-tolerant, cloud-native solutions. As an active practitioner of AI-First Software Delivery, I integrate GenAI tools to solve actual developer friction points and drive engineering efficiency.
 </div>
 
 <div class="grid grid-2">
@@ -75,19 +75,19 @@ I specialize in guiding cross-functional teams to decouple legacy monoliths and 
     
     <div class="grid grid-1">
         <div class="card card-glass text-center">
-            <p>I believe that the best architectural decisions are made at the intersection of strategic vision and hands-on reality.</p>
+            <p>I am committed to a culture of <strong>engineering excellence</strong> and <strong>collaborative growth</strong>, rooted in a continuous learning mindset. I believe that staying at the technical forefront—whether by exploring emerging technologies, contributing to open source, or sharing knowledge through technical writing—is essential to building resilient systems and driving the success of my teams.</p>
             <div class="grid grid-3 mt-md">
                 <div>
-                    <strong>Pragmatic AI</strong><br>
-                    <small>Solving real-world friction.</small>
+                    <strong>Engineering Excellence</strong><br>
+                    <small>Resilient & scalable systems.</small>
                 </div>
                 <div>
-                    <strong>Scalability</strong><br>
-                    <small>Building systems that grow.</small>
+                    <strong>Continuous Growth</strong><br>
+                    <small>Mastering emerging tech.</small>
                 </div>
                 <div>
-                    <strong>Evolution</strong><br>
-                    <small>Staying at the forefront.</small>
+                    <strong>Collaborative Impact</strong><br>
+                    <small>Sharing knowledge & OSS.</small>
                 </div>
             </div>
         </div>
