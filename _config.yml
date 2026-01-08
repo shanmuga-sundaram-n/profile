@@ -1,6 +1,6 @@
 title: "Shanmuga Sundaram Natarajan's Personal Website"
 description: "A professional personal website with technical blogs."
-author: Shanmuga Sundaram Natarajan
+author: Shanmuga Sundaram Natarajan (Shan)
 email: urmail2ss@gmail.com
 baseurl: "" # GitHub Pages subdirectory
 url: "https://shanmuga-sundaram-n.github.io"
@@ -36,5 +36,5 @@ social_links:
     url: "https://github.com/shanmuga-sundaram-n"
     icon: "fab fa-github"
   - name: "LinkedIn"
-    url: "https://linkedin.com/in/shanmuga-sundaram-n"
+    url: "https://www.linkedin.com/in/shan-profile/"
     icon: "fab fa-linkedin"
