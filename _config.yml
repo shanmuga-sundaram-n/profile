@@ -5,6 +5,9 @@ email: urmail2ss@gmail.com
 baseurl: "/profile" # GitHub Pages subdirectory
 url: "https://shanmuga-sundaram-n.github.io"
 
+# Disable default theme to use custom CSS
+theme: null
+
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
