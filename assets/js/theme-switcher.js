@@ -15,8 +15,8 @@
     }
   ];
 
-  // Get saved theme or default to purple-pink
-  const savedTheme = localStorage.getItem('site-theme') || 'purple-pink';
+  // Get saved theme or default to orange-red
+  const savedTheme = localStorage.getItem('site-theme') || 'orange-red';
 
   // Apply theme on page load
   document.documentElement.setAttribute('data-theme', savedTheme);
