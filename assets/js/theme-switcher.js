@@ -37,7 +37,8 @@
     const switcherHTML = `
       <div class="theme-switcher">
         <button class="theme-toggle-btn" id="themeToggle" aria-label="Toggle theme menu">
-          <i class="fas fa-palette"></i>
+          <span>Theme</span>
+          <i class="fas fa-chevron-down"></i>
         </button>
         <div class="theme-menu" id="themeMenu">
           ${themes.map(theme => `

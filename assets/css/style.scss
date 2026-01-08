@@ -219,14 +219,15 @@ strong {
 }
 
 .site-logo {
-  font-family: var(--font-heading);
-  font-size: var(--font-size-xl);
-  font-weight: 700;
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  display: flex;
+  align-items: center;
   transition: all var(--transition-base);
+}
+
+.logo-img {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
 }
 
 .site-logo:hover {
@@ -237,6 +238,7 @@ strong {
   display: flex;
   gap: var(--space-lg);
   list-style: none;
+  margin-left: auto;
 }
 
 .nav-link {

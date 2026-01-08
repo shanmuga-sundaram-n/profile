@@ -43,7 +43,10 @@
   <!-- Header -->
   <header class="site-header" id="header">
     <nav class="site-nav container">
-      <a href="{{ '/' | relative_url }}" class="site-logo">{{ site.author }}</a>
+      <a href="{{ '/' | relative_url }}" class="site-logo">
+        <img src="{{ '/assets/images/projects/website-logo.jpg' | relative_url }}" alt="{{ site.author }}"
+          class="logo-img">
+      </a>
 
       <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
         <span></span>
