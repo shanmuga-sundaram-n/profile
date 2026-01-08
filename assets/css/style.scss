@@ -233,9 +233,10 @@ strong {
 
 .nav-links {
   display: flex;
-  gap: var(--space-lg);
+  gap: var(--space-md);
   list-style: none;
   margin-left: auto;
+  padding-right: var(--space-sm);
 }
 
 .nav-link {
