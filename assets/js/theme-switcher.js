@@ -9,24 +9,9 @@
       colors: ['#6366f1', '#8b5cf6', '#ec4899']
     },
     {
-      id: 'blue-cyan',
-      name: 'Blue Cyan',
-      colors: ['#3b82f6', '#06b6d4', '#0ea5e9']
-    },
-    {
-      id: 'green-emerald',
-      name: 'Green Emerald',
-      colors: ['#10b981', '#059669', '#34d399']
-    },
-    {
       id: 'orange-red',
       name: 'Orange Red',
       colors: ['#f59e0b', '#ef4444', '#f97316']
-    },
-    {
-      id: 'rose-pink',
-      name: 'Rose Pink',
-      colors: ['#ec4899', '#f43f5e', '#fb7185']
     }
   ];
 

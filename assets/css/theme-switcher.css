@@ -94,28 +94,6 @@
     --font-heading: 'Space Grotesk', 'Inter', sans-serif;
 }
 
-[data-theme="blue-cyan"] {
-    --color-accent-primary: #3b82f6;
-    --color-accent-secondary: #06b6d4;
-    --color-accent-tertiary: #0ea5e9;
-    --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #06b6d4 50%, #0ea5e9 100%);
-
-    /* Blue Cyan Theme - Clean & Technical */
-    --font-primary: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --font-heading: 'Poppins', 'Roboto', sans-serif;
-}
-
-[data-theme="green-emerald"] {
-    --color-accent-primary: #10b981;
-    --color-accent-secondary: #059669;
-    --color-accent-tertiary: #34d399;
-    --gradient-primary: linear-gradient(135deg, #10b981 0%, #059669 50%, #34d399 100%);
-
-    /* Green Emerald Theme - Fresh & Natural */
-    --font-primary: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --font-heading: 'Montserrat', 'Nunito', sans-serif;
-}
-
 [data-theme="orange-red"] {
     --color-accent-primary: #f59e0b;
     --color-accent-secondary: #ef4444;
@@ -125,17 +103,6 @@
     /* Orange Red Theme - Bold & Energetic */
     --font-primary: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-heading: 'Raleway', 'Open Sans', sans-serif;
-}
-
-[data-theme="rose-pink"] {
-    --color-accent-primary: #ec4899;
-    --color-accent-secondary: #f43f5e;
-    --color-accent-tertiary: #fb7185;
-    --gradient-primary: linear-gradient(135deg, #ec4899 0%, #f43f5e 50%, #fb7185 100%);
-
-    /* Rose Pink Theme - Elegant & Stylish */
-    --font-primary: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --font-heading: 'Playfair Display', 'Lato', serif;
 }
 
 @media (max-width: 768px) {
