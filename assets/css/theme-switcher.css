@@ -1,35 +1,35 @@
-/* Theme Switcher Styles */
+/* Theme Switcher Styles - Header Version */
 .theme-switcher {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    z-index: var(--z-fixed);
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    margin-left: var(--space-md);
 }
 
 .theme-toggle-btn {
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    background: var(--gradient-primary);
-    border: none;
+    background: var(--color-surface);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: var(--shadow-lg);
     transition: all var(--transition-base);
-    color: white;
-    font-size: 1.5rem;
+    color: var(--color-text-primary);
+    font-size: 1.2rem;
 }
 
 .theme-toggle-btn:hover {
-    transform: scale(1.1) rotate(15deg);
-    box-shadow: var(--shadow-xl), var(--shadow-glow);
+    background: var(--color-surface-hover);
+    transform: scale(1.1);
+    border-color: var(--color-accent-primary);
 }
 
 .theme-menu {
     position: absolute;
-    bottom: 80px;
+    top: 60px;
     right: 0;
     background: var(--color-bg-secondary);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -38,9 +38,10 @@
     min-width: 200px;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(10px);
+    transform: translateY(-10px);
     transition: all var(--transition-base);
     box-shadow: var(--shadow-xl);
+    z-index: var(--z-dropdown);
 }
 
 .theme-menu.active {
@@ -119,13 +120,16 @@
 
 @media (max-width: 768px) {
     .theme-switcher {
-        bottom: 1rem;
-        right: 1rem;
+        margin-left: var(--space-sm);
     }
 
     .theme-toggle-btn {
-        width: 50px;
-        height: 50px;
-        font-size: 1.25rem;
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+    }
+
+    .theme-menu {
+        right: -10px;
     }
 }

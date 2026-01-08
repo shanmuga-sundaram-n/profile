@@ -1,7 +1,7 @@
 // Theme Switcher JavaScript
-(function() {
+(function () {
   'use strict';
-  
+
   const themes = [
     {
       id: 'purple-pink',
@@ -29,24 +29,24 @@
       colors: ['#ec4899', '#f43f5e', '#fb7185']
     }
   ];
-  
+
   // Get saved theme or default to purple-pink
   const savedTheme = localStorage.getItem('site-theme') || 'purple-pink';
-  
+
   // Apply theme on page load
   document.documentElement.setAttribute('data-theme', savedTheme);
-  
+
   // Wait for DOM to be ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initThemeSwitcher);
   } else {
     initThemeSwitcher();
   }
-  
+
   function initThemeSwitcher() {
     createThemeSwitcher();
   }
-  
+
   function createThemeSwitcher() {
     // Create theme switcher HTML
     const switcherHTML = `
@@ -64,31 +64,34 @@
         </div>
       </div>
     `;
-    
-    // Insert into page
-    document.body.insertAdjacentHTML('beforeend', switcherHTML);
-    
+
+    // Insert into header container
+    const container = document.getElementById('themeSwitcherContainer');
+    if (container) {
+      container.innerHTML = switcherHTML;
+    }
+
     // Get elements
     const toggleBtn = document.getElementById('themeToggle');
     const themeMenu = document.getElementById('themeMenu');
     const themeOptions = document.querySelectorAll('.theme-option');
-    
+
     // Mark active theme
     updateActiveTheme(savedTheme);
-    
+
     // Toggle menu
     toggleBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       themeMenu.classList.toggle('active');
     });
-    
+
     // Close menu when clicking outside
     document.addEventListener('click', (e) => {
       if (!e.target.closest('.theme-switcher')) {
         themeMenu.classList.remove('active');
       }
     });
-    
+
     // Theme selection
     themeOptions.forEach(option => {
       option.addEventListener('click', () => {
@@ -98,19 +101,19 @@
       });
     });
   }
-  
+
   function setTheme(themeId) {
     document.documentElement.setAttribute('data-theme', themeId);
     localStorage.setItem('site-theme', themeId);
     updateActiveTheme(themeId);
-    
+
     // Add a subtle animation effect
     document.body.style.transition = 'background-color 0.3s ease';
     setTimeout(() => {
       document.body.style.transition = '';
     }, 300);
   }
-  
+
   function updateActiveTheme(themeId) {
     document.querySelectorAll('.theme-option').forEach(option => {
       if (option.getAttribute('data-theme') === themeId) {
