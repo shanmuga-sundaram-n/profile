@@ -32,91 +32,118 @@ I specialize in guiding cross-functional teams to decouple legacy monoliths and 
     </div>
 </div>
 
-<div class="section-header">
-    <h2 class="section-title">Technical Expertise</h2>
-    <p class="section-subtitle">Core stack and architectural expertise</p>
-</div>
-
-<div class="grid grid-3">
-    <div class="card card-glass">
-        <h3><i class="fas fa-code"></i> Development Stack</h3>
-        <ul class="footer-links">
-            <li><strong>Languages</strong>: Java, Spring Boot, Node.js, TypeScript, Python</li>
-            <li><strong>Frontend</strong>: React, RESTful APIs</li>
-            <li><strong>Databases</strong>: SQL, NoSQL (DynamoDB), Redis</li>
-            <li><strong>Observability</strong>: Datadog, JIRA</li>
-        </ul>
+<div class="mt-xl">
+    <div class="section-header">
+        <h2 class="section-title">Technical Expertise</h2>
+        <p class="section-subtitle">Core stack and architectural expertise</p>
     </div>
-    <div class="card card-glass">
-        <h3><i class="fas fa-network-wired"></i> Architecture & Cloud</h3>
-        <ul class="footer-links">
-            <li><strong>Patterns</strong>: Microservices, Event-Driven (Kafka), DDD, Serverless</li>
-            <li><strong>AWS</strong>: EKS, Lambda, S3, DynamoDB, Redshift</li>
-            <li><strong>GCP</strong>: Cloud Run, Pub/Sub, BigQuery</li>
-            <li><strong>DevOps</strong>: Jenkins, Docker, Kubernetes, CI/CD</li>
-        </ul>
-    </div>
-    <div class="card card-glass">
-        <h3><i class="fas fa-brain"></i> AI & Machine Learning</h3>
-        <ul class="footer-links">
-            <li><strong>GenAI for SDLC</strong>: CursorAI, GitHub Copilot, Claude</li>
-            <li><strong>RAG Pipelines</strong>: Retrieval-Augmented Generation systems</li>
-        </ul>
-    </div>
-</div>
-
-
-<div class="section-header">
-    <h2 class="section-title">Education & Certifications</h2>
-    <p class="section-subtitle">Academic background and professional credentials</p>
-</div>
-
-<div class="grid grid-2">
-    <div class="card card-glass">
-        <h3><i class="fas fa-graduation-cap"></i> Education</h3>
-        <ul class="footer-links">
-            <li>
-                <strong>Post Graduate in AI & ML</strong><br>
-                <small>McCombs School of Business, USA/India — 2024</small>
-            </li>
-            <li>
-                <strong>Master of Computer Application (MCA)</strong><br>
-                <small>Kongu Engineering College, Anna University — 2007</small>
-            </li>
-            <li>
-                <strong>BSc Information Technology</strong><br>
-                <small>Mahendra Engineering College, Periyar University — 2004</small>
-            </li>
-        </ul>
-    </div>
-    <div class="card card-glass">
-        <h3><i class="fas fa-certificate"></i> Certifications</h3>
-        <ul class="footer-links">
-            <li><i class="fas fa-check-circle"></i> Certified AWS Solutions Architect</li>
-            <li><i class="fas fa-check-circle"></i> Senior Java Developer</li>
-            <li><i class="fas fa-check-circle"></i> API Designer & Security Architect</li>
-            <li><i class="fas fa-check-circle"></i> SAFe 4.0 Practitioner</li>
-        </ul>
+    
+    <div class="grid grid-3">
+        <div class="card card-glass">
+            <h3><i class="fas fa-code"></i> Development Stack</h3>
+            <ul class="footer-links">
+                <li><strong>Languages</strong>: Java, Spring Boot, Node.js, TypeScript, Python</li>
+                <li><strong>Frontend</strong>: React, RESTful APIs</li>
+                <li><strong>Databases</strong>: SQL, NoSQL (DynamoDB), Redis</li>
+                <li><strong>Observability</strong>: Datadog, JIRA</li>
+            </ul>
+        </div>
+        <div class="card card-glass">
+            <h3><i class="fas fa-network-wired"></i> Architecture & Cloud</h3>
+            <ul class="footer-links">
+                <li><strong>Patterns</strong>: Microservices, Event-Driven (Kafka), DDD, Serverless</li>
+                <li><strong>AWS</strong>: EKS, Lambda, S3, DynamoDB, Redshift</li>
+                <li><strong>GCP</strong>: Cloud Run, Pub/Sub, BigQuery</li>
+                <li><strong>DevOps</strong>: Jenkins, Docker, Kubernetes, CI/CD</li>
+            </ul>
+        </div>
+        <div class="card card-glass">
+            <h3><i class="fas fa-brain"></i> AI & Machine Learning</h3>
+            <ul class="footer-links">
+                <li><strong>GenAI for SDLC</strong>: CursorAI, GitHub Copilot, Claude</li>
+                <li><strong>RAG Pipelines</strong>: Retrieval-Augmented Generation systems</li>
+            </ul>
+        </div>
     </div>
 </div>
 
-<div class="grid grid-2">
-    <div class="card card-glass">
-        <h3><i class="fas fa-lightbulb"></i> My Philosophy</h3>
-        <p>I believe that the best architectural decisions are made at the intersection of strategic vision and hands-on reality. My approach is driven by:</p>
-        <ul class="footer-links">
-            <li><strong>Pragmatic AI</strong>: Solving real-world engineering friction.</li>
-            <li><strong>Scalability</strong>: Building systems that grow with the business.</li>
-            <li><strong>Evolution</strong>: Staying at the forefront of innovation.</li>
-        </ul>
+<div class="mt-xl">
+    <div class="section-header">
+        <h2 class="section-title">My Philosophy</h2>
+        <p class="section-subtitle">Core values and architectural principles</p>
     </div>
-    <div class="card card-glass">
-        <h3><i class="fas fa-paper-plane"></i> Let's Connect</h3>
-        <p>I'm always interested in discussing complex architectural challenges, AI-First delivery, or exploring new opportunities.</p>
-        <div class="social-links" style="margin-top: var(--space-md);">
-            <a href="mailto:{{ site.email }}" class="social-link" title="Email"><i class="fas fa-envelope"></i></a>
-            <a href="https://www.linkedin.com/in/shan-profile/" class="social-link" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-            <a href="https://github.com/shanmuga-sundaram-n" class="social-link" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+    
+    <div class="grid grid-1">
+        <div class="card card-glass text-center">
+            <p>I believe that the best architectural decisions are made at the intersection of strategic vision and hands-on reality.</p>
+            <div class="grid grid-3 mt-md">
+                <div>
+                    <strong>Pragmatic AI</strong><br>
+                    <small>Solving real-world friction.</small>
+                </div>
+                <div>
+                    <strong>Scalability</strong><br>
+                    <small>Building systems that grow.</small>
+                </div>
+                <div>
+                    <strong>Evolution</strong><br>
+                    <small>Staying at the forefront.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-xl">
+    <div class="section-header">
+        <h2 class="section-title">Education & Certifications</h2>
+        <p class="section-subtitle">Academic background and professional credentials</p>
+    </div>
+    
+    <div class="grid grid-2">
+        <div class="card card-glass">
+            <h3><i class="fas fa-graduation-cap"></i> Education</h3>
+            <ul class="footer-links">
+                <li>
+                    <strong>Post Graduate in AI & ML</strong><br>
+                    <small>McCombs School of Business, USA/India — 2024</small>
+                </li>
+                <li>
+                    <strong>Master of Computer Application (MCA)</strong><br>
+                    <small>Kongu Engineering College, Anna University — 2007</small>
+                </li>
+                <li>
+                    <strong>BSc Information Technology</strong><br>
+                    <small>Mahendra Engineering College, Periyar University — 2004</small>
+                </li>
+            </ul>
+        </div>
+        <div class="card card-glass">
+            <h3><i class="fas fa-certificate"></i> Certifications</h3>
+            <ul class="footer-links">
+                <li><i class="fas fa-check-circle"></i> Certified AWS Solutions Architect</li>
+                <li><i class="fas fa-check-circle"></i> Senior Java Developer</li>
+                <li><i class="fas fa-check-circle"></i> API Designer & Security Architect</li>
+                <li><i class="fas fa-check-circle"></i> SAFe 4.0 Practitioner</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="mt-xl">
+    <div class="section-header">
+        <h2 class="section-title">Let's Connect</h2>
+        <p class="section-subtitle">Feel free to reach out for collaborations or just a friendly chat</p>
+    </div>
+    
+    <div class="grid grid-1">
+        <div class="card card-glass text-center">
+            <p>I'm always interested in discussing complex architectural challenges, AI-First delivery, or exploring new opportunities.</p>
+            <div class="social-links" style="margin-top: var(--space-md); justify-content: center;">
+                <a href="mailto:{{ site.email }}" class="social-link" title="Email"><i class="fas fa-envelope"></i></a>
+                <a href="https://www.linkedin.com/in/shan-profile/" class="social-link" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="https://github.com/shanmuga-sundaram-n" class="social-link" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+            </div>
         </div>
     </div>
 </div>
