@@ -1,8 +1,5 @@
 ---
 ---
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Open+Sans:wght@300;400;600;700&family=Raleway:wght@400;500;600;700&display=swap');
-
 /* ============================================
    CSS VARIABLES & DESIGN TOKENS
    ============================================ */
@@ -225,8 +222,8 @@ strong {
 }
 
 .logo-img {
-  height: 48px;
-  width: 48px;
+  height: 48px !important;
+  width: 48px !important;
   object-fit: contain;
 }
 
