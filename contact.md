@@ -36,22 +36,33 @@ permalink: /contact/
   </div>
 </div>
 
-## Let's Work Together
+<div class="mt-xl">
+  <div class="section-header">
+    <h2 class="section-title">Let's Work Together</h2>
+    <p class="section-subtitle">I'm currently available for new opportunities and collaborations</p>
+  </div>
 
-I'm currently **available for**:
+  <div class="grid grid-3">
+  <div class="card card-glass text-center">
+    <div style="font-size: 2.5rem; margin-bottom: var(--space-md);">🤝</div>
+    <h3>Collaborations</h3>
+    <p>Open-source contributions and interesting side projects.</p>
+  </div>
 
-- 💼 **Freelance Projects** - Full-stack development, cloud architecture, and technical consulting
-- 🤝 **Collaborations** - Open-source contributions and interesting side projects
-- 📝 **Technical Writing** - Guest posts, tutorials, and documentation
-- 🎤 **Speaking Engagements** - Tech talks and workshops
+  <div class="card card-glass text-center">
+    <div style="font-size: 2.5rem; margin-bottom: var(--space-md);">📝</div>
+    <h3>Consulting & Writing</h3>
+    <p>Technical consulting, guest posts, and detailed tutorials.</p>
+  </div>
 
-## Quick Links
+  <div class="card card-glass text-center">
+    <div style="font-size: 2.5rem; margin-bottom: var(--space-md);">🎤</div>
+    <h3>Speaking</h3>
+    <p>Tech talks, workshops, and community events.</p>
+  </div>
+</div>
+</div>
 
-- **GitHub**: [github.com/shanmuga-sundaram-n](https://github.com/shanmuga-sundaram-n)
-- **LinkedIn**: [linkedin.com/in/shanmuga-sundaram-n](https://linkedin.com/in/shanmuga-sundaram-n)
-- **Email**: [{{ site.email }}](mailto:{{ site.email }})
-
----
 
 <div class="card text-center" style="background: var(--gradient-primary); padding: var(--space-2xl); margin-top: var(--space-2xl);">
   <h2 style="color: white; margin-bottom: var(--space-md);">Have a Project in Mind?</h2>
