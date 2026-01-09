@@ -313,6 +313,44 @@ strong {
 }
 
 /* ============================================
+   PROFILE IMAGE
+   ============================================ */
+.profile-img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+  margin-bottom: var(--space-lg);
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.about-profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-2xl);
+}
+
+@media (min-width: 768px) {
+  .about-profile-container {
+    flex-direction: row;
+    align-items: flex-start;
+    text-align: left;
+  }
+  
+  .about-profile-container .profile-img {
+    margin-left: 0;
+    margin-right: 0;
+    flex-shrink: 0;
+  }
+}
+
+/* ============================================
    HERO SECTION
    ============================================ */
 .hero {
@@ -363,6 +401,9 @@ strong {
   text-align: center;
   max-width: 900px;
   animation: fadeInUp 1s ease-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .hero-subtitle {

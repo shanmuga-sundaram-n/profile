@@ -5,12 +5,16 @@ description: Learn more about my background, experience, and expertise
 permalink: /about/
 ---
 
-<div class="lead">
-I am a Hands-on Architect and Technical Leader with over 18 years of experience designing and delivering scalable, multi-tenant distributed systems for global enterprises. My expertise spans across Finance, Insurance, Healthcare, and Media sectors.
-</div>
-
-<div class="lead">
-I specialize in guiding cross-functional teams to decouple legacy monoliths and deliver fault-tolerant, cloud-native solutions. As an active practitioner of AI-First Software Delivery, I integrate GenAI tools to solve actual developer friction points and drive engineering efficiency.
+<div class="about-profile-container">
+    <img src="{{ '/assets/images/profile-photo.png' | relative_url }}" alt="{{ site.author }}" class="profile-img">
+    <div class="about-text">
+        <div class="lead">
+            I am a Hands-on Architect and Technical Leader with over 18 years of experience designing and delivering scalable, multi-tenant distributed systems for global enterprises. My expertise spans across Finance, Insurance, Healthcare, and Media sectors.
+        </div>
+        <div class="lead">
+            I specialize in guiding cross-functional teams to decouple legacy monoliths and deliver fault-tolerant, cloud-native solutions. As an active practitioner of AI-First Software Delivery, I integrate GenAI tools to solve actual developer friction points and drive engineering efficiency.
+        </div>
+    </div>
 </div>
 
 <div class="grid grid-2">
