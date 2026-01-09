@@ -420,6 +420,11 @@ strong {
     flex: 1;
   }
 
+  .hero-title,
+  .hero-description {
+    margin-bottom: 0;
+  }
+
   .hero-cta {
     justify-content: flex-start;
   }
