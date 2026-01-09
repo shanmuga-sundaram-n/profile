@@ -218,7 +218,17 @@ strong {
 .site-logo {
   display: flex;
   align-items: center;
+  gap: var(--space-sm);
+  text-decoration: none;
   transition: all var(--transition-base);
+}
+
+.logo-text {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  white-space: nowrap;
 }
 
 .logo-img {
@@ -876,5 +886,9 @@ strong {
 
   .btn {
     justify-content: center;
+  }
+
+  .hero {
+    padding-top: 140px !important;
   }
 }
