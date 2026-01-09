@@ -7,10 +7,12 @@ layout: default
     <div class="hero-gradient"></div>
 
     <div class="hero-content container">
-        <h1 class="hero-title" style="font-size: var(--font-size-4xl);">{{ page.title }}</h1>
-        {% if page.description %}
-        <p class="hero-description">{{ page.description }}</p>
-        {% endif %}
+        <div class="hero-text-wrapper">
+            <h1 class="hero-title" style="font-size: var(--font-size-4xl);">{{ page.title }}</h1>
+            {% if page.description %}
+            <p class="hero-description">{{ page.description }}</p>
+            {% endif %}
+        </div>
     </div>
 </div>
 
