@@ -8,20 +8,22 @@ layout: default
 
     <div class="hero-content container">
         <img src="{{ '/assets/images/profile-photo.png' | relative_url }}" alt="{{ site.author }}" class="profile-img">
-        <p class="hero-subtitle">Welcome to my digital space</p>
-        <h1 class="hero-title">Hi, I'm {{ site.author }}</h1>
-        <p class="hero-description">
-            Lead Consultant @ Thoughtworks | Principal Engineer | Technology Leader<br>
-            Hands-on Software Architect | Cloud, AI & Distributed Systems<br>
-            AI for Software Delivery (AIFSD)
-        </p>
-        <div class="hero-cta">
-            <a href="{{ '/projects/' | relative_url }}" class="btn btn-primary">
-                <i class="fas fa-code"></i> View Projects
-            </a>
-            <a href="{{ '/contact/' | relative_url }}" class="btn btn-secondary">
-                <i class="fas fa-envelope"></i> Get in Touch
-            </a>
+        <div class="hero-text-wrapper">
+            <p class="hero-subtitle">Welcome to my digital space</p>
+            <h1 class="hero-title">Hi, I'm {{ site.author }}</h1>
+            <p class="hero-description">
+                Lead Consultant @ Thoughtworks | Principal Engineer | Technology Leader<br>
+                Hands-on Software Architect | Cloud, AI & Distributed Systems<br>
+                AI for Software Delivery (AIFSD)
+            </p>
+            <div class="hero-cta">
+                <a href="{{ '/projects/' | relative_url }}" class="btn btn-primary">
+                    <i class="fas fa-code"></i> View Projects
+                </a>
+                <a href="{{ '/contact/' | relative_url }}" class="btn btn-secondary">
+                    <i class="fas fa-envelope"></i> Get in Touch
+                </a>
+            </div>
         </div>
     </div>
 </div>

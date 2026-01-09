@@ -316,8 +316,8 @@ strong {
    PROFILE IMAGE
    ============================================ */
 .profile-img {
-  width: 200px;
-  height: 200px;
+  width: 180px;
+  height: 180px;
   border-radius: 50%;
   object-fit: cover;
   border: 4px solid rgba(255, 255, 255, 0.1);
@@ -326,6 +326,7 @@ strong {
   display: block;
   margin-left: auto;
   margin-right: auto;
+  flex-shrink: 0;
 }
 
 .about-profile-container {
@@ -399,11 +400,29 @@ strong {
 
 .hero-content {
   text-align: center;
-  max-width: 900px;
+  max-width: 1000px;
   animation: fadeInUp 1s ease-out;
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: var(--space-xl);
+}
+
+@media (min-width: 992px) {
+  .hero-content {
+    flex-direction: row;
+    text-align: left;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-text-wrapper {
+    flex: 1;
+  }
+
+  .hero-cta {
+    justify-content: flex-start;
+  }
 }
 
 .hero-subtitle {
