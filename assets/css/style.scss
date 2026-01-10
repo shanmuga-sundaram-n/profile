@@ -355,7 +355,7 @@ strong {
    HERO SECTION
    ============================================ */
 .hero {
-  min-height: 100vh;
+  min-height: 80vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -405,7 +405,7 @@ strong {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-xl);
+  gap: var(--space-lg);
 }
 
 @media (min-width: 992px) {
@@ -435,8 +435,8 @@ strong {
 }
 
 .hero-title {
-  font-size: clamp(2.5rem, 8vw, 5rem);
-  margin-bottom: var(--space-md);
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  margin-bottom: var(--space-sm);
   background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -447,7 +447,7 @@ strong {
 .hero-description {
   font-size: var(--font-size-xl);
   color: var(--color-text-secondary);
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-lg);
   line-height: 1.6;
   animation: fadeInUp 1s ease-out 0.4s both;
 }
