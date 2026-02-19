@@ -5,11 +5,6 @@ description: Explore my portfolio of projects and technical work
 permalink: /projects/
 ---
 
-<div class="section-header">
-  <h2 class="section-title">My Projects</h2>
-  <p class="section-subtitle">A showcase of my recent work and side projects</p>
-</div>
-
 <div class="grid grid-3">
   {% for project in site.data.projects %}
   <div class="project-card">

@@ -5,11 +5,6 @@ description: Technical articles, tutorials, and insights
 permalink: /blog/
 ---
 
-<div class="section-header">
-  <h2 class="section-title">Latest Posts</h2>
-  <p class="section-subtitle">Thoughts, tutorials, and technical insights</p>
-</div>
-
 <div class="grid grid-2">
   {% for post in site.posts %}
   <article class="post-card">

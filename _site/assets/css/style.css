@@ -44,9 +44,9 @@ strong { font-weight: 600; color: var(--color-text-primary); }
 
 .container-wide { max-width: 1400px; margin: 0 auto; padding: 0 var(--space-lg); }
 
-.section { padding: var(--space-3xl) 0; }
+.section { padding: var(--space-2xl) 0; }
 
-.section-sm { padding: var(--space-2xl) 0; }
+.section-sm { padding: var(--space-xl) 0; }
 
 /* ============================================ HEADER & NAVIGATION ============================================ */
 .site-header { position: fixed; top: 0; left: 0; right: 0; z-index: var(--z-fixed); background: rgba(10, 14, 39, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid var(--color-border); transition: all var(--transition-base); }
@@ -92,7 +92,9 @@ strong { font-weight: 600; color: var(--color-text-primary); }
 /* ============================================ HERO SECTION ============================================ */
 .hero { min-height: 80vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; padding-top: 120px; }
 
-.page-hero { min-height: 40vh !important; }
+.page-hero { min-height: auto !important; padding-top: 120px; padding-bottom: var(--space-md); }
+
+.page-hero .hero-description { margin-bottom: 0; }
 
 .hero-background { position: absolute; inset: 0; background: var(--gradient-hero); z-index: -2; }
 
@@ -209,7 +211,7 @@ strong { font-weight: 600; color: var(--color-text-primary); }
 .read-more:hover { gap: var(--space-sm); }
 
 /* ============================================ FOOTER ============================================ */
-.site-footer { background: var(--color-bg-secondary); border-top: 1px solid var(--color-border); padding: var(--space-2xl) 0 var(--space-lg); margin-top: var(--space-3xl); }
+.site-footer { background: var(--color-bg-secondary); border-top: 1px solid var(--color-border); padding: var(--space-xl) 0 var(--space-lg); margin-top: var(--space-2xl); }
 
 .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-xl); margin-bottom: var(--space-xl); }
 
@@ -230,7 +232,7 @@ strong { font-weight: 600; color: var(--color-text-primary); }
 .footer-bottom { text-align: center; padding-top: var(--space-lg); border-top: 1px solid var(--color-border); color: var(--color-text-tertiary); font-size: var(--font-size-sm); }
 
 /* ============================================ SECTION HEADERS ============================================ */
-.section-header { text-align: center; margin-bottom: var(--space-2xl); }
+.section-header { text-align: center; margin-bottom: var(--space-lg); }
 
 .section-title { font-size: var(--font-size-4xl); margin-bottom: var(--space-sm); background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 
