@@ -60,6 +60,14 @@
   --radius-xl: 1.5rem;
   --radius-full: 9999px;
 
+  /* Borders */
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-border-hover: rgba(255, 255, 255, 0.2);
+
+  /* Glass effect */
+  --color-glass-bg: rgba(255, 255, 255, 0.05);
+  --color-glass-border: rgba(255, 255, 255, 0.1);
+
   /* Shadows */
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.2);
@@ -79,6 +87,65 @@
   --z-modal: 1040;
   --z-tooltip: 1050;
 }
+
+/* ============================================
+   LIGHT MODE VARIABLES
+   ============================================ */
+[data-mode="light"] {
+  /* Light Mode Color Palette */
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f8f9fa;
+  --color-bg-tertiary: #e9ecef;
+  --color-surface: rgba(0, 0, 0, 0.05);
+  --color-surface-hover: rgba(0, 0, 0, 0.08);
+
+  /* Light Mode Text Colors */
+  --color-text-primary: #1a1a1a;
+  --color-text-secondary: #4a5568;
+  --color-text-tertiary: #718096;
+
+  /* Light Mode Borders */
+  --color-border: rgba(0, 0, 0, 0.1);
+  --color-border-hover: rgba(0, 0, 0, 0.2);
+
+  /* Light Mode Glass effect */
+  --color-glass-bg: rgba(0, 0, 0, 0.03);
+  --color-glass-border: rgba(0, 0, 0, 0.1);
+
+  /* Light Mode Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.15);
+  --shadow-xl: 0 16px 64px rgba(0, 0, 0, 0.2);
+  --shadow-glow: 0 0 32px rgba(99, 102, 241, 0.2);
+
+  /* Light Mode Gradients */
+  --gradient-hero: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+/* ============================================
+   HEADER: ALWAYS DARK (ignores light mode)
+   ============================================ */
+[data-mode="light"] .site-header {
+  background: #0a0e27;
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+  --color-bg-primary: #0a0e27;
+  --color-bg-secondary: #151932;
+  --color-bg-tertiary: #1e2440;
+  --color-surface: rgba(255, 255, 255, 0.05);
+  --color-surface-hover: rgba(255, 255, 255, 0.08);
+  --color-text-primary: #e8eaed;
+  --color-text-secondary: #b8bcc8;
+  --color-text-tertiary: #8a8f9e;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+[data-mode="light"] .site-header.scrolled {
+  background: #0a0e27;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
 
 /* ============================================
    RESET & BASE STYLES
@@ -103,6 +170,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* ============================================
@@ -199,7 +267,7 @@ strong {
   z-index: var(--z-fixed);
   background: rgba(10, 14, 39, 0.8);
   backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--color-border);
   transition: all var(--transition-base);
 }
 
@@ -320,7 +388,7 @@ strong {
   height: 180px;
   border-radius: 50%;
   object-fit: cover;
-  border: 4px solid rgba(255, 255, 255, 0.1);
+  border: 4px solid var(--color-border);
   box-shadow: var(--shadow-lg), var(--shadow-glow);
   display: block;
   margin-left: auto;
@@ -518,12 +586,12 @@ strong {
 .btn-secondary {
   background: var(--color-surface);
   color: var(--color-text-primary);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-border);
 }
 
 .btn-secondary:hover {
   background: var(--color-surface-hover);
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: var(--color-border-hover);
   transform: translateY(-2px);
 }
 
@@ -544,7 +612,7 @@ strong {
    ============================================ */
 .card {
   background: var(--color-bg-secondary);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--space-lg);
   transition: all var(--transition-base);
@@ -567,7 +635,7 @@ strong {
 .card:hover {
   transform: translateY(-5px);
   box-shadow: var(--shadow-lg);
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: var(--color-border-hover);
 }
 
 .card:hover::before {
@@ -575,9 +643,9 @@ strong {
 }
 
 .card-glass {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--color-glass-bg);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-glass-border);
 }
 
 .card-title {
@@ -676,7 +744,7 @@ strong {
   border-radius: var(--radius-lg);
   overflow: hidden;
   transition: all var(--transition-base);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-border);
 }
 
 .project-card:hover {
@@ -720,7 +788,7 @@ strong {
   background: var(--color-bg-secondary);
   border-radius: var(--radius-lg);
   padding: var(--space-lg);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-border);
   transition: all var(--transition-base);
 }
 
@@ -774,7 +842,7 @@ strong {
    ============================================ */
 .site-footer {
   background: var(--color-bg-secondary);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--color-border);
   padding: var(--space-2xl) 0 var(--space-lg);
   margin-top: var(--space-3xl);
 }
@@ -824,7 +892,7 @@ strong {
   border-radius: var(--radius-md);
   color: var(--color-text-primary);
   transition: all var(--transition-base);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-border);
 }
 
 .social-link:hover {
@@ -837,7 +905,7 @@ strong {
 .footer-bottom {
   text-align: center;
   padding-top: var(--space-lg);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--color-border);
   color: var(--color-text-tertiary);
   font-size: var(--font-size-sm);
 }
@@ -930,7 +998,7 @@ strong {
     left: 0;
     right: 0;
     padding: var(--space-md);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid var(--color-border);
   }
 
   .nav-links.active {

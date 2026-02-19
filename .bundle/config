@@ -1,0 +1,2 @@
+---
+BUNDLE_BUILD__EVENTMACHINE: "--with-cxxflags='-fdeclspec' --with-ldflags='-Wl,-undefined,dynamic_lookup'"

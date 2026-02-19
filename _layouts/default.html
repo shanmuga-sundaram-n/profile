@@ -36,6 +36,7 @@
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/theme-switcher.css' | relative_url }}">
 
   <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -70,6 +71,8 @@
         <li><a href="{{ '/contact/' | relative_url }}"
             class="nav-link {% if page.url contains '/contact' %}active{% endif %}">Contact</a></li>
       </ul>
+
+      <div id="modeToggleContainer"></div>
     </nav>
   </header>
 
@@ -156,6 +159,9 @@
       });
     });
   </script>
+
+  <!-- Theme Switcher Script -->
+  <script src="{{ '/assets/js/theme-switcher.js' | relative_url }}"></script>
 
 </body>
 
