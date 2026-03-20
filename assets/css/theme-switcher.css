@@ -76,6 +76,14 @@
     --font-heading: 'Raleway', 'Open Sans', sans-serif;
 }
 
+/* Orange Red Theme — light mode: darker accents for WCAG AA contrast on white */
+[data-mode="light"][data-theme="orange-red"] {
+    --color-accent-primary: #b45309;
+    --color-accent-secondary: #dc2626;
+    --color-accent-tertiary: #c2410c;
+    --gradient-primary: linear-gradient(135deg, #b45309 0%, #dc2626 50%, #c2410c 100%);
+}
+
 @media (max-width: 768px) {
     .mode-switch {
         width: 50px;
