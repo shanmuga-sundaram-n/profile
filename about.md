@@ -110,8 +110,8 @@ permalink: /about/
                 </div>
             </div>
             <ul class="footer-links" style="margin-top: var(--space-md);">
-                <li>Architected and developed an Event-sourced post-trading ecosystem handling high-velocity, enterprise-scale transaction throughput. Implemented a resilient microservices architecture with active-active redundancy, securing 99.99% SLA compliance.</li>
-                <li>Identified bottlenecks in existing infrastructure and led optimization efforts that improved overall system efficiency by 40%, significantly cutting cloud costs while supporting higher transaction volumes.</li>
+                <li>Designed and developed a Event-sourced post-trading ecosystem handling high-velocity, enterprise-scale transaction throughput. Implemented a resilient microservices architecture.</li>
+                <li>Identified bottlenecks in the existing infrastructure and led optimization efforts that improved overall system efficiency by 40%, significantly cutting cloud costs while supporting higher transaction volumes.</li>
             </ul>
         </div>
 
