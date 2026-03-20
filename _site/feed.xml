@@ -1,8 +1,1023 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.3">Jekyll</generator><link href="https://shanmuga-sundaram-n.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://shanmuga-sundaram-n.github.io/" rel="alternate" type="text/html" /><updated>2026-02-19T21:00:47+05:30</updated><id>https://shanmuga-sundaram-n.github.io/feed.xml</id><title type="html">Shanmuga Sundaram Natarajan’s Personal Website</title><subtitle>Hands-on Architect &amp; Technical Leader | 18+ Years Experience | AI-First Software Delivery</subtitle><author><name>Shanmuga Sundaram Natarajan (Shan)</name></author><entry><title type="html">Sample Technical Blog</title><link href="https://shanmuga-sundaram-n.github.io/blog/2023/01/01/sample-blog/" rel="alternate" type="text/html" title="Sample Technical Blog" /><published>2023-01-01T17:30:00+05:30</published><updated>2023-01-01T17:30:00+05:30</updated><id>https://shanmuga-sundaram-n.github.io/blog/2023/01/01/sample-blog</id><content type="html" xml:base="https://shanmuga-sundaram-n.github.io/blog/2023/01/01/sample-blog/">&lt;p&gt;Welcome to my first technical blog post! Here, I share insights on programming, software engineering, and more.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.3">Jekyll</generator><link href="https://shanmuga-sundaram-n.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://shanmuga-sundaram-n.github.io/" rel="alternate" type="text/html" /><updated>2026-03-20T14:42:53+05:30</updated><id>https://shanmuga-sundaram-n.github.io/feed.xml</id><title type="html">Shanmuga Sundaram Natarajan’s Personal Website</title><subtitle>Hands-on Architect &amp; Technical Leader | 18+ Years Experience | AI-First Software Delivery</subtitle><author><name>Shanmuga Sundaram Natarajan (Shan)</name></author><entry><title type="html">Zero Vibe Coding: How I Engineered a Full-Stack Finance App with Claude Code’s Multi-Agent Pipeline</title><link href="https://shanmuga-sundaram-n.github.io/blog/2026/03/20/zero-vibe-coding-finance-tracker/" rel="alternate" type="text/html" title="Zero Vibe Coding: How I Engineered a Full-Stack Finance App with Claude Code’s Multi-Agent Pipeline" /><published>2026-03-20T17:30:00+05:30</published><updated>2026-03-20T17:30:00+05:30</updated><id>https://shanmuga-sundaram-n.github.io/blog/2026/03/20/zero-vibe-coding-finance-tracker</id><content type="html" xml:base="https://shanmuga-sundaram-n.github.io/blog/2026/03/20/zero-vibe-coding-finance-tracker/">&lt;p&gt;When we talk about AI-assisted coding, the conversation usually revolves around “vibe coding” — throwing vague prompts at an LLM, connecting a UI layout tool, and crossing our fingers that the underlying architecture holds together.&lt;/p&gt;
 
-&lt;p&gt;Here is an example of a code snippet:&lt;/p&gt;
+&lt;p&gt;I wanted to see what happens when you treat AI not as a magic wand, but as an embedded enterprise engineering team. To test this, I built a production-ready Personal Finance Tracker entirely from the terminal. I strictly avoided UI Model Context Protocol (MCP) integrations like Figma. Instead, I forced the &lt;strong&gt;Claude Code CLI&lt;/strong&gt; into a rigid, Spec-Driven, Multi-Agent Development Environment.&lt;/p&gt;
 
-&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;hello_world&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Hello, world!&quot;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Shanmuga Sundaram Natarajan (Shan)</name></author><category term="tech" /><summary type="html">Welcome to my first technical blog post! Here, I share insights on programming, software engineering, and more.</summary></entry></feed>
+&lt;p&gt;You can check out the final codebase here: &lt;a href=&quot;https://github.com/shanmuga-sundaram-n/personal-finance-tracker&quot;&gt;Personal Finance Tracker on GitHub&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;the-final-product&quot;&gt;The Final Product&lt;/h2&gt;
+
+&lt;p&gt;Before diving into &lt;em&gt;how&lt;/em&gt; the AI built this, here’s a look at the final application running locally — clean, modern interface, responsive sidebar navigation, and distinct feature pages (Dashboard, Transactions, Budgets) generated without ever touching a visual design tool:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/projects/personal-finance-tracker.webp&quot; alt=&quot;Personal Finance Tracker UI Demo&quot; /&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;1-unleashing-claude-code-cli-features&quot;&gt;1. Unleashing Claude Code CLI Features&lt;/h2&gt;
+
+&lt;p&gt;The Claude Code CLI provides native capabilities that elevate it out of a standard web chat interface. By leveraging the local filesystem, I turned the CLI into an automated powerhouse:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Custom Prompt Hooks (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.claude/hooks/&lt;/code&gt;):&lt;/strong&gt; Building a modern React App requires strict linting, and AI can easily format things incorrectly. I created a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.claude/hooks/post-edit-lint.sh&lt;/code&gt; script. Every time Claude Code edited a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.tsx&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.ts&lt;/code&gt; file, the CLI automatically fired off &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$ESLINT_BIN --fix&lt;/code&gt;. This completely eliminated broken CI builds due to styling errors.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Persistent CLI Memory (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.claude/agent-memory/&lt;/code&gt;):&lt;/strong&gt; I stored detailed markdown files like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DOMAIN-OWNERSHIP.md&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;hexagonal-architecture.md&lt;/code&gt;. Whenever I prompted Claude Code, it automatically fetched this local context to write code compliant with my architectural decisions.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Context Compaction (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/compact&lt;/code&gt;):&lt;/strong&gt; Building a complex backend generates massive CLI context. Once Claude finished planning a feature, I simply typed &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/compact&lt;/code&gt;. This reset the active context window while keeping core memories intact — saving tokens and keeping the CLI fast.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Intelligent Commits (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/commit&lt;/code&gt;):&lt;/strong&gt; After &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;./gradlew test&lt;/code&gt; passed, rather than typing out git messages, I ran &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/commit&lt;/code&gt;. Claude Code read the actual &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git diff&lt;/code&gt; and generated a perfect, semantic commit message right in the terminal.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;simulated-terminal-run-claude-code-in-action&quot;&gt;Simulated Terminal Run: Claude Code in Action&lt;/h3&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;claude
+╭────────────────────────────────────────────────────────────────────────╮
+│ Claude Code &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;v0.x.x&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; - Project: personal-finance-tracker               │
+╰────────────────────────────────────────────────────────────────────────╯
+▶ I want to add double-entry transfers between accounts. Follow the
+  &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;Transaction.md&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt; PRD and use the solution-planner workflow.
+
+&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Claude is thinking...&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Reading files: docs/product/Transaction.md,
+ .claude/agent-memory/tech-lead/architecture-decisions.md]
+
+I will act as the solution-planner. Let&lt;span class=&quot;s1&quot;&gt;&apos;s start the pipeline.
+1. Running Domain Analysis against FR-1 (Double-Entry Transfers).
+   - The transaction must atomically generate a TRANSFER_OUT and TRANSFER_IN.
+2. Running Tech-Lead Architecture Review...
+   - I will utilize a Spring `@Transactional` block.
+
+Would you like me to spawn `full-stack-dev` to implement this now? (Y/n) &amp;gt; y
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;2-coordinated-execution-the-7-agent-pipeline&quot;&gt;2. Coordinated Execution: The 7-Agent Pipeline&lt;/h2&gt;
+
+&lt;p&gt;Instead of hooking up an external Figma MCP and letting a single AI guess at the UI and database simultaneously, I enforced spec-driven development using a pipeline of 7 distinct Markdown-based personas inside &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.claude/agents/&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;The most impressive part wasn’t the AI’s coding ability — it was &lt;strong&gt;the strict handoff mechanism&lt;/strong&gt; between agents. They never “spoke” in a chaotic group chat. They communicated by writing strict Markdown files (Briefs) to each other, orchestrated entirely by the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;solution-planner&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;User Request
+    │
+    ▼
+solution-planner (Orchestrator)
+    │
+    ├── 1. personal-finance-analyst  → Domain Brief
+    ├── 2. tech-lead                 → Architecture Brief
+    ├── 3. full-stack-dev            → Implementation
+    ├── 4. ux-ui-designer            → Accessibility Audit
+    ├── 5. qa-automation-tester      → Test Gatekeeper
+    └── 6. devops-engineer           → CI/CD &amp;amp; Containers
+                                            │
+                                            ▼
+                                    Feature Complete
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Here’s exactly how a feature flowed through this virtual team:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 1 — &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;solution-planner&lt;/code&gt; (The Orchestrator):&lt;/strong&gt; The central brain. This agent was explicitly instructed to &lt;em&gt;never&lt;/em&gt; write software code. Its only job was to take my feature request, kickstart the pipeline, and gather outputs from the analysts.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 2 — &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;personal-finance-analyst&lt;/code&gt; (Domain Brief):&lt;/strong&gt; Before pushing code, the planner invoked the analyst. This agent evaluated feature requests against strict PRDs, caught financial edge cases like rounding errors, and generated a &lt;strong&gt;Domain Brief&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 3 — &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tech-lead&lt;/code&gt; (Architecture Brief):&lt;/strong&gt; The architect analyzed business rules and translated them into Hexagonal Architecture and Liquibase schema designs. It generated an &lt;strong&gt;Architecture Brief&lt;/strong&gt; outlining exact Java classes, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Transactional&lt;/code&gt; boundaries, and interfaces — catching cross-context import violations before they happened.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 4 — &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;full-stack-dev&lt;/code&gt; (Execution):&lt;/strong&gt; The developer received the merged Feature Implementation Brief and focused on end-to-end data flow from the PostgreSQL backend to the React Vite frontend — avoiding N+1 queries in JPA and using proper React state management.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 5 — &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ux-ui-designer&lt;/code&gt; (Anti-Vibe Coding Audit):&lt;/strong&gt; By explicitly avoiding UI MCPs, I forced Claude to rely on strict UX heuristics. This agent reviewed React code strictly against WCAG 2.1 AA standards and Fitts’s Law spacing (touch targets ≥ 44px).&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 6 — &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;qa-automation-tester&lt;/code&gt; (The Gatekeeper):&lt;/strong&gt; This agent wrote integration tests via JUnit and MockMvc, utilized &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;axe-core&lt;/code&gt; for accessibility enforcement, and refused to complete until &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;./gradlew test&lt;/code&gt; passed in the terminal.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 7 — &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;devops-engineer&lt;/code&gt; (Infrastructure):&lt;/strong&gt; Configured Testcontainers (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;postgres:15.2&lt;/code&gt;), wrote multi-stage Dockerfiles with Alpine JRE layers, and managed GitHub Actions caching to slash build times.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;3-engineering-strict-guardrails&quot;&gt;3. Engineering Strict Guardrails&lt;/h2&gt;
+
+&lt;p&gt;To ensure the CLI didn’t drift as the conversation grew, I enforced architectural purity with &lt;strong&gt;hard automated constraints&lt;/strong&gt; rather than hoping Claude would follow instructions.&lt;/p&gt;
+
+&lt;h3 id=&quot;guardrail-a-pure-hexagonal-boundaries-via-archunit&quot;&gt;Guardrail A: Pure Hexagonal Boundaries via ArchUnit&lt;/h3&gt;
+
+&lt;p&gt;The domain layer must be completely unaware of Spring or databases. If Claude generated a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Lombok&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Autowired&lt;/code&gt; import inside the domain logic, the build failed physically in the terminal:&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// ArchitectureTest.java&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@ArchTest&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ArchRule&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;domain_must_not_import_spring&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;noClasses&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;that&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;resideInAPackage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;..domain..&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;should&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;dependOnClassesThat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;resideInAnyPackage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;org.springframework..&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;jakarta.persistence..&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;lombok..&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;as&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Domain classes must not depend on Spring, JPA, Jackson, or Lombok&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;guardrail-b-clean-wiring-without-framework-pollution&quot;&gt;Guardrail B: Clean Wiring Without Framework Pollution&lt;/h3&gt;
+
+&lt;p&gt;Claude was forbidden from using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Service&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Component&lt;/code&gt; on core business logic. Instead, it learned to construct a dedicated configuration class to wire dependencies manually:&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// account/config/AccountConfig.java&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@Configuration&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AccountConfig&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@Bean&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AccountCommandService&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;accountCommandService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+            &lt;span class=&quot;nc&quot;&gt;AccountPersistencePort&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;accountPersistencePort&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;nc&quot;&gt;AccountEventPublisherPort&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;accountEventPublisherPort&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;AccountCommandService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;accountPersistencePort&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;accountEventPublisherPort&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;guardrail-c-persistent-database-models-vs-domain-models&quot;&gt;Guardrail C: Persistent Database Models vs Domain Models&lt;/h3&gt;
+
+&lt;p&gt;To avoid attaching &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Entity&lt;/code&gt; to a domain object (which allows bad states to bypass business invariants), Claude maintained two separate class structures:&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// account/adapter/outbound/persistence/AccountJpaEntity.java&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@Entity&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@Table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;schema&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;finance_tracker&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;accounts&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AccountJpaEntity&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AuditableJpaEntity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Column&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;current_balance&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nullable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;precision&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;19&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;scale&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BigDecimal&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;currentBalance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// Rule: Must be exactly NUMERIC(19,4)&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Version&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@Column&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;version&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nullable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// Rule: Required for optimistic locking&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;guardrail-d-anti-corruption-layers-bounded-context-isolation&quot;&gt;Guardrail D: Anti-Corruption Layers (Bounded Context Isolation)&lt;/h3&gt;
+
+&lt;p&gt;If the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;budget&lt;/code&gt; module needed &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;transaction&lt;/code&gt; data, Claude had to build an explicit cross-context outbound port adapter — it could not directly import across bounded contexts:&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// budget/domain/port/outbound/TransactionSummaryPort.java&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TransactionSummaryPort&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nc&quot;&gt;Money&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;sumExpensesForCategory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;CategoryId&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;categoryId&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LocalDate&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LocalDate&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;4-feature-spotlight-dynamic-budget-aggregation&quot;&gt;4. Feature Spotlight: Dynamic Budget Aggregation&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;The Challenge:&lt;/strong&gt; Storing a physical &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;spentAmount&lt;/code&gt; column on a Budget table is a classic beginner mistake — if you delete a transaction from 3 weeks ago, the budget’s &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;spentAmount&lt;/code&gt; goes out of sync.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;The Solution:&lt;/strong&gt; Because Claude Code was forced to follow the PRD, it leveraged Guardrail D to build a &lt;strong&gt;Runtime Synthesis Engine&lt;/strong&gt; — dynamically computing usage on the fly rather than storing stale state:&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// Inside BudgetQueryService (Domain logic)&lt;/span&gt;
+&lt;span class=&quot;nc&quot;&gt;Money&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;spentThisPeriod&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;transactionSummaryPort&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sumExpensesForCategory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;budget&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getCategoryId&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(),&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;budget&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getStartDate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(),&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;budget&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getEndDate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;budget&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;evaluateStatus&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;spentThisPeriod&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// Flags true if spent &amp;gt;= 85% alert threshold&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;qa-execution&quot;&gt;QA Execution&lt;/h3&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;▶ Automatically running QA sequence &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;new budget logic...
+
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;./gradlew &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--tests&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;com.shan.cyber.tech.financetracker.budget.*&quot;&lt;/span&gt;
+
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; Task :application:test
+com.shan.cyber.tech.financetracker.budget.domain.BudgetQueryServiceTest
+  ✔ dynamic_synthesis_calculates_correct_usage_percent&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+  ✔ threshold_alert_triggered_when_over_85_percent&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+
+BUILD SUCCESSFUL &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;3s
+
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Claude]: All tests passed. ArchUnit hex boundaries are clean.
+          Should I &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;/commit&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt; these changes? &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Y/n&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; y
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;final-thoughts-from-chatbot-to-engineering-partner&quot;&gt;Final Thoughts: From Chatbot to Engineering Partner&lt;/h2&gt;
+
+&lt;p&gt;Building a production-ready application with Claude Code CLI reveals a massive shift in how AI should be utilized for software engineering. By rejecting “vibe coding” and external MCP crutches, and instead relying on Claude Code’s native hooks, persistent memory, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/compact&lt;/code&gt; commands, I was able to enforce a rigid, 7-agent spec-driven environment.&lt;/p&gt;
+
+&lt;p&gt;This process didn’t just build an app for me — it taught me how to properly design scalable databases, orchestrate Hexagonal solutions, and respect WCAG UX heuristics. By forcing Claude Code to respect pipeline personas and automated tests, you don’t just get an AI assistant that writes text files — you get a senior engineering team embedded directly in your terminal.&lt;/p&gt;
+
+&lt;p&gt;Check out the full source: &lt;a href=&quot;https://github.com/shanmuga-sundaram-n/personal-finance-tracker&quot;&gt;github.com/shanmuga-sundaram-n/personal-finance-tracker&lt;/a&gt;&lt;/p&gt;</content><author><name>Shanmuga Sundaram Natarajan (Shan)</name></author><category term="ai" /><category term="engineering" /><category term="claude-code" /><category term="claude-code" /><category term="multi-agent" /><category term="hexagonal-architecture" /><category term="spring-boot" /><category term="react" /><summary type="html">When we talk about AI-assisted coding, the conversation usually revolves around “vibe coding” — throwing vague prompts at an LLM, connecting a UI layout tool, and crossing our fingers that the underlying architecture holds together.</summary></entry><entry><title type="html">LLM Tokenizers: The Hidden Engine Behind AI Language Models</title><link href="https://shanmuga-sundaram-n.github.io/blog/2025/03/08/llm-tokenizers-hidden-engine/" rel="alternate" type="text/html" title="LLM Tokenizers: The Hidden Engine Behind AI Language Models" /><published>2025-03-08T17:30:00+05:30</published><updated>2025-03-08T17:30:00+05:30</updated><id>https://shanmuga-sundaram-n.github.io/blog/2025/03/08/llm-tokenizers-hidden-engine</id><content type="html" xml:base="https://shanmuga-sundaram-n.github.io/blog/2025/03/08/llm-tokenizers-hidden-engine/">&lt;p&gt;&lt;img src=&quot;/assets/images/blog/llm-tokenizers.jpg&quot; alt=&quot;LLM Tokenizers&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Every interaction with a large language model begins long before any neural network computation. It starts with &lt;strong&gt;tokenization&lt;/strong&gt; — the process of converting human language into the numerical representations that models actually process. Understanding tokenizers unlocks a deeper understanding of why LLMs behave the way they do.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;what-is-tokenization&quot;&gt;What is Tokenization?&lt;/h2&gt;
+
+&lt;p&gt;Tokenization transforms text into discrete units called &lt;strong&gt;tokens&lt;/strong&gt; — numerical representations the model can process. Rather than understanding words directly, models convert input into token IDs corresponding to entries in a vocabulary.&lt;/p&gt;
+
+&lt;p&gt;“Hello, world!” might become &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[15496, 11, 995, 0]&lt;/code&gt; — four numbers that the model processes as a sequence. The model never sees the original text; it only sees tokens.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;why-tokenization-matters&quot;&gt;Why Tokenization Matters&lt;/h2&gt;
+
+&lt;p&gt;The choice of tokenizer has profound downstream effects:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;Context window capacity&lt;/strong&gt; — the maximum text a model can process is measured in tokens, not words or characters&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;API costs&lt;/strong&gt; — most LLM APIs charge per token; tokenization efficiency directly affects cost&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Cross-lingual performance&lt;/strong&gt; — languages with inefficient tokenization get fewer “thoughts” per context window&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Specialised content&lt;/strong&gt; — code, mathematical notation, and domain-specific text tokenize very differently than prose&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;three-main-tokenization-approaches&quot;&gt;Three Main Tokenization Approaches&lt;/h2&gt;
+
+&lt;h3 id=&quot;1-word-based-tokenization&quot;&gt;1. Word-Based Tokenization&lt;/h3&gt;
+
+&lt;p&gt;The system scans text character-by-character, treating delimiters (spaces, punctuation) as token boundaries. “Hello world!” becomes individual word units.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Advantages:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Intuitive and semantically meaningful&lt;/li&gt;
+  &lt;li&gt;Simple to implement&lt;/li&gt;
+  &lt;li&gt;Efficient for common vocabulary&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Limitations:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Massive vocabularies for morphologically rich languages&lt;/li&gt;
+  &lt;li&gt;Out-of-vocabulary (OOV) problems for rare or new words&lt;/li&gt;
+  &lt;li&gt;Compound word challenges (German, Finnish, Turkish suffer most)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;2-character-based-tokenization&quot;&gt;2. Character-Based Tokenization&lt;/h3&gt;
+
+&lt;p&gt;Each character becomes a token. “Hello world” breaks into 11 tokens: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;H-e-l-l-o-[space]-w-o-r-l-d&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Advantages:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Tiny vocabulary (100–200 tokens covers most languages)&lt;/li&gt;
+  &lt;li&gt;Eliminates unknown word problems entirely&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Trade-offs:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Sequences 5–10× longer than word-based&lt;/li&gt;
+  &lt;li&gt;The model must reconstruct semantic meaning from individual characters&lt;/li&gt;
+  &lt;li&gt;Higher computational cost for the same amount of text&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;3-subword-tokenization-the-modern-standard&quot;&gt;3. Subword Tokenization (The Modern Standard)&lt;/h3&gt;
+
+&lt;p&gt;Modern LLMs — GPT, Claude, Llama, Gemini — all use subword tokenization. Words are split into meaningful units: “Unlikeliest” becomes &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[&quot;Un&quot;, &quot;likely&quot;, &quot;est&quot;]&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;The dominant algorithm is &lt;strong&gt;Byte-Pair Encoding (BPE)&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Start with a vocabulary of individual characters&lt;/li&gt;
+  &lt;li&gt;Count the frequency of all adjacent token pairs&lt;/li&gt;
+  &lt;li&gt;Merge the most common pair into a new token&lt;/li&gt;
+  &lt;li&gt;Repeat until reaching the target vocabulary size (typically 10,000–100,000 tokens)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The result: common words become single tokens, rare words get split into recognisable subword units, and the vocabulary is compact enough to be manageable.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;impact-on-model-performance&quot;&gt;Impact on Model Performance&lt;/h2&gt;
+
+&lt;h3 id=&quot;economic-implications&quot;&gt;Economic Implications&lt;/h3&gt;
+
+&lt;p&gt;Tokenization efficiency has real cost consequences:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Training efficiency&lt;/strong&gt; improves with optimised tokenization&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Fine-tuning costs&lt;/strong&gt; scale directly with tokens per training example&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Inference latency&lt;/strong&gt; varies based on how a given input tokenizes&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;A well-structured prompt in English might use significantly fewer tokens than an equivalent prompt in another language — directly affecting both cost and available reasoning capacity.&lt;/p&gt;
+
+&lt;h3 id=&quot;cross-lingual-disparities&quot;&gt;Cross-Lingual Disparities&lt;/h3&gt;
+
+&lt;p&gt;This is one of the most significant fairness issues in modern LLMs. Languages with less efficient tokenization:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Get fewer reasoning steps within a fixed context window&lt;/li&gt;
+  &lt;li&gt;Cost more per equivalent amount of text&lt;/li&gt;
+  &lt;li&gt;May have lower model quality due to less training data representation&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;English typically tokenizes very efficiently in models trained primarily on English text. Languages like Thai, Arabic, or many African languages often require significantly more tokens for equivalent content.&lt;/p&gt;
+
+&lt;h3 id=&quot;technical-effects-on-model-reasoning&quot;&gt;Technical Effects on Model Reasoning&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Attention dilution&lt;/strong&gt; — when semantic units are spread across many tokens, the model’s attention mechanism must work harder to connect related concepts&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Boundary artifacts&lt;/strong&gt; — token boundaries that misalign with semantic units can affect how the model processes meaning&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Embedding geometry&lt;/strong&gt; — the choice of tokens shapes the internal representation of concepts in the model’s embedding space&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;practical-optimisation-strategies&quot;&gt;Practical Optimisation Strategies&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;For prompt engineering:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Structure prompts with awareness of how your target language tokenizes&lt;/li&gt;
+  &lt;li&gt;Use tokenizer visualisation tools (like OpenAI’s tokenizer playground) to inspect token boundaries&lt;/li&gt;
+  &lt;li&gt;Prefer structured formats (JSON, markdown) that often tokenize efficiently&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;For data preparation:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Select formats based on tokenization performance for your use case&lt;/li&gt;
+  &lt;li&gt;Apply semantic compression — preserve meaning with fewer tokens where possible&lt;/li&gt;
+  &lt;li&gt;Be aware that code tokenizes very differently than prose&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;the-future-of-tokenization&quot;&gt;The Future of Tokenization&lt;/h2&gt;
+
+&lt;p&gt;Emerging approaches are addressing current limitations:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Character-level fallbacks&lt;/strong&gt; for rare words and multilingual content&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Learned tokenizers&lt;/strong&gt; that adapt during pre-training&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Semantic tokenization&lt;/strong&gt; that incorporates meaning-based rather than purely frequency-based boundaries&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Byte-level models&lt;/strong&gt; that operate directly on raw bytes, eliminating the tokenization step entirely&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;key-takeaway&quot;&gt;Key Takeaway&lt;/h2&gt;
+
+&lt;p&gt;Tokenization forms the crucial bridge between human language and machine understanding. It shapes everything from API costs to model reasoning depth to cross-lingual fairness — yet it’s almost entirely invisible to most users.&lt;/p&gt;
+
+&lt;p&gt;Understanding how your text becomes tokens isn’t just an academic exercise. It directly informs better prompt design, more accurate cost estimation, and a clearer mental model of why LLMs behave the way they do.&lt;/p&gt;</content><author><name>Shanmuga Sundaram Natarajan (Shan)</name></author><category term="ai" /><category term="ml" /><category term="llm" /><category term="tokenization" /><category term="nlp" /><category term="ai" /><category term="machine-learning" /><category term="transformers" /><summary type="html"></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://shanmuga-sundaram-n.github.io/assets/images/blog/llm-tokenizers.jpg" /><media:content medium="image" url="https://shanmuga-sundaram-n.github.io/assets/images/blog/llm-tokenizers.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Mastering Backpressure in Reactive Programming: A Deep Dive</title><link href="https://shanmuga-sundaram-n.github.io/blog/2024/12/28/mastering-backpressure-reactive-programming/" rel="alternate" type="text/html" title="Mastering Backpressure in Reactive Programming: A Deep Dive" /><published>2024-12-28T17:30:00+05:30</published><updated>2024-12-28T17:30:00+05:30</updated><id>https://shanmuga-sundaram-n.github.io/blog/2024/12/28/mastering-backpressure-reactive-programming</id><content type="html" xml:base="https://shanmuga-sundaram-n.github.io/blog/2024/12/28/mastering-backpressure-reactive-programming/">&lt;p&gt;&lt;img src=&quot;/assets/images/blog/backpressure-reactive.jpg&quot; alt=&quot;Mastering Backpressure in Reactive Programming&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Reactive programming allows developers to build highly responsive and scalable systems that handle asynchronous data flows. But a fundamental challenge emerges when &lt;strong&gt;producers emit data faster than consumers can process it&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Without a solution, this imbalance leads to memory overload, CPU exhaustion, and cascading failures. The solution is &lt;strong&gt;backpressure&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;what-is-backpressure&quot;&gt;What is Backpressure?&lt;/h2&gt;
+
+&lt;p&gt;Backpressure is the mechanism that allows a consumer to communicate to its producer that it cannot keep up with the current data rate. Rather than silently dropping messages or crashing under load, a well-designed reactive system uses backpressure to apply flow control.&lt;/p&gt;
+
+&lt;p&gt;Think of it like a water pipe: if you push water in faster than it can flow out, something bursts. Backpressure is the pressure relief valve.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;why-it-matters&quot;&gt;Why It Matters&lt;/h2&gt;
+
+&lt;p&gt;Without proper backpressure handling:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Memory overload&lt;/strong&gt; — unbounded buffers fill up and cause OOM errors&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;CPU exhaustion&lt;/strong&gt; — the consumer thrashes trying to process an overwhelming queue&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Cascading failures&lt;/strong&gt; — one slow consumer can destabilise an entire pipeline&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Silent data loss&lt;/strong&gt; — messages get dropped without any indication&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;four-core-backpressure-strategies&quot;&gt;Four Core Backpressure Strategies&lt;/h2&gt;
+
+&lt;h3 id=&quot;1-buffering&quot;&gt;1. Buffering&lt;/h3&gt;
+
+&lt;p&gt;Temporarily store excess data in a bounded buffer. When the buffer fills, apply additional pressure upstream.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// Project Reactor&lt;/span&gt;
+&lt;span class=&quot;nc&quot;&gt;Flux&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;onBackpressureBuffer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// buffer up to 100 items&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;subscribe&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;item&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;process&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Use when:&lt;/strong&gt; Data loss is unacceptable and consumers will eventually catch up. Be careful with buffer size — an unbounded buffer is no protection at all.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;2-dropping&quot;&gt;2. Dropping&lt;/h3&gt;
+
+&lt;p&gt;Discard items when the consumer falls behind. Simpler than buffering, but only appropriate when losing some messages is acceptable.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// RxJava&lt;/span&gt;
+&lt;span class=&quot;nc&quot;&gt;Flowable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;interval&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TimeUnit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;MILLISECONDS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;onBackpressureDrop&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;observeOn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Schedulers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;computation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;subscribe&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;item&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;slowProcess&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Use when:&lt;/strong&gt; You’re processing real-time streams (metrics, sensor data) where stale data has no value.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;3-throttling&quot;&gt;3. Throttling&lt;/h3&gt;
+
+&lt;p&gt;Control the emission speed from the producer to match consumer capacity. Instead of buffering or dropping, you slow the source down.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// Akka Streams&lt;/span&gt;
+&lt;span class=&quot;nc&quot;&gt;Source&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;repeat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;event&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;throttle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Duration&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;ofSeconds&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// max 10 elements per second&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;runWith&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Sink&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;foreach&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;system&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Use when:&lt;/strong&gt; The producer is controllable and you want to maintain a steady, sustainable flow rather than bursts.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;4-requesting-pull-based&quot;&gt;4. Requesting (Pull-based)&lt;/h3&gt;
+
+&lt;p&gt;Consumers explicitly request a specific number of items from the producer. This is the most precise form of backpressure — the foundation of the Reactive Streams specification.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// Project Reactor — limit rate to 10 items at a time&lt;/span&gt;
+&lt;span class=&quot;nc&quot;&gt;Flux&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;limitRate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// consumer pulls 10 items at a time&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;subscribe&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;item&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;process&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Use when:&lt;/strong&gt; You want fine-grained control over throughput and can predict consumer processing capacity.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;framework-comparison&quot;&gt;Framework Comparison&lt;/h2&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Framework&lt;/th&gt;
+      &lt;th&gt;Default Strategy&lt;/th&gt;
+      &lt;th&gt;Key API&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Project Reactor&lt;/td&gt;
+      &lt;td&gt;Error on overflow&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;onBackpressureBuffer()&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;limitRate()&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;RxJava&lt;/td&gt;
+      &lt;td&gt;Configurable&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;onBackpressureDrop()&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;onBackpressureLatest()&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Akka Streams&lt;/td&gt;
+      &lt;td&gt;Built-in propagation&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;throttle()&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;buffer()&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;All three follow the &lt;strong&gt;Reactive Streams specification&lt;/strong&gt;, which standardises backpressure handling through the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Publisher&lt;/code&gt;/&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Subscriber&lt;/code&gt; contract.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;best-practices&quot;&gt;Best Practices&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;Match strategy to data criticality&lt;/strong&gt; — financial transactions need buffering; live metrics can afford dropping&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Always bound your buffers&lt;/strong&gt; — unbounded buffers defer the problem rather than solving it&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Test under realistic load&lt;/strong&gt; — backpressure issues only surface at production traffic levels&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Understand your consumer’s processing capacity&lt;/strong&gt; — profile before tuning&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Monitor queue depths&lt;/strong&gt; — expose buffer utilisation as a metric to catch pressure building up&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;key-takeaway&quot;&gt;Key Takeaway&lt;/h2&gt;
+
+&lt;p&gt;Backpressure isn’t an edge case — it’s a core concern in any reactive system that handles real-world load. Choosing the right strategy (buffer, drop, throttle, or request) depends on your data’s criticality and your consumer’s characteristics. The frameworks provide the tools; understanding the trade-offs is the engineering judgment that makes them work.&lt;/p&gt;</content><author><name>Shanmuga Sundaram Natarajan (Shan)</name></author><category term="engineering" /><category term="java" /><category term="reactive-programming" /><category term="backpressure" /><category term="project-reactor" /><category term="rxjava" /><category term="akka" /><category term="java" /><category term="streaming" /><summary type="html"></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://shanmuga-sundaram-n.github.io/assets/images/blog/backpressure-reactive.jpg" /><media:content medium="image" url="https://shanmuga-sundaram-n.github.io/assets/images/blog/backpressure-reactive.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Traditional Coding vs AI-Assisted Coding vs Vibe Coding: A New Spectrum</title><link href="https://shanmuga-sundaram-n.github.io/blog/2024/12/01/traditional-vs-ai-vs-vibe-coding/" rel="alternate" type="text/html" title="Traditional Coding vs AI-Assisted Coding vs Vibe Coding: A New Spectrum" /><published>2024-12-01T17:30:00+05:30</published><updated>2024-12-01T17:30:00+05:30</updated><id>https://shanmuga-sundaram-n.github.io/blog/2024/12/01/traditional-vs-ai-vs-vibe-coding</id><content type="html" xml:base="https://shanmuga-sundaram-n.github.io/blog/2024/12/01/traditional-vs-ai-vs-vibe-coding/">&lt;p&gt;&lt;img src=&quot;/assets/images/blog/traditional-vs-ai-vs-vibe-coding.jpg&quot; alt=&quot;Traditional vs AI-Assisted vs Vibe Coding&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Something has shifted in how software gets written. As an engineer, I’ve noticed that I no longer work in a single mode throughout the day. Depending on the task, the stakes, and the context, I switch between three fundamentally different headspaces — and recognising which one to be in has become as important as any technical skill.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;mode-1-traditional-coding&quot;&gt;Mode 1: Traditional Coding&lt;/h2&gt;
+
+&lt;p&gt;Traditional coding is manual, deliberate, and total-control. You write every line, reason through every decision, and understand the full implications of the code you produce.&lt;/p&gt;
+
+&lt;p&gt;There is a deep satisfaction in knowing you understand every single line. When something breaks, you know where to look. When a colleague asks why something works a certain way, you can explain it fully.&lt;/p&gt;
+
+&lt;p&gt;This mode is slower — but it builds the deepest understanding. It’s where you learn. It’s where complex, business-critical, or security-sensitive code should live.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Best for:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Core domain logic&lt;/li&gt;
+  &lt;li&gt;Security-critical code paths&lt;/li&gt;
+  &lt;li&gt;Novel problems with no clear prior art&lt;/li&gt;
+  &lt;li&gt;Situations where you need to deeply understand what you’re building&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;mode-2-ai-assisted-coding&quot;&gt;Mode 2: AI-Assisted Coding&lt;/h2&gt;
+
+&lt;p&gt;AI-assisted coding is my default mode today. It’s a constant collaboration — I handle the logic, intent, and architectural decisions, while AI tools manage boilerplate, suggest implementations, and reduce cognitive overhead.&lt;/p&gt;
+
+&lt;p&gt;The workflow feels like pair programming with a very fast, very well-read partner who sometimes hallucinates. You stay in control of the wheel, but the journey is significantly faster.&lt;/p&gt;
+
+&lt;p&gt;This mode reduces friction without reducing understanding. I still review every line. I still reason about every decision. But I spend less time on the mechanical aspects of writing code and more time on what matters.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Best for:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Most day-to-day development tasks&lt;/li&gt;
+  &lt;li&gt;Boilerplate and scaffolding&lt;/li&gt;
+  &lt;li&gt;Translating well-understood patterns into code&lt;/li&gt;
+  &lt;li&gt;Code reviews and refactoring suggestions&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;mode-3-vibe-coding&quot;&gt;Mode 3: Vibe Coding&lt;/h2&gt;
+
+&lt;p&gt;Vibe coding is the newest mode — and the most misunderstood. It’s about describing ideas in plain language and iterating on results rather than syntax. You’re directing, not writing.&lt;/p&gt;
+
+&lt;p&gt;The speed advantage is real. For prototyping, exploration, and proof-of-concept work, vibe coding collapses the feedback loop dramatically. You can test ten ideas in the time it would traditionally take to implement one.&lt;/p&gt;
+
+&lt;p&gt;But vibe coding doesn’t eliminate the need for strong engineering fundamentals — it &lt;em&gt;requires&lt;/em&gt; them. You need to evaluate what gets generated, spot the subtle bugs, recognise the architectural shortcuts that will cause problems at scale. Without a strong foundation, vibe coding produces fast-moving, difficult-to-maintain code.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Best for:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Rapid prototyping and exploration&lt;/li&gt;
+  &lt;li&gt;Proof-of-concept development&lt;/li&gt;
+  &lt;li&gt;Low-stakes internal tools&lt;/li&gt;
+  &lt;li&gt;Learning new domains quickly&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;the-real-skill-knowing-which-mode-to-use&quot;&gt;The Real Skill: Knowing Which Mode to Use&lt;/h2&gt;
+
+&lt;p&gt;The most important insight isn’t about any single mode — it’s about switching between them deliberately.&lt;/p&gt;
+
+&lt;p&gt;A day of engineering now might look like: vibe coding to explore a new API (Mode 3), shifting to AI-assisted coding to build the actual integration (Mode 2), and dropping into traditional coding for the authentication and error-handling logic (Mode 1).&lt;/p&gt;
+
+&lt;p&gt;Conflating these modes is where things go wrong. Vibe coding your security layer is dangerous. Traditionally coding your boilerplate is inefficient. AI-assisted coding without review is irresponsible.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;what-this-means-for-engineers&quot;&gt;What This Means for Engineers&lt;/h2&gt;
+
+&lt;p&gt;The spectrum of coding modes is expanding — and that’s a good thing. More tools, more leverage, more ways to deliver value.&lt;/p&gt;
+
+&lt;p&gt;But the fundamentals don’t go away. Understanding algorithms, systems, trade-offs, and failure modes matters more as the code generation layer becomes more automated. The engineer who can work across all three modes — and knows when to use each — is more valuable than ever.&lt;/p&gt;
+
+&lt;p&gt;The headspace is different. The skill is knowing which one you’re in.&lt;/p&gt;</content><author><name>Shanmuga Sundaram Natarajan (Shan)</name></author><category term="ai" /><category term="engineering" /><category term="ai" /><category term="coding" /><category term="vibe-coding" /><category term="productivity" /><category term="software-engineering" /><category term="claude-code" /><summary type="html"></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://shanmuga-sundaram-n.github.io/assets/images/blog/traditional-vs-ai-vs-vibe-coding.jpg" /><media:content medium="image" url="https://shanmuga-sundaram-n.github.io/assets/images/blog/traditional-vs-ai-vs-vibe-coding.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">LlamaCoder: Turn Your Idea into an App in Minutes</title><link href="https://shanmuga-sundaram-n.github.io/blog/2024/11/25/llamacoder-ai-app-builder/" rel="alternate" type="text/html" title="LlamaCoder: Turn Your Idea into an App in Minutes" /><published>2024-11-25T17:30:00+05:30</published><updated>2024-11-25T17:30:00+05:30</updated><id>https://shanmuga-sundaram-n.github.io/blog/2024/11/25/llamacoder-ai-app-builder</id><content type="html" xml:base="https://shanmuga-sundaram-n.github.io/blog/2024/11/25/llamacoder-ai-app-builder/">&lt;p&gt;&lt;img src=&quot;/assets/images/blog/llamacoder.jpg&quot; alt=&quot;LlamaCoder&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;What if you could describe an app idea in plain English and have working code ready in minutes? That’s exactly what &lt;strong&gt;LlamaCoder&lt;/strong&gt; delivers — and it signals a significant shift in who gets to build software.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;what-is-llamacoder&quot;&gt;What is LlamaCoder?&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://llamacoder.together.ai/&quot;&gt;LlamaCoder&lt;/a&gt; is an AI-powered code generation platform built on large language models. It converts natural language descriptions into functional application code, enabling people without deep programming expertise to build real apps.&lt;/p&gt;
+
+&lt;p&gt;Powered by &lt;a href=&quot;https://www.together.ai/&quot;&gt;Together AI&lt;/a&gt;, it demonstrates how LLMs are rapidly lowering the barrier to software creation.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;how-it-works&quot;&gt;How It Works&lt;/h2&gt;
+
+&lt;p&gt;The workflow is straightforward:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;Describe your idea&lt;/strong&gt; in plain language — no technical jargon required&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;AI generates clean, efficient code&lt;/strong&gt; in Python, JavaScript, Swift, and more&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Customise and refine&lt;/strong&gt; the generated code to fit your exact needs&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Deploy&lt;/strong&gt; across web, iOS, or Android platforms&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The model interprets intent, not just keywords — it understands the &lt;em&gt;goal&lt;/em&gt; of what you’re building and generates code structured accordingly.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;key-features&quot;&gt;Key Features&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;No prior coding knowledge required&lt;/strong&gt; — describe the app, get the code&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Rapid prototyping&lt;/strong&gt; — go from idea to working prototype in minutes&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Multi-language support&lt;/strong&gt; — Python, JavaScript, Swift, and more&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Cross-platform output&lt;/strong&gt; — web, iOS, Android&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Iterative refinement&lt;/strong&gt; — describe changes in natural language to evolve the code&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Cost-effective&lt;/strong&gt; — dramatically reduces development time and resources&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;who-is-it-for&quot;&gt;Who Is It For?&lt;/h2&gt;
+
+&lt;p&gt;LlamaCoder opens software development to a much broader audience:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Entrepreneurs&lt;/strong&gt; validating product ideas without hiring developers&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Business owners&lt;/strong&gt; building internal tools without IT dependency&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Designers&lt;/strong&gt; prototyping interactive concepts directly&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Students&lt;/strong&gt; learning by seeing working code generated from their ideas&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Developers&lt;/strong&gt; accelerating boilerplate and scaffolding&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;what-can-you-build&quot;&gt;What Can You Build?&lt;/h2&gt;
+
+&lt;p&gt;The platform handles a surprisingly wide range of use cases:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;E-commerce platforms with product listings and checkout flows&lt;/li&gt;
+  &lt;li&gt;Social networking applications with feeds and user profiles&lt;/li&gt;
+  &lt;li&gt;Productivity tools like task managers and dashboards&lt;/li&gt;
+  &lt;li&gt;Educational software with quizzes and progress tracking&lt;/li&gt;
+  &lt;li&gt;Gaming and entertainment apps&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;the-bigger-picture&quot;&gt;The Bigger Picture&lt;/h2&gt;
+
+&lt;p&gt;LlamaCoder is part of a broader shift in software development. As AI code generation matures, the bottleneck moves from &lt;em&gt;writing&lt;/em&gt; code to &lt;em&gt;knowing what to build&lt;/em&gt;. Domain expertise, product thinking, and clear problem definition become the primary skills — the technical implementation becomes increasingly automated.&lt;/p&gt;
+
+&lt;p&gt;This doesn’t eliminate the need for engineers — but it fundamentally changes what they spend their time on. The best engineers will focus on architecture, quality, edge cases, and the hard problems that AI still can’t solve reliably.&lt;/p&gt;
+
+&lt;p&gt;For everyone else, tools like LlamaCoder are a genuine step toward democratising the ability to build software.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Try it yourself:&lt;/strong&gt; &lt;a href=&quot;https://llamacoder.together.ai/&quot;&gt;llamacoder.together.ai&lt;/a&gt;&lt;/p&gt;</content><author><name>Shanmuga Sundaram Natarajan (Shan)</name></author><category term="ai" /><category term="tools" /><category term="ai" /><category term="llm" /><category term="code-generation" /><category term="llamacoder" /><category term="no-code" /><category term="productivity" /><summary type="html"></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://shanmuga-sundaram-n.github.io/assets/images/blog/llamacoder.jpg" /><media:content medium="image" url="https://shanmuga-sundaram-n.github.io/assets/images/blog/llamacoder.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Architectural Trade-off: Serverless APIs vs. Kubernetes APIs</title><link href="https://shanmuga-sundaram-n.github.io/blog/2024/11/17/serverless-vs-kubernetes-apis/" rel="alternate" type="text/html" title="Architectural Trade-off: Serverless APIs vs. Kubernetes APIs" /><published>2024-11-17T17:30:00+05:30</published><updated>2024-11-17T17:30:00+05:30</updated><id>https://shanmuga-sundaram-n.github.io/blog/2024/11/17/serverless-vs-kubernetes-apis</id><content type="html" xml:base="https://shanmuga-sundaram-n.github.io/blog/2024/11/17/serverless-vs-kubernetes-apis/">&lt;p&gt;&lt;img src=&quot;/assets/images/blog/serverless-vs-kubernetes.jpg&quot; alt=&quot;Serverless APIs vs Kubernetes&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Choosing between serverless and Kubernetes for API deployment is one of the most consequential architectural decisions in modern cloud engineering. Both are powerful paradigms — but they make fundamentally different trade-offs.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;the-core-distinction&quot;&gt;The Core Distinction&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Serverless&lt;/strong&gt; abstracts away all infrastructure. You deploy functions or containers, define triggers, and the cloud provider handles scaling, patching, and availability.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Kubernetes&lt;/strong&gt; gives you a programmable infrastructure platform. You define workloads, networking, and scaling policies — with full control over how your APIs run.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;trade-off-analysis&quot;&gt;Trade-off Analysis&lt;/h2&gt;
+
+&lt;h3 id=&quot;1-operational-overhead&quot;&gt;1. Operational Overhead&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;Serverless&lt;/strong&gt; minimises operational burden through abstraction. There are no servers to patch, no clusters to manage, no capacity to plan. Teams can focus entirely on business logic.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Kubernetes&lt;/strong&gt; demands DevOps expertise. Cluster management, networking (CNI plugins, ingress controllers), storage, upgrades, and observability all require dedicated attention — often a platform engineering team.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Winner for small teams or rapid iteration:&lt;/strong&gt; Serverless.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;2-scalability&quot;&gt;2. Scalability&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;Serverless&lt;/strong&gt; offers automatic, near-instant scaling from zero to peak — no configuration required.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Kubernetes&lt;/strong&gt; supports scaling through Horizontal Pod Autoscalers (HPA) and KEDA, but requires explicit configuration and has a minimum baseline cost (you can’t truly scale to zero without additional tooling like Knative).&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Winner for unpredictable traffic spikes:&lt;/strong&gt; Serverless.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;3-cost&quot;&gt;3. Cost&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;Serverless&lt;/strong&gt; uses pay-per-execution pricing — ideal for sporadic, bursty workloads. Cost can spike unexpectedly at high volumes.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Kubernetes&lt;/strong&gt; costs are tied to cluster utilisation. With well-optimised bin-packing and steady traffic, Kubernetes can be significantly cheaper at scale.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Winner for high, steady-state throughput:&lt;/strong&gt; Kubernetes.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;4-control-and-customisation&quot;&gt;4. Control and Customisation&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;Serverless&lt;/strong&gt; limits infrastructure control. Runtime versions, execution environments, and networking are largely managed by the provider.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Kubernetes&lt;/strong&gt; provides extensive customisation: custom runtimes, sidecar patterns, service meshes, custom schedulers, and full network policy control.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Winner for complex, specialised requirements:&lt;/strong&gt; Kubernetes.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;5-vendor-lock-in&quot;&gt;5. Vendor Lock-in&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;Serverless&lt;/strong&gt; platforms (AWS Lambda, Google Cloud Functions, Azure Functions) create provider dependency. Migrating functions across clouds is non-trivial.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Kubernetes&lt;/strong&gt; is open-source and runs on any cloud or on-premises. Managed distributions (EKS, GKE, AKS) add some lock-in at the control plane level, but workloads remain portable.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Winner for portability:&lt;/strong&gt; Kubernetes.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;6-deployment-speed&quot;&gt;6. Deployment Speed&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;Serverless&lt;/strong&gt; accelerates time-to-market. Deployments are simple — upload code, configure a trigger, done.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Kubernetes&lt;/strong&gt; adds pipeline complexity: container builds, image registries, Helm charts or manifests, rolling deployments. A well-engineered pipeline abstracts this, but the investment is real.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Winner for speed of initial delivery:&lt;/strong&gt; Serverless.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;7-debugging-and-observability&quot;&gt;7. Debugging and Observability&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;Serverless&lt;/strong&gt; offers limited visibility. Cold starts, ephemeral execution environments, and distributed traces across functions can be difficult to reason about.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Kubernetes&lt;/strong&gt; provides robust observability tooling: Prometheus, Grafana, Jaeger, and deep integration with service meshes like Istio. Full control over logging, metrics, and tracing.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Winner for production debuggability:&lt;/strong&gt; Kubernetes.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;8-state-management&quot;&gt;8. State Management&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;Serverless&lt;/strong&gt; emphasises statelessness by design. Persistent state requires external services (DynamoDB, S3, Redis).&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Kubernetes&lt;/strong&gt; supports stateful applications natively through StatefulSets and Persistent Volumes — suitable for databases, queues, and long-running workloads.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Winner for stateful workloads:&lt;/strong&gt; Kubernetes.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;decision-framework&quot;&gt;Decision Framework&lt;/h2&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Consider&lt;/th&gt;
+      &lt;th&gt;Choose&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Small team, rapid iteration&lt;/td&gt;
+      &lt;td&gt;Serverless&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Bursty, unpredictable traffic&lt;/td&gt;
+      &lt;td&gt;Serverless&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;High steady-state throughput&lt;/td&gt;
+      &lt;td&gt;Kubernetes&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Complex infrastructure requirements&lt;/td&gt;
+      &lt;td&gt;Kubernetes&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Strong portability requirements&lt;/td&gt;
+      &lt;td&gt;Kubernetes&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Minimal operational investment&lt;/td&gt;
+      &lt;td&gt;Serverless&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Stateful workloads&lt;/td&gt;
+      &lt;td&gt;Kubernetes&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;key-takeaway&quot;&gt;Key Takeaway&lt;/h2&gt;
+
+&lt;p&gt;There is no universally correct answer. Serverless excels at reducing operational overhead and handling variable load elegantly. Kubernetes excels at control, portability, and cost efficiency at scale.&lt;/p&gt;
+
+&lt;p&gt;Many mature organisations run both — serverless for event-driven, low-traffic APIs and Kubernetes for core platform services. Evaluate your API complexity, team expertise, traffic patterns, and long-term architectural goals before committing to either paradigm.&lt;/p&gt;</content><author><name>Shanmuga Sundaram Natarajan (Shan)</name></author><category term="engineering" /><category term="architecture" /><category term="serverless" /><category term="kubernetes" /><category term="cloud" /><category term="architecture" /><category term="devops" /><category term="apis" /><summary type="html"></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://shanmuga-sundaram-n.github.io/assets/images/blog/serverless-vs-kubernetes.jpg" /><media:content medium="image" url="https://shanmuga-sundaram-n.github.io/assets/images/blog/serverless-vs-kubernetes.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Exploring Threads and Virtual Threads in Java: A Comprehensive Guide</title><link href="https://shanmuga-sundaram-n.github.io/blog/2024/11/13/java-threads-and-virtual-threads/" rel="alternate" type="text/html" title="Exploring Threads and Virtual Threads in Java: A Comprehensive Guide" /><published>2024-11-13T17:30:00+05:30</published><updated>2024-11-13T17:30:00+05:30</updated><id>https://shanmuga-sundaram-n.github.io/blog/2024/11/13/java-threads-and-virtual-threads</id><content type="html" xml:base="https://shanmuga-sundaram-n.github.io/blog/2024/11/13/java-threads-and-virtual-threads/">&lt;p&gt;&lt;img src=&quot;/assets/images/blog/java-virtual-threads.jpg&quot; alt=&quot;Java Threads and Virtual Threads&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Java’s concurrency model has undergone a significant evolution with the introduction of &lt;strong&gt;virtual threads&lt;/strong&gt; in Java 19 (Project Loom). Understanding the difference between traditional threads and virtual threads is key to building scalable, efficient applications.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;traditional-java-threads-platform-threads&quot;&gt;Traditional Java Threads (Platform Threads)&lt;/h2&gt;
+
+&lt;p&gt;Traditional threads — also called &lt;strong&gt;platform threads&lt;/strong&gt; — are managed by the operating system and map directly to native OS threads.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Key characteristics:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Heavyweight: significant creation and management cost&lt;/li&gt;
+  &lt;li&gt;Consume OS resources even when blocked on I/O&lt;/li&gt;
+  &lt;li&gt;Limited scalability due to memory overhead per thread&lt;/li&gt;
+  &lt;li&gt;Scheduled by the OS, incurring context-switching overhead&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Internal mechanics:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Each Java thread maps 1:1 to a kernel-level thread with its own memory stack&lt;/li&gt;
+  &lt;li&gt;The OS scheduler manages thread switching through context-switching&lt;/li&gt;
+  &lt;li&gt;Synchronization occurs at the OS level&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Thousands of threads quickly become inefficient — memory constraints and context-switching overheads degrade performance significantly.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;virtual-threads-project-loom&quot;&gt;Virtual Threads (Project Loom)&lt;/h2&gt;
+
+&lt;p&gt;Introduced in Java 19 and made production-ready in Java 21, &lt;strong&gt;virtual threads&lt;/strong&gt; are user-mode threads managed by the JVM rather than the OS.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Key characteristics:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Lightweight and inexpensive to create (millions can run simultaneously)&lt;/li&gt;
+  &lt;li&gt;Yield control to the JVM when blocking, freeing carrier OS threads for other work&lt;/li&gt;
+  &lt;li&gt;Managed by the JVM scheduler using a small pool of OS threads&lt;/li&gt;
+  &lt;li&gt;Cooperative multitasking through yielding&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Internal mechanics:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;No direct 1:1 mapping to OS threads&lt;/li&gt;
+  &lt;li&gt;Use continuation-based scheduling backed by &lt;strong&gt;carrier threads&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;Stack frames stored in the Java heap — minimal per-thread overhead&lt;/li&gt;
+  &lt;li&gt;When a virtual thread blocks (e.g., on I/O), it unmounts from the carrier thread, which immediately picks up another virtual thread&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;side-by-side-comparison&quot;&gt;Side-by-Side Comparison&lt;/h2&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Aspect&lt;/th&gt;
+      &lt;th&gt;Platform Threads&lt;/th&gt;
+      &lt;th&gt;Virtual Threads&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Managed by&lt;/td&gt;
+      &lt;td&gt;OS&lt;/td&gt;
+      &lt;td&gt;JVM&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Cost to create&lt;/td&gt;
+      &lt;td&gt;High&lt;/td&gt;
+      &lt;td&gt;Very low&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Scalability&lt;/td&gt;
+      &lt;td&gt;Thousands&lt;/td&gt;
+      &lt;td&gt;Millions&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Blocking behaviour&lt;/td&gt;
+      &lt;td&gt;Blocks OS thread&lt;/td&gt;
+      &lt;td&gt;Unmounts from carrier&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Memory overhead&lt;/td&gt;
+      &lt;td&gt;Large (OS stack)&lt;/td&gt;
+      &lt;td&gt;Small (heap)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Best for&lt;/td&gt;
+      &lt;td&gt;CPU-bound tasks&lt;/td&gt;
+      &lt;td&gt;I/O-bound tasks&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;practical-example-web-server&quot;&gt;Practical Example: Web Server&lt;/h2&gt;
+
+&lt;p&gt;Consider a web server handling thousands of concurrent requests.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;With platform threads:&lt;/strong&gt; Each request ties up an OS thread while waiting for database queries or network calls. With 10,000 concurrent requests, you need 10,000 OS threads — memory exhaustion becomes a real risk.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;With virtual threads:&lt;/strong&gt; Each request gets its own virtual thread. When blocked on I/O, the virtual thread unmounts and the carrier thread immediately handles another request. You can handle 10,000 concurrent requests with just a handful of OS threads.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// Creating a virtual thread (Java 21)&lt;/span&gt;
+&lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;ofVirtual&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// handle request — blocking I/O is fine here&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;database&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;query&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;SELECT ...&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;send&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// Or with ExecutorService&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;executor&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Executors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;newVirtualThreadPerTaskExecutor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;executor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;submit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;handleRequest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;when-to-use-each&quot;&gt;When to Use Each&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Use platform threads when:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Your workload is CPU-bound (heavy computation, no blocking)&lt;/li&gt;
+  &lt;li&gt;You have a small, fixed number of concurrent tasks&lt;/li&gt;
+  &lt;li&gt;You need precise OS-level thread control&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Use virtual threads when:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Your workload is I/O-bound (database, network, file access)&lt;/li&gt;
+  &lt;li&gt;You need high concurrency (web servers, microservices, messaging)&lt;/li&gt;
+  &lt;li&gt;You want to simplify code by avoiding reactive/callback patterns&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;key-takeaway&quot;&gt;Key Takeaway&lt;/h2&gt;
+
+&lt;p&gt;Virtual threads don’t replace platform threads — they complement them. For the vast majority of server-side Java applications that spend most time waiting on I/O, virtual threads offer a dramatic scalability improvement with minimal code changes. Project Loom effectively brings the simplicity of synchronous code to the scale of asynchronous systems.&lt;/p&gt;</content><author><name>Shanmuga Sundaram Natarajan (Shan)</name></author><category term="engineering" /><category term="java" /><category term="java" /><category term="concurrency" /><category term="virtual-threads" /><category term="project-loom" /><category term="performance" /><summary type="html"></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://shanmuga-sundaram-n.github.io/assets/images/blog/java-virtual-threads.jpg" /><media:content medium="image" url="https://shanmuga-sundaram-n.github.io/assets/images/blog/java-virtual-threads.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Why is Kafka So Fast? Unveiling the Secrets Behind Kafka’s Speed</title><link href="https://shanmuga-sundaram-n.github.io/blog/2024/10/17/why-kafka-is-so-fast/" rel="alternate" type="text/html" title="Why is Kafka So Fast? Unveiling the Secrets Behind Kafka’s Speed" /><published>2024-10-17T17:30:00+05:30</published><updated>2024-10-17T17:30:00+05:30</updated><id>https://shanmuga-sundaram-n.github.io/blog/2024/10/17/why-kafka-is-so-fast</id><content type="html" xml:base="https://shanmuga-sundaram-n.github.io/blog/2024/10/17/why-kafka-is-so-fast/">&lt;p&gt;&lt;img src=&quot;/assets/images/blog/kafka-speed.jpg&quot; alt=&quot;Why is Kafka So Fast?&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Apache Kafka is renowned for its extraordinary throughput and low latency. But what actually makes it so fast? The answer lies in a combination of deliberate engineering decisions that work together to minimize overhead at every layer.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;1-sequential-io-optimizing-disk-access&quot;&gt;1. Sequential I/O: Optimizing Disk Access&lt;/h2&gt;
+
+&lt;p&gt;Kafka employs an &lt;strong&gt;append-only log&lt;/strong&gt; architecture that leverages sequential rather than random disk access. Messages are written in the order they arrive and stored sequentially — data is continuously appended to the end of the log file.&lt;/p&gt;
+
+&lt;p&gt;This approach minimizes seek time on mechanical drives. When handling thousands of messages per second from IoT sensors, each new entry simply gets added to the log’s end, avoiding the expensive physical movement of disk read/write heads.&lt;/p&gt;
+
+&lt;p&gt;Sequential reads and writes are orders of magnitude faster than random access — Kafka exploits this at the core of its storage design.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;2-zero-copy-principle-efficient-data-transfer&quot;&gt;2. Zero-Copy Principle: Efficient Data Transfer&lt;/h2&gt;
+
+&lt;p&gt;Traditionally, transferring data from disk to network involves multiple copies through kernel and user-space buffers. Kafka bypasses this with &lt;strong&gt;zero-copy&lt;/strong&gt; using system calls like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sendfile()&lt;/code&gt; on Linux.&lt;/p&gt;
+
+&lt;p&gt;This technique instructs the kernel to move data directly from the disk buffer to the network socket buffer — eliminating unnecessary intermediate copies, reducing CPU overhead, and maximizing delivery throughput.&lt;/p&gt;
+
+&lt;p&gt;The practical benefit: transferring a 1 GB batch of logs bypasses the costly round-trip through user space entirely.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;3-message-compression-reducing-transmission-size&quot;&gt;3. Message Compression: Reducing Transmission Size&lt;/h2&gt;
+
+&lt;p&gt;Kafka supports compression algorithms including &lt;strong&gt;GZIP, Snappy, and LZ4&lt;/strong&gt; at the producer level. Compression is applied to message batches before transmission, then decompressed by consumers.&lt;/p&gt;
+
+&lt;p&gt;This is particularly valuable when handling repetitive data like application logs, where compression ratios can be significant — reducing both network bandwidth and storage requirements.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;4-message-batching-efficient-processing&quot;&gt;4. Message Batching: Efficient Processing&lt;/h2&gt;
+
+&lt;p&gt;Rather than handling individual messages one at a time, Kafka groups multiple messages into &lt;strong&gt;batches&lt;/strong&gt; before disk writes or network transmission. Grouping 100 metrics into a single batch:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Reduces the number of I/O operations&lt;/li&gt;
+  &lt;li&gt;Decreases network round-trips&lt;/li&gt;
+  &lt;li&gt;Lowers broker CPU load&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This amortises the fixed overhead of each operation across many messages, dramatically improving throughput.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;5-efficient-memory-management-and-caching&quot;&gt;5. Efficient Memory Management and Caching&lt;/h2&gt;
+
+&lt;p&gt;Kafka maintains &lt;strong&gt;in-memory indexes&lt;/strong&gt; and leverages the OS page cache for recently accessed log segments. This enables rapid message retrieval without frequent disk reads — particularly when consumers request recently produced messages, which are almost always already in the page cache.&lt;/p&gt;
+
+&lt;p&gt;Kafka intentionally relies on the OS page cache rather than implementing its own heap-based caching, keeping JVM garbage collection pressure low.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;key-takeaway&quot;&gt;Key Takeaway&lt;/h2&gt;
+
+&lt;p&gt;Kafka’s performance is not the result of a single trick — it’s a comprehensive engineering approach:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Technique&lt;/th&gt;
+      &lt;th&gt;Benefit&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Sequential I/O&lt;/td&gt;
+      &lt;td&gt;Eliminates random disk seek time&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Zero-copy&lt;/td&gt;
+      &lt;td&gt;Removes redundant data copies&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Compression&lt;/td&gt;
+      &lt;td&gt;Reduces bandwidth and storage&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Batching&lt;/td&gt;
+      &lt;td&gt;Amortises I/O overhead across messages&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Page cache&lt;/td&gt;
+      &lt;td&gt;Fast reads without disk access&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Together, these decisions make Kafka capable of handling millions of messages per second with consistently low latency — a system designed from the ground up for high-throughput streaming.&lt;/p&gt;</content><author><name>Shanmuga Sundaram Natarajan (Shan)</name></author><category term="engineering" /><category term="distributed-systems" /><category term="kafka" /><category term="performance" /><category term="distributed-systems" /><category term="streaming" /><category term="backend" /><summary type="html"></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://shanmuga-sundaram-n.github.io/assets/images/blog/kafka-speed.jpg" /><media:content medium="image" url="https://shanmuga-sundaram-n.github.io/assets/images/blog/kafka-speed.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry></feed>

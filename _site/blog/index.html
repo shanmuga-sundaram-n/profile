@@ -112,32 +112,126 @@
 <section class="section">
     <div class="container">
         <article class="content">
-            <div class="grid grid-2">
-  
-  <article class="post-card">
-    <div class="post-meta">
-      <span><i class="far fa-calendar"></i> January 01, 2023</span>
-      
-      <span><i class="fas fa-folder"></i> tech</span>
-      
-    </div>
-    <h3 class="post-title">
-      <a href="/blog/2023/01/01/sample-blog/">Sample Technical Blog</a>
-    </h3>
-    <p class="post-excerpt">Welcome to my first technical blog post! Here, I share insights on programming, software engineering, and more.
-
-</p>
-    <a href="/blog/2023/01/01/sample-blog/" class="read-more">
-      Read More <i class="fas fa-arrow-right"></i>
-    </a>
-  </article>
-  
+            <div class="blog-controls">
+  <div class="blog-search-wrapper">
+    <i class="fas fa-search"></i>
+    <input type="text" id="blog-search" placeholder="Search articles..." autocomplete="off" />
+  </div>
+  <div class="blog-category-filters" id="category-filters">
+    <button class="category-btn active" data-category="all">All</button>
+    <button class="category-btn" data-category="engineering">Engineering</button>
+    <button class="category-btn" data-category="ai">AI</button>
+    <button class="category-btn" data-category="java">Java</button>
+    <button class="category-btn" data-category="architecture">Architecture</button>
+    <button class="category-btn" data-category="distributed-systems">Distributed Systems</button>
+    <button class="category-btn" data-category="ml">ML</button>
+    <button class="category-btn" data-category="tools">Tools</button>
+  </div>
 </div>
 
+<div id="posts-container" class="grid grid-2"></div>
+<div id="pagination-controls" class="blog-pagination"></div>
+<p id="no-results" class="no-results-msg" hidden>No posts found.</p>
+
+<script id="post-data" type="application/json">
+[
+  {
+    "title": "Zero Vibe Coding: How I Engineered a Full-Stack Finance App with Claude Code's Multi-Agent Pipeline",
+    "url": "/blog/2026/03/20/zero-vibe-coding-finance-tracker/",
+    "date": "March 20, 2026",
+    "excerpt": "When we talk about AI-assisted coding, the conversation usually revolves around “vibe coding” — throwing vague prompts at an LLM, connecting a UI layout tool, and crossing our fingers that the unde...",
+    "description": "How I built a production-ready Personal Finance Tracker entirely from the terminal using Claude Code CLI with a strict 7-agent spec-driven pipeline — no UI MCP tools, no vibe coding.",
+    "categories": ["ai","engineering","claude-code"],
+    "tags": ["claude-code","multi-agent","hexagonal-architecture","spring-boot","react"],
+    "image": null
+  },
+
+  {
+    "title": "LLM Tokenizers: The Hidden Engine Behind AI Language Models",
+    "url": "/blog/2025/03/08/llm-tokenizers-hidden-engine/",
+    "date": "March 08, 2025",
+    "excerpt": "\n\n",
+    "description": "Tokenizers are the invisible foundation of every large language model — shaping context limits, API costs, cross-lingual fairness, and model reasoning. Here's how they work and why they matter.",
+    "categories": ["ai","ml"],
+    "tags": ["llm","tokenization","nlp","ai","machine-learning","transformers"],
+    "image": "/assets/images/blog/llm-tokenizers.jpg"
+  },
+
+  {
+    "title": "Mastering Backpressure in Reactive Programming: A Deep Dive",
+    "url": "/blog/2024/12/28/mastering-backpressure-reactive-programming/",
+    "date": "December 28, 2024",
+    "excerpt": "\n\n",
+    "description": "Backpressure is the fundamental mechanism that keeps reactive systems from collapsing under load. This deep dive covers what it is, why it matters, and how to implement it correctly across Project Reactor, RxJava, and Akka Streams.",
+    "categories": ["engineering","java"],
+    "tags": ["reactive-programming","backpressure","project-reactor","rxjava","akka","java","streaming"],
+    "image": "/assets/images/blog/backpressure-reactive.jpg"
+  },
+
+  {
+    "title": "Traditional Coding vs AI-Assisted Coding vs Vibe Coding: A New Spectrum",
+    "url": "/blog/2024/12/01/traditional-vs-ai-vs-vibe-coding/",
+    "date": "December 01, 2024",
+    "excerpt": "\n\n",
+    "description": "Modern software development has evolved into three distinct modes — traditional, AI-assisted, and vibe coding. Understanding when to use each is becoming a core engineering skill.",
+    "categories": ["ai","engineering"],
+    "tags": ["ai","coding","vibe-coding","productivity","software-engineering","claude-code"],
+    "image": "/assets/images/blog/traditional-vs-ai-vs-vibe-coding.jpg"
+  },
+
+  {
+    "title": "LlamaCoder: Turn Your Idea into an App in Minutes",
+    "url": "/blog/2024/11/25/llamacoder-ai-app-builder/",
+    "date": "November 25, 2024",
+    "excerpt": "\n\n",
+    "description": "An introduction to LlamaCoder — the AI-powered platform that converts plain language descriptions into functional application code, democratising app development for everyone.",
+    "categories": ["ai","tools"],
+    "tags": ["ai","llm","code-generation","llamacoder","no-code","productivity"],
+    "image": "/assets/images/blog/llamacoder.jpg"
+  },
+
+  {
+    "title": "Architectural Trade-off: Serverless APIs vs. Kubernetes APIs",
+    "url": "/blog/2024/11/17/serverless-vs-kubernetes-apis/",
+    "date": "November 17, 2024",
+    "excerpt": "\n\n",
+    "description": "A structured comparison of serverless and Kubernetes as API deployment paradigms — trade-offs across operational overhead, scalability, cost, control, and vendor lock-in to help you choose the right architecture for your context.",
+    "categories": ["engineering","architecture"],
+    "tags": ["serverless","kubernetes","cloud","architecture","devops","apis"],
+    "image": "/assets/images/blog/serverless-vs-kubernetes.jpg"
+  },
+
+  {
+    "title": "Exploring Threads and Virtual Threads in Java: A Comprehensive Guide",
+    "url": "/blog/2024/11/13/java-threads-and-virtual-threads/",
+    "date": "November 13, 2024",
+    "excerpt": "\n\n",
+    "description": "A deep dive into traditional Java threads vs virtual threads (Project Loom) — how they work internally, when to use each, and why virtual threads are a game changer for I/O-bound applications.",
+    "categories": ["engineering","java"],
+    "tags": ["java","concurrency","virtual-threads","project-loom","performance"],
+    "image": "/assets/images/blog/java-virtual-threads.jpg"
+  },
+
+  {
+    "title": "Why is Kafka So Fast? Unveiling the Secrets Behind Kafka's Speed",
+    "url": "/blog/2024/10/17/why-kafka-is-so-fast/",
+    "date": "October 17, 2024",
+    "excerpt": "\n\n",
+    "description": "A deep dive into the engineering decisions that make Apache Kafka one of the fastest messaging systems — sequential I/O, zero-copy, batching, compression, and intelligent caching.",
+    "categories": ["engineering","distributed-systems"],
+    "tags": ["kafka","performance","distributed-systems","streaming","backend"],
+    "image": "/assets/images/blog/kafka-speed.jpg"
+  }
+]
+</script>
 
         </article>
     </div>
 </section>
+
+
+<script src="/assets/js/blog-search.js"></script>
+
   </main>
 
   <!-- Footer -->

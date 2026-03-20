@@ -1,0 +1,43 @@
+---
+layout: page
+title: Blog
+description: Technical articles, tutorials, and insights
+permalink: /blog/
+blog_search: true
+---
+
+<div class="blog-controls">
+  <div class="blog-search-wrapper">
+    <i class="fas fa-search"></i>
+    <input type="text" id="blog-search" placeholder="Search articles..." autocomplete="off" />
+  </div>
+  <div class="blog-category-filters" id="category-filters">
+    <button class="category-btn active" data-category="all">All</button>
+    <button class="category-btn" data-category="engineering">Engineering</button>
+    <button class="category-btn" data-category="ai">AI</button>
+    <button class="category-btn" data-category="java">Java</button>
+    <button class="category-btn" data-category="architecture">Architecture</button>
+    <button class="category-btn" data-category="distributed-systems">Distributed Systems</button>
+    <button class="category-btn" data-category="ml">ML</button>
+    <button class="category-btn" data-category="tools">Tools</button>
+  </div>
+</div>
+
+<div id="posts-container" class="grid grid-2"></div>
+<div id="pagination-controls" class="blog-pagination"></div>
+<p id="no-results" class="no-results-msg" hidden>No posts found.</p>
+
+<script id="post-data" type="application/json">
+[{% for post in site.posts %}
+  {
+    "title": {{ post.title | jsonify }},
+    "url": "{{ post.url | relative_url }}",
+    "date": "{{ post.date | date: '%B %d, %Y' }}",
+    "excerpt": {{ post.excerpt | strip_html | truncate: 200 | jsonify }},
+    "description": {{ post.description | jsonify }},
+    "categories": {{ post.categories | jsonify }},
+    "tags": {{ post.tags | jsonify }},
+    "image": {{ post.image | jsonify }}
+  }{% unless forloop.last %},{% endunless %}
+{% endfor %}]
+</script>

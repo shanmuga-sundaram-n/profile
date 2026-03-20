@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Open+Sans:wght@300;400;600;700&family=Raleway:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <title>Mastering Backpressure in Reactive Programming: A Deep Dive | Shanmuga Sundaram Natarajan's Personal Website</title>
+
+  <!-- SEO Meta Tags -->
+  <meta name="description"
+    content="Backpressure is the fundamental mechanism that keeps reactive systems from collapsing under load. This deep dive covers what it is, why it matters, and how to implement it correctly across Project Reactor, RxJava, and Akka Streams.">
+  <meta name="author" content="Shanmuga Sundaram Natarajan (Shan)">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Mastering Backpressure in Reactive Programming: A Deep Dive">
+  <meta property="og:description"
+    content="Backpressure is the fundamental mechanism that keeps reactive systems from collapsing under load. This deep dive covers what it is, why it matters, and how to implement it correctly across Project Reactor, RxJava, and Akka Streams.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://shanmuga-sundaram-n.github.io/blog/2024/12/28/mastering-backpressure-reactive-programming/">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mastering Backpressure in Reactive Programming: A Deep Dive">
+  <meta name="twitter:description"
+    content="Backpressure is the fundamental mechanism that keeps reactive systems from collapsing under load. This deep dive covers what it is, why it matters, and how to implement it correctly across Project Reactor, RxJava, and Akka Streams.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/assets/images/projects/website-logo-matched.png">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/theme-switcher.css">
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Mastering Backpressure in Reactive Programming: A Deep Dive | Shanmuga Sundaram Natarajan’s Personal Website</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Mastering Backpressure in Reactive Programming: A Deep Dive" />
+<meta name="author" content="Shanmuga Sundaram Natarajan (Shan)" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Backpressure is the fundamental mechanism that keeps reactive systems from collapsing under load. This deep dive covers what it is, why it matters, and how to implement it correctly across Project Reactor, RxJava, and Akka Streams." />
+<meta property="og:description" content="Backpressure is the fundamental mechanism that keeps reactive systems from collapsing under load. This deep dive covers what it is, why it matters, and how to implement it correctly across Project Reactor, RxJava, and Akka Streams." />
+<link rel="canonical" href="https://shanmuga-sundaram-n.github.io/blog/2024/12/28/mastering-backpressure-reactive-programming/" />
+<meta property="og:url" content="https://shanmuga-sundaram-n.github.io/blog/2024/12/28/mastering-backpressure-reactive-programming/" />
+<meta property="og:site_name" content="Shanmuga Sundaram Natarajan’s Personal Website" />
+<meta property="og:image" content="https://shanmuga-sundaram-n.github.io/assets/images/blog/backpressure-reactive.jpg" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-12-28T17:30:00+05:30" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="twitter:image" content="https://shanmuga-sundaram-n.github.io/assets/images/blog/backpressure-reactive.jpg" />
+<meta property="twitter:title" content="Mastering Backpressure in Reactive Programming: A Deep Dive" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Shanmuga Sundaram Natarajan (Shan)"},"dateModified":"2024-12-28T17:30:00+05:30","datePublished":"2024-12-28T17:30:00+05:30","description":"Backpressure is the fundamental mechanism that keeps reactive systems from collapsing under load. This deep dive covers what it is, why it matters, and how to implement it correctly across Project Reactor, RxJava, and Akka Streams.","headline":"Mastering Backpressure in Reactive Programming: A Deep Dive","image":"https://shanmuga-sundaram-n.github.io/assets/images/blog/backpressure-reactive.jpg","mainEntityOfPage":{"@type":"WebPage","@id":"https://shanmuga-sundaram-n.github.io/blog/2024/12/28/mastering-backpressure-reactive-programming/"},"url":"https://shanmuga-sundaram-n.github.io/blog/2024/12/28/mastering-backpressure-reactive-programming/"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="site-header" id="header">
+    <nav class="site-nav container">
+      <a href="/" class="site-logo">
+        <img src="/assets/images/projects/website-logo-matched.png" alt="Shanmuga Sundaram Natarajan (Shan)"
+          class="logo-img">
+        <span class="logo-text">Shan's Digital Space</span>
+      </a>
+
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/" class="nav-link ">Home</a></li>
+        <li><a href="/about/"
+            class="nav-link ">About</a></li>
+        <li><a href="/projects/"
+            class="nav-link ">Projects</a></li>
+        <li><a href="/blog/"
+            class="nav-link active">Blog</a></li>
+        <li><a href="/contact/"
+            class="nav-link ">Contact</a></li>
+      </ul>
+
+      <div id="modeToggleContainer"></div>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <article class="section" style="padding-top: calc(var(--space-2xl) + 80px);">
+    <div class="container">
+        <div class="card" style="padding: var(--space-2xl); overflow: visible;">
+
+            <div class="post-meta" style="margin-bottom: var(--space-md);">
+                <span><i class="far fa-calendar"></i> December 28, 2024</span>
+                
+                <span><i class="fas fa-folder"></i> engineering, java</span>
+                
+            </div>
+
+            <h1 style="font-size: var(--font-size-4xl); margin-bottom: var(--space-xl); background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1.3;">Mastering Backpressure in Reactive Programming: A Deep Dive</h1>
+
+            <div class="post-content">
+                <p><img src="/assets/images/blog/backpressure-reactive.jpg" alt="Mastering Backpressure in Reactive Programming" /></p>
+
+<p>Reactive programming allows developers to build highly responsive and scalable systems that handle asynchronous data flows. But a fundamental challenge emerges when <strong>producers emit data faster than consumers can process it</strong>.</p>
+
+<p>Without a solution, this imbalance leads to memory overload, CPU exhaustion, and cascading failures. The solution is <strong>backpressure</strong>.</p>
+
+<hr />
+
+<h2 id="what-is-backpressure">What is Backpressure?</h2>
+
+<p>Backpressure is the mechanism that allows a consumer to communicate to its producer that it cannot keep up with the current data rate. Rather than silently dropping messages or crashing under load, a well-designed reactive system uses backpressure to apply flow control.</p>
+
+<p>Think of it like a water pipe: if you push water in faster than it can flow out, something bursts. Backpressure is the pressure relief valve.</p>
+
+<hr />
+
+<h2 id="why-it-matters">Why It Matters</h2>
+
+<p>Without proper backpressure handling:</p>
+
+<ul>
+  <li><strong>Memory overload</strong> — unbounded buffers fill up and cause OOM errors</li>
+  <li><strong>CPU exhaustion</strong> — the consumer thrashes trying to process an overwhelming queue</li>
+  <li><strong>Cascading failures</strong> — one slow consumer can destabilise an entire pipeline</li>
+  <li><strong>Silent data loss</strong> — messages get dropped without any indication</li>
+</ul>
+
+<hr />
+
+<h2 id="four-core-backpressure-strategies">Four Core Backpressure Strategies</h2>
+
+<h3 id="1-buffering">1. Buffering</h3>
+
+<p>Temporarily store excess data in a bounded buffer. When the buffer fills, apply additional pressure upstream.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Project Reactor</span>
+<span class="nc">Flux</span><span class="o">.</span><span class="na">range</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">1000</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">onBackpressureBuffer</span><span class="o">(</span><span class="mi">100</span><span class="o">)</span> <span class="c1">// buffer up to 100 items</span>
+    <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">item</span> <span class="o">-&gt;</span> <span class="n">process</span><span class="o">(</span><span class="n">item</span><span class="o">));</span>
+</code></pre></div></div>
+
+<p><strong>Use when:</strong> Data loss is unacceptable and consumers will eventually catch up. Be careful with buffer size — an unbounded buffer is no protection at all.</p>
+
+<hr />
+
+<h3 id="2-dropping">2. Dropping</h3>
+
+<p>Discard items when the consumer falls behind. Simpler than buffering, but only appropriate when losing some messages is acceptable.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// RxJava</span>
+<span class="nc">Flowable</span><span class="o">.</span><span class="na">interval</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">onBackpressureDrop</span><span class="o">()</span>
+    <span class="o">.</span><span class="na">observeOn</span><span class="o">(</span><span class="nc">Schedulers</span><span class="o">.</span><span class="na">computation</span><span class="o">())</span>
+    <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">item</span> <span class="o">-&gt;</span> <span class="n">slowProcess</span><span class="o">(</span><span class="n">item</span><span class="o">));</span>
+</code></pre></div></div>
+
+<p><strong>Use when:</strong> You’re processing real-time streams (metrics, sensor data) where stale data has no value.</p>
+
+<hr />
+
+<h3 id="3-throttling">3. Throttling</h3>
+
+<p>Control the emission speed from the producer to match consumer capacity. Instead of buffering or dropping, you slow the source down.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Akka Streams</span>
+<span class="nc">Source</span><span class="o">.</span><span class="na">repeat</span><span class="o">(</span><span class="s">"event"</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">throttle</span><span class="o">(</span><span class="mi">10</span><span class="o">,</span> <span class="nc">Duration</span><span class="o">.</span><span class="na">ofSeconds</span><span class="o">(</span><span class="mi">1</span><span class="o">))</span> <span class="c1">// max 10 elements per second</span>
+    <span class="o">.</span><span class="na">runWith</span><span class="o">(</span><span class="nc">Sink</span><span class="o">.</span><span class="na">foreach</span><span class="o">(</span><span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">::</span><span class="n">println</span><span class="o">),</span> <span class="n">system</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p><strong>Use when:</strong> The producer is controllable and you want to maintain a steady, sustainable flow rather than bursts.</p>
+
+<hr />
+
+<h3 id="4-requesting-pull-based">4. Requesting (Pull-based)</h3>
+
+<p>Consumers explicitly request a specific number of items from the producer. This is the most precise form of backpressure — the foundation of the Reactive Streams specification.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Project Reactor — limit rate to 10 items at a time</span>
+<span class="nc">Flux</span><span class="o">.</span><span class="na">range</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">1000</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">limitRate</span><span class="o">(</span><span class="mi">10</span><span class="o">)</span> <span class="c1">// consumer pulls 10 items at a time</span>
+    <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="n">item</span> <span class="o">-&gt;</span> <span class="n">process</span><span class="o">(</span><span class="n">item</span><span class="o">));</span>
+</code></pre></div></div>
+
+<p><strong>Use when:</strong> You want fine-grained control over throughput and can predict consumer processing capacity.</p>
+
+<hr />
+
+<h2 id="framework-comparison">Framework Comparison</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Framework</th>
+      <th>Default Strategy</th>
+      <th>Key API</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Project Reactor</td>
+      <td>Error on overflow</td>
+      <td><code class="language-plaintext highlighter-rouge">onBackpressureBuffer()</code>, <code class="language-plaintext highlighter-rouge">limitRate()</code></td>
+    </tr>
+    <tr>
+      <td>RxJava</td>
+      <td>Configurable</td>
+      <td><code class="language-plaintext highlighter-rouge">onBackpressureDrop()</code>, <code class="language-plaintext highlighter-rouge">onBackpressureLatest()</code></td>
+    </tr>
+    <tr>
+      <td>Akka Streams</td>
+      <td>Built-in propagation</td>
+      <td><code class="language-plaintext highlighter-rouge">throttle()</code>, <code class="language-plaintext highlighter-rouge">buffer()</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>All three follow the <strong>Reactive Streams specification</strong>, which standardises backpressure handling through the <code class="language-plaintext highlighter-rouge">Publisher</code>/<code class="language-plaintext highlighter-rouge">Subscriber</code> contract.</p>
+
+<hr />
+
+<h2 id="best-practices">Best Practices</h2>
+
+<ol>
+  <li><strong>Match strategy to data criticality</strong> — financial transactions need buffering; live metrics can afford dropping</li>
+  <li><strong>Always bound your buffers</strong> — unbounded buffers defer the problem rather than solving it</li>
+  <li><strong>Test under realistic load</strong> — backpressure issues only surface at production traffic levels</li>
+  <li><strong>Understand your consumer’s processing capacity</strong> — profile before tuning</li>
+  <li><strong>Monitor queue depths</strong> — expose buffer utilisation as a metric to catch pressure building up</li>
+</ol>
+
+<hr />
+
+<h2 id="key-takeaway">Key Takeaway</h2>
+
+<p>Backpressure isn’t an edge case — it’s a core concern in any reactive system that handles real-world load. Choosing the right strategy (buffer, drop, throttle, or request) depends on your data’s criticality and your consumer’s characteristics. The frameworks provide the tools; understanding the trade-offs is the engineering judgment that makes them work.</p>
+
+            </div>
+
+            
+            <div class="tags mt-xl">
+                
+                <span class="tag">reactive-programming</span>
+                
+                <span class="tag">backpressure</span>
+                
+                <span class="tag">project-reactor</span>
+                
+                <span class="tag">rxjava</span>
+                
+                <span class="tag">akka</span>
+                
+                <span class="tag">java</span>
+                
+                <span class="tag">streaming</span>
+                
+            </div>
+            
+
+            <div class="mt-xl" style="padding-top: var(--space-xl); border-top: 1px solid var(--color-border);">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-md);">
+                    
+                    <a href="/blog/2024/12/01/traditional-vs-ai-vs-vibe-coding/" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Previous Post
+                    </a>
+                    
+
+                    
+                    <a href="/blog/2025/03/08/llm-tokenizers-hidden-engine/" class="btn btn-secondary">
+                        Next Post <i class="fas fa-arrow-right"></i>
+                    </a>
+                    
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-xl">
+            <a href="/blog/" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Back to Blog
+            </a>
+        </div>
+    </div>
+</article>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Shanmuga Sundaram Natarajan (Shan)</h3>
+          <p>Hands-on Architect & Technical Leader | 18+ Years Experience | AI-First Software Delivery</p>
+        </div>
+
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <ul class="footer-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/about/">About</a></li>
+            <li><a href="/projects/">Projects</a></li>
+            <li><a href="/blog/">Blog</a></li>
+            <li><a href="/contact/">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h3>Connect</h3>
+          <div class="social-links">
+            
+            <a href="https://github.com/shanmuga-sundaram-n" class="social-link" target="_blank" rel="noopener" aria-label="GitHub">
+              <i class="fab fa-github"></i>
+            </a>
+            
+            <a href="https://www.linkedin.com/in/shan-profile/" class="social-link" target="_blank" rel="noopener" aria-label="LinkedIn">
+              <i class="fab fa-linkedin"></i>
+            </a>
+            
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 Shanmuga Sundaram Natarajan (Shan). All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+
+    // Header scroll effect
+    const header = document.getElementById('header');
+    let lastScroll = 0;
+
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+
+      if (currentScroll > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+
+      lastScroll = currentScroll;
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+  </script>
+
+  <!-- Theme Switcher Script -->
+  <script src="/assets/js/theme-switcher.js"></script>
+
+</body>
+
+</html>

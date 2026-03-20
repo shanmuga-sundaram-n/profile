@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Open+Sans:wght@300;400;600;700&family=Raleway:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <title>LLM Tokenizers: The Hidden Engine Behind AI Language Models | Shanmuga Sundaram Natarajan's Personal Website</title>
+
+  <!-- SEO Meta Tags -->
+  <meta name="description"
+    content="Tokenizers are the invisible foundation of every large language model — shaping context limits, API costs, cross-lingual fairness, and model reasoning. Here's how they work and why they matter.">
+  <meta name="author" content="Shanmuga Sundaram Natarajan (Shan)">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="LLM Tokenizers: The Hidden Engine Behind AI Language Models">
+  <meta property="og:description"
+    content="Tokenizers are the invisible foundation of every large language model — shaping context limits, API costs, cross-lingual fairness, and model reasoning. Here's how they work and why they matter.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://shanmuga-sundaram-n.github.io/blog/2025/03/08/llm-tokenizers-hidden-engine/">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="LLM Tokenizers: The Hidden Engine Behind AI Language Models">
+  <meta name="twitter:description"
+    content="Tokenizers are the invisible foundation of every large language model — shaping context limits, API costs, cross-lingual fairness, and model reasoning. Here's how they work and why they matter.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/assets/images/projects/website-logo-matched.png">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/theme-switcher.css">
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>LLM Tokenizers: The Hidden Engine Behind AI Language Models | Shanmuga Sundaram Natarajan’s Personal Website</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="LLM Tokenizers: The Hidden Engine Behind AI Language Models" />
+<meta name="author" content="Shanmuga Sundaram Natarajan (Shan)" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Tokenizers are the invisible foundation of every large language model — shaping context limits, API costs, cross-lingual fairness, and model reasoning. Here’s how they work and why they matter." />
+<meta property="og:description" content="Tokenizers are the invisible foundation of every large language model — shaping context limits, API costs, cross-lingual fairness, and model reasoning. Here’s how they work and why they matter." />
+<link rel="canonical" href="https://shanmuga-sundaram-n.github.io/blog/2025/03/08/llm-tokenizers-hidden-engine/" />
+<meta property="og:url" content="https://shanmuga-sundaram-n.github.io/blog/2025/03/08/llm-tokenizers-hidden-engine/" />
+<meta property="og:site_name" content="Shanmuga Sundaram Natarajan’s Personal Website" />
+<meta property="og:image" content="https://shanmuga-sundaram-n.github.io/assets/images/blog/llm-tokenizers.jpg" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-03-08T17:30:00+05:30" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="twitter:image" content="https://shanmuga-sundaram-n.github.io/assets/images/blog/llm-tokenizers.jpg" />
+<meta property="twitter:title" content="LLM Tokenizers: The Hidden Engine Behind AI Language Models" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Shanmuga Sundaram Natarajan (Shan)"},"dateModified":"2025-03-08T17:30:00+05:30","datePublished":"2025-03-08T17:30:00+05:30","description":"Tokenizers are the invisible foundation of every large language model — shaping context limits, API costs, cross-lingual fairness, and model reasoning. Here’s how they work and why they matter.","headline":"LLM Tokenizers: The Hidden Engine Behind AI Language Models","image":"https://shanmuga-sundaram-n.github.io/assets/images/blog/llm-tokenizers.jpg","mainEntityOfPage":{"@type":"WebPage","@id":"https://shanmuga-sundaram-n.github.io/blog/2025/03/08/llm-tokenizers-hidden-engine/"},"url":"https://shanmuga-sundaram-n.github.io/blog/2025/03/08/llm-tokenizers-hidden-engine/"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="site-header" id="header">
+    <nav class="site-nav container">
+      <a href="/" class="site-logo">
+        <img src="/assets/images/projects/website-logo-matched.png" alt="Shanmuga Sundaram Natarajan (Shan)"
+          class="logo-img">
+        <span class="logo-text">Shan's Digital Space</span>
+      </a>
+
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/" class="nav-link ">Home</a></li>
+        <li><a href="/about/"
+            class="nav-link ">About</a></li>
+        <li><a href="/projects/"
+            class="nav-link ">Projects</a></li>
+        <li><a href="/blog/"
+            class="nav-link active">Blog</a></li>
+        <li><a href="/contact/"
+            class="nav-link ">Contact</a></li>
+      </ul>
+
+      <div id="modeToggleContainer"></div>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <article class="section" style="padding-top: calc(var(--space-2xl) + 80px);">
+    <div class="container">
+        <div class="card" style="padding: var(--space-2xl); overflow: visible;">
+
+            <div class="post-meta" style="margin-bottom: var(--space-md);">
+                <span><i class="far fa-calendar"></i> March 08, 2025</span>
+                
+                <span><i class="fas fa-folder"></i> ai, ml</span>
+                
+            </div>
+
+            <h1 style="font-size: var(--font-size-4xl); margin-bottom: var(--space-xl); background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1.3;">LLM Tokenizers: The Hidden Engine Behind AI Language Models</h1>
+
+            <div class="post-content">
+                <p><img src="/assets/images/blog/llm-tokenizers.jpg" alt="LLM Tokenizers" /></p>
+
+<p>Every interaction with a large language model begins long before any neural network computation. It starts with <strong>tokenization</strong> — the process of converting human language into the numerical representations that models actually process. Understanding tokenizers unlocks a deeper understanding of why LLMs behave the way they do.</p>
+
+<hr />
+
+<h2 id="what-is-tokenization">What is Tokenization?</h2>
+
+<p>Tokenization transforms text into discrete units called <strong>tokens</strong> — numerical representations the model can process. Rather than understanding words directly, models convert input into token IDs corresponding to entries in a vocabulary.</p>
+
+<p>“Hello, world!” might become <code class="language-plaintext highlighter-rouge">[15496, 11, 995, 0]</code> — four numbers that the model processes as a sequence. The model never sees the original text; it only sees tokens.</p>
+
+<hr />
+
+<h2 id="why-tokenization-matters">Why Tokenization Matters</h2>
+
+<p>The choice of tokenizer has profound downstream effects:</p>
+
+<ol>
+  <li><strong>Context window capacity</strong> — the maximum text a model can process is measured in tokens, not words or characters</li>
+  <li><strong>API costs</strong> — most LLM APIs charge per token; tokenization efficiency directly affects cost</li>
+  <li><strong>Cross-lingual performance</strong> — languages with inefficient tokenization get fewer “thoughts” per context window</li>
+  <li><strong>Specialised content</strong> — code, mathematical notation, and domain-specific text tokenize very differently than prose</li>
+</ol>
+
+<hr />
+
+<h2 id="three-main-tokenization-approaches">Three Main Tokenization Approaches</h2>
+
+<h3 id="1-word-based-tokenization">1. Word-Based Tokenization</h3>
+
+<p>The system scans text character-by-character, treating delimiters (spaces, punctuation) as token boundaries. “Hello world!” becomes individual word units.</p>
+
+<p><strong>Advantages:</strong></p>
+<ul>
+  <li>Intuitive and semantically meaningful</li>
+  <li>Simple to implement</li>
+  <li>Efficient for common vocabulary</li>
+</ul>
+
+<p><strong>Limitations:</strong></p>
+<ul>
+  <li>Massive vocabularies for morphologically rich languages</li>
+  <li>Out-of-vocabulary (OOV) problems for rare or new words</li>
+  <li>Compound word challenges (German, Finnish, Turkish suffer most)</li>
+</ul>
+
+<hr />
+
+<h3 id="2-character-based-tokenization">2. Character-Based Tokenization</h3>
+
+<p>Each character becomes a token. “Hello world” breaks into 11 tokens: <code class="language-plaintext highlighter-rouge">H-e-l-l-o-[space]-w-o-r-l-d</code>.</p>
+
+<p><strong>Advantages:</strong></p>
+<ul>
+  <li>Tiny vocabulary (100–200 tokens covers most languages)</li>
+  <li>Eliminates unknown word problems entirely</li>
+</ul>
+
+<p><strong>Trade-offs:</strong></p>
+<ul>
+  <li>Sequences 5–10× longer than word-based</li>
+  <li>The model must reconstruct semantic meaning from individual characters</li>
+  <li>Higher computational cost for the same amount of text</li>
+</ul>
+
+<hr />
+
+<h3 id="3-subword-tokenization-the-modern-standard">3. Subword Tokenization (The Modern Standard)</h3>
+
+<p>Modern LLMs — GPT, Claude, Llama, Gemini — all use subword tokenization. Words are split into meaningful units: “Unlikeliest” becomes <code class="language-plaintext highlighter-rouge">["Un", "likely", "est"]</code>.</p>
+
+<p>The dominant algorithm is <strong>Byte-Pair Encoding (BPE)</strong>:</p>
+
+<ol>
+  <li>Start with a vocabulary of individual characters</li>
+  <li>Count the frequency of all adjacent token pairs</li>
+  <li>Merge the most common pair into a new token</li>
+  <li>Repeat until reaching the target vocabulary size (typically 10,000–100,000 tokens)</li>
+</ol>
+
+<p>The result: common words become single tokens, rare words get split into recognisable subword units, and the vocabulary is compact enough to be manageable.</p>
+
+<hr />
+
+<h2 id="impact-on-model-performance">Impact on Model Performance</h2>
+
+<h3 id="economic-implications">Economic Implications</h3>
+
+<p>Tokenization efficiency has real cost consequences:</p>
+
+<ul>
+  <li><strong>Training efficiency</strong> improves with optimised tokenization</li>
+  <li><strong>Fine-tuning costs</strong> scale directly with tokens per training example</li>
+  <li><strong>Inference latency</strong> varies based on how a given input tokenizes</li>
+</ul>
+
+<p>A well-structured prompt in English might use significantly fewer tokens than an equivalent prompt in another language — directly affecting both cost and available reasoning capacity.</p>
+
+<h3 id="cross-lingual-disparities">Cross-Lingual Disparities</h3>
+
+<p>This is one of the most significant fairness issues in modern LLMs. Languages with less efficient tokenization:</p>
+
+<ul>
+  <li>Get fewer reasoning steps within a fixed context window</li>
+  <li>Cost more per equivalent amount of text</li>
+  <li>May have lower model quality due to less training data representation</li>
+</ul>
+
+<p>English typically tokenizes very efficiently in models trained primarily on English text. Languages like Thai, Arabic, or many African languages often require significantly more tokens for equivalent content.</p>
+
+<h3 id="technical-effects-on-model-reasoning">Technical Effects on Model Reasoning</h3>
+
+<ul>
+  <li><strong>Attention dilution</strong> — when semantic units are spread across many tokens, the model’s attention mechanism must work harder to connect related concepts</li>
+  <li><strong>Boundary artifacts</strong> — token boundaries that misalign with semantic units can affect how the model processes meaning</li>
+  <li><strong>Embedding geometry</strong> — the choice of tokens shapes the internal representation of concepts in the model’s embedding space</li>
+</ul>
+
+<hr />
+
+<h2 id="practical-optimisation-strategies">Practical Optimisation Strategies</h2>
+
+<p><strong>For prompt engineering:</strong></p>
+<ul>
+  <li>Structure prompts with awareness of how your target language tokenizes</li>
+  <li>Use tokenizer visualisation tools (like OpenAI’s tokenizer playground) to inspect token boundaries</li>
+  <li>Prefer structured formats (JSON, markdown) that often tokenize efficiently</li>
+</ul>
+
+<p><strong>For data preparation:</strong></p>
+<ul>
+  <li>Select formats based on tokenization performance for your use case</li>
+  <li>Apply semantic compression — preserve meaning with fewer tokens where possible</li>
+  <li>Be aware that code tokenizes very differently than prose</li>
+</ul>
+
+<hr />
+
+<h2 id="the-future-of-tokenization">The Future of Tokenization</h2>
+
+<p>Emerging approaches are addressing current limitations:</p>
+
+<ul>
+  <li><strong>Character-level fallbacks</strong> for rare words and multilingual content</li>
+  <li><strong>Learned tokenizers</strong> that adapt during pre-training</li>
+  <li><strong>Semantic tokenization</strong> that incorporates meaning-based rather than purely frequency-based boundaries</li>
+  <li><strong>Byte-level models</strong> that operate directly on raw bytes, eliminating the tokenization step entirely</li>
+</ul>
+
+<hr />
+
+<h2 id="key-takeaway">Key Takeaway</h2>
+
+<p>Tokenization forms the crucial bridge between human language and machine understanding. It shapes everything from API costs to model reasoning depth to cross-lingual fairness — yet it’s almost entirely invisible to most users.</p>
+
+<p>Understanding how your text becomes tokens isn’t just an academic exercise. It directly informs better prompt design, more accurate cost estimation, and a clearer mental model of why LLMs behave the way they do.</p>
+
+            </div>
+
+            
+            <div class="tags mt-xl">
+                
+                <span class="tag">llm</span>
+                
+                <span class="tag">tokenization</span>
+                
+                <span class="tag">nlp</span>
+                
+                <span class="tag">ai</span>
+                
+                <span class="tag">machine-learning</span>
+                
+                <span class="tag">transformers</span>
+                
+            </div>
+            
+
+            <div class="mt-xl" style="padding-top: var(--space-xl); border-top: 1px solid var(--color-border);">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-md);">
+                    
+                    <a href="/blog/2024/12/28/mastering-backpressure-reactive-programming/" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Previous Post
+                    </a>
+                    
+
+                    
+                    <a href="/blog/2026/03/20/zero-vibe-coding-finance-tracker/" class="btn btn-secondary">
+                        Next Post <i class="fas fa-arrow-right"></i>
+                    </a>
+                    
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-xl">
+            <a href="/blog/" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Back to Blog
+            </a>
+        </div>
+    </div>
+</article>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Shanmuga Sundaram Natarajan (Shan)</h3>
+          <p>Hands-on Architect & Technical Leader | 18+ Years Experience | AI-First Software Delivery</p>
+        </div>
+
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <ul class="footer-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/about/">About</a></li>
+            <li><a href="/projects/">Projects</a></li>
+            <li><a href="/blog/">Blog</a></li>
+            <li><a href="/contact/">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h3>Connect</h3>
+          <div class="social-links">
+            
+            <a href="https://github.com/shanmuga-sundaram-n" class="social-link" target="_blank" rel="noopener" aria-label="GitHub">
+              <i class="fab fa-github"></i>
+            </a>
+            
+            <a href="https://www.linkedin.com/in/shan-profile/" class="social-link" target="_blank" rel="noopener" aria-label="LinkedIn">
+              <i class="fab fa-linkedin"></i>
+            </a>
+            
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 Shanmuga Sundaram Natarajan (Shan). All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+
+    // Header scroll effect
+    const header = document.getElementById('header');
+    let lastScroll = 0;
+
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+
+      if (currentScroll > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+
+      lastScroll = currentScroll;
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+  </script>
+
+  <!-- Theme Switcher Script -->
+  <script src="/assets/js/theme-switcher.js"></script>
+
+</body>
+
+</html>
