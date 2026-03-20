@@ -10,8 +10,8 @@
     return 'dark';
   }
 
-  // Get saved mode or detect system preference
-  const savedMode = localStorage.getItem('site-mode') || detectSystemPreference();
+  // Get saved mode; default to dark regardless of system preference
+  const savedMode = localStorage.getItem('site-mode') || 'dark';
 
   // Always use orange-red theme
   document.documentElement.setAttribute('data-mode', savedMode);
