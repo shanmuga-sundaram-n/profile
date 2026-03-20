@@ -124,6 +124,47 @@
 }
 
 /* ============================================
+   LIGHT MODE: BLOG OVERRIDES
+   ============================================ */
+[data-mode="light"] .post-card {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+[data-mode="light"] .post-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+  border-color: rgba(0, 0, 0, 0.25);
+}
+
+[data-mode="light"] .blog-search-wrapper input {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+[data-mode="light"] .category-btn {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.18);
+  color: #4a5568;
+}
+
+[data-mode="light"] .category-btn:hover {
+  background: #f1f3f5;
+  border-color: rgba(0, 0, 0, 0.28);
+  color: #1a1a1a;
+}
+
+[data-mode="light"] .pagination-btn {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.18);
+}
+
+[data-mode="light"] .pagination-btn:hover:not(:disabled) {
+  background: #f1f3f5;
+  border-color: rgba(0, 0, 0, 0.28);
+}
+
+/* ============================================
    HEADER: ALWAYS DARK (ignores light mode)
    ============================================ */
 [data-mode="light"] .site-header {

@@ -4,6 +4,21 @@
 /* ============================================ LIGHT MODE VARIABLES ============================================ */
 [data-mode="light"] { /* Light Mode Color Palette */ --color-bg-primary: #ffffff; --color-bg-secondary: #f8f9fa; --color-bg-tertiary: #e9ecef; --color-surface: rgba(0, 0, 0, 0.05); --color-surface-hover: rgba(0, 0, 0, 0.08); /* Light Mode Text Colors */ --color-text-primary: #1a1a1a; --color-text-secondary: #4a5568; --color-text-tertiary: #718096; /* Light Mode Borders */ --color-border: rgba(0, 0, 0, 0.1); --color-border-hover: rgba(0, 0, 0, 0.2); /* Light Mode Glass effect */ --color-glass-bg: rgba(0, 0, 0, 0.03); --color-glass-border: rgba(0, 0, 0, 0.1); /* Light Mode Shadows */ --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08); --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12); --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.15); --shadow-xl: 0 16px 64px rgba(0, 0, 0, 0.2); --shadow-glow: 0 0 32px rgba(99, 102, 241, 0.2); /* Light Mode Gradients */ --gradient-hero: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); }
 
+/* ============================================ LIGHT MODE: BLOG OVERRIDES ============================================ */
+[data-mode="light"] .post-card { background: #ffffff; border-color: rgba(0, 0, 0, 0.15); box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08); }
+
+[data-mode="light"] .post-card:hover { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14); border-color: rgba(0, 0, 0, 0.25); }
+
+[data-mode="light"] .blog-search-wrapper input { background: #ffffff; border-color: rgba(0, 0, 0, 0.2); }
+
+[data-mode="light"] .category-btn { background: #ffffff; border-color: rgba(0, 0, 0, 0.18); color: #4a5568; }
+
+[data-mode="light"] .category-btn:hover { background: #f1f3f5; border-color: rgba(0, 0, 0, 0.28); color: #1a1a1a; }
+
+[data-mode="light"] .pagination-btn { background: #ffffff; border-color: rgba(0, 0, 0, 0.18); }
+
+[data-mode="light"] .pagination-btn:hover:not(:disabled) { background: #f1f3f5; border-color: rgba(0, 0, 0, 0.28); }
+
 /* ============================================ HEADER: ALWAYS DARK (ignores light mode) ============================================ */
 [data-mode="light"] .site-header { background: #0a0e27; border-bottom-color: rgba(255, 255, 255, 0.1); --color-bg-primary: #0a0e27; --color-bg-secondary: #151932; --color-bg-tertiary: #1e2440; --color-surface: rgba(255, 255, 255, 0.05); --color-surface-hover: rgba(255, 255, 255, 0.08); --color-text-primary: #e8eaed; --color-text-secondary: #b8bcc8; --color-text-tertiary: #8a8f9e; --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1); --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.2); }
 
