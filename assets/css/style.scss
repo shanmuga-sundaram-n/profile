@@ -689,13 +689,13 @@ strong {
    ============================================ */
 .skills-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: var(--space-md);
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: var(--space-sm);
 }
 
 .skill-item {
   background: var(--color-surface);
-  padding: var(--space-md);
+  padding: var(--space-sm);
   border-radius: var(--radius-md);
   text-align: center;
   transition: all var(--transition-base);
@@ -709,12 +709,13 @@ strong {
 }
 
 .skill-icon {
-  font-size: var(--font-size-3xl);
-  margin-bottom: var(--space-sm);
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--space-xs);
 }
 
 .skill-name {
   font-weight: 600;
+  font-size: var(--font-size-sm);
   color: var(--color-text-primary);
 }
 
