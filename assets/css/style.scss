@@ -104,6 +104,17 @@
   --color-text-secondary: #4a5568;
   --color-text-tertiary: #718096;
 
+  /* Light Mode Accent Colors — darker for contrast on white (WCAG AA) */
+  --color-accent-primary: #b45309;    /* amber-700, 4.74:1 on white */
+  --color-accent-secondary: #dc2626;  /* red-600,   5.12:1 on white */
+  --color-accent-tertiary: #c2410c;   /* orange-700 */
+  --color-accent-success: #047857;
+  --color-accent-warning: #b45309;
+
+  /* Light Mode Gradients */
+  --gradient-primary: linear-gradient(135deg, #b45309 0%, #dc2626 50%, #c2410c 100%);
+  --gradient-hero: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+
   /* Light Mode Borders */
   --color-border: rgba(0, 0, 0, 0.1);
   --color-border-hover: rgba(0, 0, 0, 0.2);
@@ -118,9 +129,6 @@
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.15);
   --shadow-xl: 0 16px 64px rgba(0, 0, 0, 0.2);
   --shadow-glow: 0 0 32px rgba(99, 102, 241, 0.2);
-
-  /* Light Mode Gradients */
-  --gradient-hero: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
 }
 
 /* ============================================
