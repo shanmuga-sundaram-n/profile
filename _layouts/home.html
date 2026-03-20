@@ -216,7 +216,7 @@ layout: default
         </div>
 
         <div class="grid grid-2">
-            {% for post in site.posts limit:4 %}
+            {% for post in site.posts limit:3 %}
             <article class="post-card">
                 <div class="post-meta">
                     <span><i class="far fa-calendar"></i> {{ post.date | date: "%B %d, %Y" }}</span>
