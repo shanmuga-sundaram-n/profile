@@ -99,6 +99,19 @@
     - Statistical Inference
     - Business Intelligence
 
+- title: "Personal Finance Tracker"
+  description: "Production-ready full-stack finance app built entirely via Claude Code CLI using a 7-agent spec-driven pipeline. Features Hexagonal Architecture, double-entry accounting, dynamic budget aggregation, and WCAG 2.1 AA compliance — built without any UI MCP tools."
+  image: "/assets/images/projects/personal-finance-tracker.webp"
+  github: "https://github.com/shanmuga-sundaram-n/personal-finance-tracker"
+  technologies:
+    - Claude Code
+    - Multi-Agent AI
+    - Spring Boot
+    - React
+    - PostgreSQL
+    - Hexagonal Architecture
+    - Java
+
 - title: "Portfolio Website"
   description: "Modern, responsive personal portfolio website built with Jekyll and hosted on GitHub Pages. Features a clean design with blog integration."
   image: "/assets/images/projects/portfolio.png"

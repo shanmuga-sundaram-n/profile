@@ -191,7 +191,6 @@ layout: default
             <article class="post-card">
                 <div class="post-meta">
                     <span><i class="far fa-calendar"></i> {{ post.date | date: "%B %d, %Y" }}</span>
-                    <span><i class="far fa-clock"></i> {{ post.content | reading_time }}</span>
                 </div>
                 <h3 class="post-title">
                     <a href="{{ post.url | relative_url }}">{{ post.title }}</a>

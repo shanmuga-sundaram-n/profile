@@ -13,6 +13,8 @@ plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
 
+future: true
+
 markdown: kramdown
 highlighter: rouge
 
