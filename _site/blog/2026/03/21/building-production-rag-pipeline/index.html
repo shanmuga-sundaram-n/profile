@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Open+Sans:wght@300;400;600;700&family=Raleway:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <title>Building RAG That Actually Works: Lessons from the Trenches | Shanmuga Sundaram Natarajan's Personal Website</title>
+
+  <!-- SEO Meta Tags -->
+  <meta name="description"
+    content="A practitioner's guide to building production-grade RAG pipelines — covering chunking strategy, retrieval tuning, re-ranking, and evaluation. Lessons from real failures, not sanitized tutorials.">
+  <meta name="author" content="Shanmuga Sundaram Natarajan (Shan)">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Building RAG That Actually Works: Lessons from the Trenches">
+  <meta property="og:description"
+    content="A practitioner's guide to building production-grade RAG pipelines — covering chunking strategy, retrieval tuning, re-ranking, and evaluation. Lessons from real failures, not sanitized tutorials.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://shanmuga-sundaram-n.github.io/blog/2026/03/21/building-production-rag-pipeline/">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Building RAG That Actually Works: Lessons from the Trenches">
+  <meta name="twitter:description"
+    content="A practitioner's guide to building production-grade RAG pipelines — covering chunking strategy, retrieval tuning, re-ranking, and evaluation. Lessons from real failures, not sanitized tutorials.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/assets/images/projects/website-logo-matched.png">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/theme-switcher.css">
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Building RAG That Actually Works: Lessons from the Trenches | Shanmuga Sundaram Natarajan’s Personal Website</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Building RAG That Actually Works: Lessons from the Trenches" />
+<meta name="author" content="Shanmuga Sundaram Natarajan (Shan)" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A practitioner’s guide to building production-grade RAG pipelines — covering chunking strategy, retrieval tuning, re-ranking, and evaluation. Lessons from real failures, not sanitized tutorials." />
+<meta property="og:description" content="A practitioner’s guide to building production-grade RAG pipelines — covering chunking strategy, retrieval tuning, re-ranking, and evaluation. Lessons from real failures, not sanitized tutorials." />
+<link rel="canonical" href="https://shanmuga-sundaram-n.github.io/blog/2026/03/21/building-production-rag-pipeline/" />
+<meta property="og:url" content="https://shanmuga-sundaram-n.github.io/blog/2026/03/21/building-production-rag-pipeline/" />
+<meta property="og:site_name" content="Shanmuga Sundaram Natarajan’s Personal Website" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-03-21T17:30:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Building RAG That Actually Works: Lessons from the Trenches" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Shanmuga Sundaram Natarajan (Shan)"},"dateModified":"2026-03-21T17:30:00+05:30","datePublished":"2026-03-21T17:30:00+05:30","description":"A practitioner’s guide to building production-grade RAG pipelines — covering chunking strategy, retrieval tuning, re-ranking, and evaluation. Lessons from real failures, not sanitized tutorials.","headline":"Building RAG That Actually Works: Lessons from the Trenches","mainEntityOfPage":{"@type":"WebPage","@id":"https://shanmuga-sundaram-n.github.io/blog/2026/03/21/building-production-rag-pipeline/"},"url":"https://shanmuga-sundaram-n.github.io/blog/2026/03/21/building-production-rag-pipeline/"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="site-header" id="header">
+    <nav class="site-nav container">
+      <a href="/" class="site-logo">
+        <img src="/assets/images/projects/website-logo-matched.png" alt="Shanmuga Sundaram Natarajan (Shan)"
+          class="logo-img">
+        <span class="logo-text">Shan's Digital Space</span>
+      </a>
+
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/" class="nav-link ">Home</a></li>
+        <li><a href="/about/"
+            class="nav-link ">About</a></li>
+        <li><a href="/projects/"
+            class="nav-link ">Projects</a></li>
+        <li><a href="/blog/"
+            class="nav-link active">Blog</a></li>
+        <li><a href="/contact/"
+            class="nav-link ">Contact</a></li>
+      </ul>
+
+      <div id="modeToggleContainer"></div>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <article class="section" style="padding-top: calc(var(--space-2xl) + 80px);">
+    <div class="container">
+        <div class="card" style="padding: var(--space-2xl); overflow: visible;">
+
+            <div class="post-meta" style="margin-bottom: var(--space-md);">
+                <span><i class="far fa-calendar"></i> March 21, 2026</span>
+                
+                <span><i class="fas fa-folder"></i> ai, engineering, rag</span>
+                
+            </div>
+
+            <h1 style="font-size: var(--font-size-4xl); margin-bottom: var(--space-xl); background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1.3;">Building RAG That Actually Works: Lessons from the Trenches</h1>
+
+            <div class="post-content">
+                <p>I’ve read probably a dozen RAG tutorials. They all do the same thing: show you how to embed a handful of PDFs into a vector store, run a similarity search, stuff the results into a prompt, and call it a production pipeline. Then you try to use the same approach on real data — thousands of documents, mixed formats, users with messy natural language queries — and the whole thing falls apart. The answers are vague, wrong, or confidently referencing documents that have nothing to do with the question.</p>
+
+<p>That gap between “works in the tutorial” and “works in production” is what this post is about. I’ve built a few of these pipelines now, and I’ve made almost every mistake there is to make — wrong chunk sizes, no overlap, skipping the re-ranker, shipping without any evaluation. I’m going to walk through the full pipeline — from chunking to evaluation — not as a sanitized tutorial, but as the thing I wish I’d had when I started building this stuff for real.</p>
+
+<p>We’ll use LangChain, ChromaDB, and OpenAI throughout. If you use different tools, the concepts all transfer.</p>
+
+<hr />
+
+<h2 id="the-two-phases-you-need-to-separate-in-your-head">The Two Phases You Need to Separate in Your Head</h2>
+
+<p>Before any code, the most important mental model is that RAG is two completely separate systems that happen to share a vector database.</p>
+
+<p>The <strong>indexing pipeline</strong> is offline. It runs on a schedule or when documents change. It loads your source files, chunks them, converts them to embeddings, and writes them to a vector store. Speed isn’t critical here. Correctness is.</p>
+
+<p>The <strong>query pipeline</strong> is online. It runs on every user request, and it needs to be fast. It embeds the user’s question, retrieves the most relevant chunks, builds a prompt, and calls the LLM.</p>
+
+<pre><code class="language-mermaid">%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#313244', 'primaryTextColor': '#CDD6F4', 'primaryBorderColor': '#89B4FA', 'lineColor': '#A6ADC8', 'secondaryColor': '#24243E', 'background': '#1E1E2E', 'mainBkg': '#313244', 'clusterBkg': '#24243E', 'clusterBorder': '#45475A', 'titleColor': '#CDD6F4', 'edgeLabelBackground': '#1E1E2E', 'fontFamily': 'JetBrains Mono, monospace', 'fontSize': '13px'}}}%%
+flowchart LR
+    classDef yellow  fill:#313244,stroke:#F9E2AF,color:#F9E2AF,rx:4
+    classDef blue    fill:#313244,stroke:#89B4FA,color:#89B4FA,rx:4
+    classDef mauve   fill:#313244,stroke:#CBA6F7,color:#CBA6F7,rx:4
+    classDef green   fill:#1A3A1A,stroke:#A6E3A1,color:#A6E3A1,rx:4
+    classDef red     fill:#313244,stroke:#F38BA8,color:#F38BA8,rx:4
+
+    subgraph OFFLINE["① OFFLINE · INDEXING"]
+        A["Documents&lt;br/&gt;PDF / HTML / TXT"]:::yellow
+        B["Document Loader"]:::blue
+        C["Text Splitter&lt;br/&gt;chunk_size=1000, overlap=200"]:::blue
+        D["Embedding Model&lt;br/&gt;text-embedding-3-large"]:::mauve
+        A --&gt; B --&gt; C --&gt; D
+    end
+
+    VS[("Vector Store&lt;br/&gt;ChromaDB")]:::green
+
+    D --&gt; VS
+
+    subgraph ONLINE["② ONLINE · QUERY"]
+        F["User Question"]:::yellow
+        G["Embed Question"]:::blue
+        H["Similarity Search&lt;br/&gt;MMR  k=5, fetch_k=20"]:::blue
+        I["Re-ranker&lt;br/&gt;cross-encoder  top-5"]:::red
+        J["Prompt Builder → LLM&lt;br/&gt;temperature=0"]:::green
+        K(["Answer"]):::green
+        F --&gt; G --&gt; H --&gt; I --&gt; J --&gt; K
+    end
+
+    VS --&gt;|top-k chunks| H
+</code></pre>
+
+<p>Keeping these two phases decoupled is the first thing most tutorials get wrong. If your indexing and querying code are tangled together, you’ll end up in situations where you can’t re-index without restarting your query service, or where a slow re-embed job blocks user requests. Treat them as separate processes from day one.</p>
+
+<p>Here’s how to get your environment set up:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># requirements.txt equivalent — install these first
+# pip install langchain langchain-openai langchain-chroma chromadb openai tiktoken pypdf
+</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="c1"># Set your API key
+</span><span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">[</span><span class="s">"OPENAI_API_KEY"</span><span class="p">]</span> <span class="o">=</span> <span class="s">"your-openai-api-key"</span>
+
+<span class="c1"># Verify environment
+</span><span class="kn">import</span> <span class="nn">openai</span>
+<span class="kn">import</span> <span class="nn">chromadb</span>
+<span class="kn">import</span> <span class="nn">langchain</span>
+
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"LangChain version: </span><span class="si">{</span><span class="n">langchain</span><span class="p">.</span><span class="n">__version__</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"ChromaDB version: </span><span class="si">{</span><span class="n">chromadb</span><span class="p">.</span><span class="n">__version__</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Environment ready"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Run this and confirm your package versions before going further. Version mismatches between LangChain and ChromaDB have caused me more pain than any bug I’ve written myself.</p>
+
+<hr />
+
+<h2 id="chunking-the-part-i-got-wrong-for-two-weeks">Chunking: The Part I Got Wrong for Two Weeks</h2>
+
+<p>I’ll be direct: chunk size is the single most important decision in this entire pipeline. It took me two weeks of debugging poor retrieval quality before I realized my chunks were the problem, not my embedding model or retrieval code. I had set <code class="language-plaintext highlighter-rouge">chunk_size=2000</code> thinking “more context = better” and ended up with bloated, unfocused chunks that pulled in too much noise along with the relevant content.</p>
+
+<p>The intuition is simple. A chunk is the atomic unit of retrieval. When a user asks a question, the system fetches the N most relevant chunks and hands them to the LLM. If your chunks are too large, each one contains multiple topics and the similarity score gets diluted. Too small, and you end up with fragments that don’t make sense without their surrounding context.</p>
+
+<pre><code class="language-mermaid">%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#313244', 'primaryTextColor': '#CDD6F4', 'primaryBorderColor': '#45475A', 'lineColor': '#A6ADC8', 'background': '#1E1E2E', 'mainBkg': '#313244', 'clusterBkg': '#24243E', 'fontFamily': 'JetBrains Mono, monospace', 'fontSize': '13px'}}}%%
+flowchart TD
+    classDef peach   fill:#313244,stroke:#FAB387,color:#FAB387
+    classDef blue    fill:#313244,stroke:#89B4FA,color:#89B4FA
+    classDef green   fill:#313244,stroke:#A6E3A1,color:#A6E3A1
+    classDef teal    fill:#313244,stroke:#94E2D5,color:#94E2D5
+    classDef dim     fill:#1E1E2E,stroke:#45475A,color:#A6ADC8
+
+    ROOT["Document&lt;br/&gt;Chunking Strategy?"]:::dim
+
+    ROOT --&gt;|"Fixed size"| FC["Fixed Character&lt;br/&gt;─────────────────&lt;br/&gt;Speed : Fast&lt;br/&gt;Quality : Basic&lt;br/&gt;Use : Prototypes only"]:::peach
+    ROOT --&gt;|"Recursive split"| RC["Recursive Character  ★ recommended&lt;br/&gt;─────────────────&lt;br/&gt;Speed : Fast&lt;br/&gt;Quality : Very Good&lt;br/&gt;Use : General production"]:::blue
+    ROOT --&gt;|"Embedding-based"| SC["Semantic Splitter&lt;br/&gt;─────────────────&lt;br/&gt;Speed : Slow&lt;br/&gt;Quality : Excellent&lt;br/&gt;Use : High-stakes retrieval"]:::green
+    ROOT --&gt;|"Structure-aware"| MC["HTML / Markdown&lt;br/&gt;─────────────────&lt;br/&gt;Speed : Fast&lt;br/&gt;Quality : Very Good&lt;br/&gt;Use : Structured docs"]:::teal
+</code></pre>
+
+<p>For most use cases, <code class="language-plaintext highlighter-rouge">RecursiveCharacterTextSplitter</code> with <code class="language-plaintext highlighter-rouge">chunk_size=1000</code> and <code class="language-plaintext highlighter-rouge">chunk_overlap=200</code> is a solid starting point. The recursive part matters: it tries to split on paragraph breaks first, then sentence boundaries, then spaces, only falling back to raw character splits as a last resort. This means your chunks are much more likely to contain complete thoughts rather than sentences cut in half.</p>
+
+<p>The overlap is non-negotiable. Without it, a concept that straddles a chunk boundary gets split in two, and whichever half gets retrieved will be missing critical context.</p>
+
+<pre><code class="language-mermaid">%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#313244', 'primaryTextColor': '#CDD6F4', 'primaryBorderColor': '#45475A', 'lineColor': '#A6ADC8', 'background': '#1E1E2E', 'mainBkg': '#313244', 'clusterBkg': '#24243E', 'fontFamily': 'JetBrains Mono, monospace', 'fontSize': '13px'}}}%%
+flowchart LR
+    classDef red    fill:#2E1A1A,stroke:#F38BA8,color:#F38BA8
+    classDef blue   fill:#1A1A2E,stroke:#89B4FA,color:#89B4FA
+    classDef green  fill:#1A2E1A,stroke:#A6E3A1,color:#A6E3A1
+    classDef dim    fill:#1E1E2E,stroke:#45475A,color:#A6ADC8
+
+    subgraph NO["# without overlap"]
+        C1["chunk_1&lt;br/&gt;…concept begins"]:::red
+        C2["chunk_2&lt;br/&gt;continues…"]:::red
+        C3["chunk_3&lt;br/&gt;…conclusion"]:::red
+        C1 --&gt; C2 --&gt; C3
+        LOST["⚠ context from chunk_1&lt;br/&gt;   is LOST at boundary"]:::dim
+        C2 -.-&gt;|boundary gap| LOST
+    end
+
+    subgraph YES["# overlap=200"]
+        A1["chunk_1&lt;br/&gt;…concept begins"]:::blue
+        A2["chunk_1 tail (200 chars)&lt;br/&gt;+ chunk_2 new content"]:::green
+        A1 --&gt;|"overlapping tail carried forward"| A2
+        OK["✓ context preserved&lt;br/&gt;  across boundary"]:::dim
+        A2 -.-&gt; OK
+    end
+</code></pre>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">langchain_community.document_loaders</span> <span class="kn">import</span> <span class="n">PyPDFLoader</span><span class="p">,</span> <span class="n">DirectoryLoader</span>
+<span class="kn">from</span> <span class="nn">langchain.text_splitter</span> <span class="kn">import</span> <span class="n">RecursiveCharacterTextSplitter</span>
+<span class="kn">from</span> <span class="nn">langchain.schema</span> <span class="kn">import</span> <span class="n">Document</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+<span class="k">def</span> <span class="nf">load_documents</span><span class="p">(</span><span class="n">source_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Document</span><span class="p">]:</span>
+    <span class="s">"""Load all PDF documents from a directory."""</span>
+    <span class="n">loader</span> <span class="o">=</span> <span class="n">DirectoryLoader</span><span class="p">(</span>
+        <span class="n">source_dir</span><span class="p">,</span>
+        <span class="n">glob</span><span class="o">=</span><span class="s">"**/*.pdf"</span><span class="p">,</span>
+        <span class="n">loader_cls</span><span class="o">=</span><span class="n">PyPDFLoader</span><span class="p">,</span>
+        <span class="n">show_progress</span><span class="o">=</span><span class="bp">True</span>
+    <span class="p">)</span>
+    <span class="n">documents</span> <span class="o">=</span> <span class="n">loader</span><span class="p">.</span><span class="n">load</span><span class="p">()</span>
+    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Loaded </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span><span class="si">}</span><span class="s"> pages from </span><span class="si">{</span><span class="n">source_dir</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">documents</span>
+
+
+<span class="k">def</span> <span class="nf">chunk_documents</span><span class="p">(</span>
+    <span class="n">documents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Document</span><span class="p">],</span>
+    <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
+    <span class="n">chunk_overlap</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Document</span><span class="p">]:</span>
+    <span class="s">"""
+    Split documents into overlapping chunks.
+
+    chunk_overlap=200 ensures continuity — if a concept spans a chunk
+    boundary, both chunks will contain enough context to be meaningful.
+    """</span>
+    <span class="n">splitter</span> <span class="o">=</span> <span class="n">RecursiveCharacterTextSplitter</span><span class="p">(</span>
+        <span class="n">chunk_size</span><span class="o">=</span><span class="n">chunk_size</span><span class="p">,</span>
+        <span class="n">chunk_overlap</span><span class="o">=</span><span class="n">chunk_overlap</span><span class="p">,</span>
+        <span class="c1"># Try these separators in order — fall back to the next if needed
+</span>        <span class="n">separators</span><span class="o">=</span><span class="p">[</span><span class="s">"</span><span class="se">\n\n</span><span class="s">"</span><span class="p">,</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="s">". "</span><span class="p">,</span> <span class="s">" "</span><span class="p">,</span> <span class="s">""</span><span class="p">],</span>
+        <span class="n">length_function</span><span class="o">=</span><span class="nb">len</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">chunks</span> <span class="o">=</span> <span class="n">splitter</span><span class="p">.</span><span class="n">split_documents</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Split </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span><span class="si">}</span><span class="s"> pages into </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span><span class="si">}</span><span class="s"> chunks"</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Average chunk size: </span><span class="si">{</span><span class="nb">sum</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">.</span><span class="n">page_content</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">)</span> <span class="o">//</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span><span class="si">}</span><span class="s"> chars"</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">chunks</span>
+
+
+<span class="c1"># --- Run it ---
+</span><span class="n">docs</span> <span class="o">=</span> <span class="n">load_documents</span><span class="p">(</span><span class="s">"./docs"</span><span class="p">)</span>
+<span class="n">chunks</span> <span class="o">=</span> <span class="n">chunk_documents</span><span class="p">(</span><span class="n">docs</span><span class="p">,</span> <span class="n">chunk_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">chunk_overlap</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+
+<span class="c1"># Inspect a sample chunk
+</span><span class="n">sample</span> <span class="o">=</span> <span class="n">chunks</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"</span><span class="se">\n</span><span class="s">--- Sample Chunk ---"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Content: </span><span class="si">{</span><span class="n">sample</span><span class="p">.</span><span class="n">page_content</span><span class="p">[:</span><span class="mi">300</span><span class="p">]</span><span class="si">}</span><span class="s">..."</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Metadata: </span><span class="si">{</span><span class="n">sample</span><span class="p">.</span><span class="n">metadata</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>You should see chunk counts and average sizes printed out. I strongly recommend inspecting a handful of sample chunks manually before proceeding. If your chunks look like they’re cutting off mid-sentence constantly, drop the <code class="language-plaintext highlighter-rouge">chunk_size</code> or double-check that your separator list is actually matching your document structure.</p>
+
+<p>One more thing I wish someone had told me: always print the average chunk size after splitting. If it’s dramatically smaller than your target (say, you set 1000 but average is 400), your documents are full of very short paragraphs and you probably need to reconsider your separator strategy.</p>
+
+<hr />
+
+<h2 id="embeddings-and-the-vector-store-boring-but-critical">Embeddings and the Vector Store: Boring but Critical</h2>
+
+<p>This part feels like plumbing, and it kind of is. But bad plumbing causes leaks.</p>
+
+<p>The premise is that semantically similar text produces vectors that are geometrically close in high-dimensional space. “How does attention work?” and “Explain the self-attention mechanism” don’t share many words, but their embeddings will be very close because they mean the same thing. That’s the whole trick.</p>
+
+<pre><code class="language-mermaid">%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#313244', 'primaryTextColor': '#CDD6F4', 'primaryBorderColor': '#45475A', 'lineColor': '#A6ADC8', 'background': '#1E1E2E', 'mainBkg': '#313244', 'fontFamily': 'JetBrains Mono, monospace', 'fontSize': '13px'}}}%%
+flowchart LR
+    classDef yellow  fill:#313244,stroke:#F9E2AF,color:#F9E2AF
+    classDef blue    fill:#313244,stroke:#89B4FA,color:#89B4FA
+    classDef mauve   fill:#313244,stroke:#CBA6F7,color:#CBA6F7
+    classDef green   fill:#1A3A1A,stroke:#A6E3A1,color:#A6E3A1
+    classDef dim     fill:#1E1E2E,stroke:#45475A,color:#A6ADC8
+
+    Q["'What is self-attention?'&lt;br/&gt;query text"]:::yellow
+    QV["[0.12, -0.87, 0.34, …]&lt;br/&gt;dim=1536"]:::yellow
+
+    C["'Self-attention allows tokens&lt;br/&gt;to attend to all other tokens'&lt;br/&gt;chunk text"]:::blue
+    CV["[0.11, -0.89, 0.31, …]&lt;br/&gt;dim=1536"]:::blue
+
+    SIM["cosine_sim() = 0.97"]:::mauve
+    MATCH["HIGH MATCH&lt;br/&gt;semantically equivalent"]:::green
+    NOTE["# different words&lt;br/&gt;# same meaning&lt;br/&gt;# geometrically close"]:::dim
+
+    Q  --&gt;|"embed()"| QV
+    C  --&gt;|"embed()"| CV
+    QV --&gt;  SIM
+    CV --&gt;  SIM
+    SIM --&gt; MATCH
+    MATCH -.-&gt; NOTE
+</code></pre>
+
+<p>I use <code class="language-plaintext highlighter-rouge">text-embedding-3-large</code> for anything where quality matters. It’s more expensive than <code class="language-plaintext highlighter-rouge">text-embedding-3-small</code>, but for a knowledge base application the quality difference is real and the cost per query is still small. For high-volume applications where you’re embedding millions of documents and running thousands of queries a day, <code class="language-plaintext highlighter-rouge">text-embedding-3-small</code> is worth benchmarking.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">langchain_openai</span> <span class="kn">import</span> <span class="n">OpenAIEmbeddings</span>
+<span class="kn">from</span> <span class="nn">langchain_chroma</span> <span class="kn">import</span> <span class="n">Chroma</span>
+<span class="kn">import</span> <span class="nn">chromadb</span>
+
+<span class="k">def</span> <span class="nf">build_vector_store</span><span class="p">(</span>
+    <span class="n">chunks</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Document</span><span class="p">],</span>
+    <span class="n">persist_directory</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">"./chroma_db"</span><span class="p">,</span>
+    <span class="n">collection_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">"knowledge_base"</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Chroma</span><span class="p">:</span>
+    <span class="s">"""
+    Embed all document chunks and store them in ChromaDB.
+
+    Uses text-embedding-3-large for best retrieval quality.
+    Falls back gracefully if the store already exists.
+    """</span>
+
+    <span class="c1"># Initialize the embedding model
+</span>    <span class="c1"># text-embedding-3-large: 1536 dims, excellent quality
+</span>    <span class="c1"># text-embedding-3-small: cheaper, good for high-volume apps
+</span>    <span class="n">embeddings</span> <span class="o">=</span> <span class="n">OpenAIEmbeddings</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="s">"text-embedding-3-large"</span><span class="p">,</span>
+        <span class="n">dimensions</span><span class="o">=</span><span class="mi">1536</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Check if vector store already exists to avoid re-embedding
+</span>    <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="n">persist_directory</span><span class="p">).</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Loading existing vector store from </span><span class="si">{</span><span class="n">persist_directory</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+        <span class="n">vector_store</span> <span class="o">=</span> <span class="n">Chroma</span><span class="p">(</span>
+            <span class="n">collection_name</span><span class="o">=</span><span class="n">collection_name</span><span class="p">,</span>
+            <span class="n">embedding_function</span><span class="o">=</span><span class="n">embeddings</span><span class="p">,</span>
+            <span class="n">persist_directory</span><span class="o">=</span><span class="n">persist_directory</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Building new vector store with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span><span class="si">}</span><span class="s"> chunks..."</span><span class="p">)</span>
+
+        <span class="c1"># Chroma.from_documents handles embedding + storing in one call
+</span>        <span class="n">vector_store</span> <span class="o">=</span> <span class="n">Chroma</span><span class="p">.</span><span class="n">from_documents</span><span class="p">(</span>
+            <span class="n">documents</span><span class="o">=</span><span class="n">chunks</span><span class="p">,</span>
+            <span class="n">embedding</span><span class="o">=</span><span class="n">embeddings</span><span class="p">,</span>
+            <span class="n">collection_name</span><span class="o">=</span><span class="n">collection_name</span><span class="p">,</span>
+            <span class="n">persist_directory</span><span class="o">=</span><span class="n">persist_directory</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Vector store built and persisted to </span><span class="si">{</span><span class="n">persist_directory</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+    <span class="c1"># Verify the store
+</span>    <span class="n">count</span> <span class="o">=</span> <span class="n">vector_store</span><span class="p">.</span><span class="n">_collection</span><span class="p">.</span><span class="n">count</span><span class="p">()</span>
+    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Vector store contains </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s"> vectors"</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">vector_store</span>
+
+
+<span class="c1"># --- Build it ---
+</span><span class="n">vector_store</span> <span class="o">=</span> <span class="n">build_vector_store</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>In production, documents change. People update wikis, replace PDFs, add new reports. You don’t want to re-embed your entire corpus every time a single file changes. The incremental indexing pattern below handles this with a simple content hash:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="k">def</span> <span class="nf">get_document_hash</span><span class="p">(</span><span class="n">doc</span><span class="p">:</span> <span class="n">Document</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="s">"""Generate a stable hash for a document chunk based on its content."""</span>
+    <span class="k">return</span> <span class="n">hashlib</span><span class="p">.</span><span class="n">md5</span><span class="p">(</span><span class="n">doc</span><span class="p">.</span><span class="n">page_content</span><span class="p">.</span><span class="n">encode</span><span class="p">()).</span><span class="n">hexdigest</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">upsert_documents</span><span class="p">(</span>
+    <span class="n">vector_store</span><span class="p">:</span> <span class="n">Chroma</span><span class="p">,</span>
+    <span class="n">new_chunks</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Document</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="s">"""
+    Add only new/changed documents to an existing vector store.
+    Avoids re-embedding documents that haven't changed.
+    """</span>
+    <span class="c1"># Fetch all existing document IDs from the store
+</span>    <span class="n">existing</span> <span class="o">=</span> <span class="n">vector_store</span><span class="p">.</span><span class="n">_collection</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="s">"metadatas"</span><span class="p">])</span>
+    <span class="n">existing_hashes</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">meta</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">"content_hash"</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">meta</span> <span class="ow">in</span> <span class="n">existing</span><span class="p">[</span><span class="s">"metadatas"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">meta</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">"content_hash"</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Filter to only chunks we haven't seen before
+</span>    <span class="n">new_docs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">new_chunks</span><span class="p">:</span>
+        <span class="n">content_hash</span> <span class="o">=</span> <span class="n">get_document_hash</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">content_hash</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">existing_hashes</span><span class="p">:</span>
+            <span class="c1"># Stamp the chunk with its hash for future deduplication
+</span>            <span class="n">chunk</span><span class="p">.</span><span class="n">metadata</span><span class="p">[</span><span class="s">"content_hash"</span><span class="p">]</span> <span class="o">=</span> <span class="n">content_hash</span>
+            <span class="n">chunk</span><span class="p">.</span><span class="n">metadata</span><span class="p">[</span><span class="s">"indexed_at"</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">.</span><span class="n">now</span><span class="p">().</span><span class="n">isoformat</span><span class="p">()</span>
+            <span class="n">new_docs</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">new_docs</span><span class="p">:</span>
+        <span class="n">vector_store</span><span class="p">.</span><span class="n">add_documents</span><span class="p">(</span><span class="n">new_docs</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Added </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">new_docs</span><span class="p">)</span><span class="si">}</span><span class="s"> new chunks to the vector store"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"No new documents to index — everything is up to date"</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span><span class="s">"added"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_docs</span><span class="p">),</span> <span class="s">"skipped"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_chunks</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_docs</span><span class="p">)}</span>
+</code></pre></div></div>
+
+<p>The first time you run this on a large corpus, embedding takes a while. Budget accordingly. On 10,000 chunks with <code class="language-plaintext highlighter-rouge">text-embedding-3-large</code>, expect roughly 2-3 minutes and a few dollars in API costs.</p>
+
+<hr />
+
+<h2 id="retrieval-where-most-pipelines-silently-die">Retrieval: Where Most Pipelines Silently Die</h2>
+
+<p>Here’s what I mean by “silently.” A naive similarity search will almost always return <em>something</em>. The chunks it returns will usually be topically related to the query. The LLM will usually produce a fluent, confident answer. The problem is that the answer might be incomplete, subtly wrong, or built on the third-best chunk rather than the most relevant one. You’ll never know unless you’re logging and measuring.</p>
+
+<p>The two main failure modes I’ve seen:</p>
+
+<p><strong>Redundant retrieval.</strong> You ask for <code class="language-plaintext highlighter-rouge">k=5</code> chunks and get back 5 chunks that all say essentially the same thing. You’ve used your entire context window on one perspective of the topic and left out everything else.</p>
+
+<p><strong>Unfocused retrieval in multi-domain knowledge bases.</strong> If your vector store has documents from HR, engineering, finance, and legal all mixed together, a query about “approval process” might retrieve chunks from three different departments when the user only cared about one.</p>
+
+<pre><code class="language-mermaid">%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#313244', 'primaryTextColor': '#CDD6F4', 'primaryBorderColor': '#45475A', 'lineColor': '#A6ADC8', 'background': '#1E1E2E', 'mainBkg': '#313244', 'fontFamily': 'JetBrains Mono, monospace', 'fontSize': '13px'}}}%%
+flowchart LR
+    classDef yellow  fill:#313244,stroke:#F9E2AF,color:#F9E2AF
+    classDef blue    fill:#313244,stroke:#89B4FA,color:#89B4FA
+    classDef teal    fill:#313244,stroke:#94E2D5,color:#94E2D5
+    classDef red     fill:#313244,stroke:#F38BA8,color:#F38BA8
+    classDef green   fill:#1A3A1A,stroke:#A6E3A1,color:#A6E3A1
+    classDef mauve   fill:#313244,stroke:#CBA6F7,color:#CBA6F7
+
+    UQ["User&lt;br/&gt;Query"]:::yellow
+    EMB["Embedder&lt;br/&gt;embed()"]:::blue
+    VS["Vector Store&lt;br/&gt;similarity_search()"]:::teal
+    RR["Re-ranker&lt;br/&gt;CrossEncoder&lt;br/&gt;top-20 → top-5"]:::red
+    PB["Prompt&lt;br/&gt;Builder"]:::green
+    LLM["LLM&lt;br/&gt;generate()"]:::mauve
+    ANS(["Answer"]):::green
+
+    UQ --&gt;|"raw question"| EMB
+    EMB --&gt;|"query vector"| VS
+    VS --&gt;|"top-20 candidates"| RR
+    RR --&gt;|"re-ranked top-5"| PB
+    PB --&gt;|"augmented prompt"| LLM
+    LLM --&gt; ANS
+</code></pre>
+
+<p>MMR (Maximal Marginal Relevance) solves the redundancy problem. Instead of returning the top-K most similar chunks, it returns the top-K that are both relevant to the query <em>and</em> maximally different from each other. I should have been using this from the start.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">build_retriever</span><span class="p">(</span><span class="n">vector_store</span><span class="p">:</span> <span class="n">Chroma</span><span class="p">,</span> <span class="n">strategy</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">"mmr"</span><span class="p">):</span>
+    <span class="s">"""
+    Build a retriever with different strategies:
+    - 'similarity': pure cosine similarity (fast, simple)
+    - 'mmr': Maximal Marginal Relevance (diverse results, reduces redundancy)
+    - 'filtered': similarity with metadata filtering
+    """</span>
+
+    <span class="k">if</span> <span class="n">strategy</span> <span class="o">==</span> <span class="s">"similarity"</span><span class="p">:</span>
+        <span class="c1"># Basic similarity search — good for small, focused knowledge bases
+</span>        <span class="n">retriever</span> <span class="o">=</span> <span class="n">vector_store</span><span class="p">.</span><span class="n">as_retriever</span><span class="p">(</span>
+            <span class="n">search_type</span><span class="o">=</span><span class="s">"similarity"</span><span class="p">,</span>
+            <span class="n">search_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s">"k"</span><span class="p">:</span> <span class="mi">5</span><span class="p">}</span>
+        <span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">strategy</span> <span class="o">==</span> <span class="s">"mmr"</span><span class="p">:</span>
+        <span class="c1"># MMR balances relevance AND diversity
+</span>        <span class="c1"># fetch_k=20: fetch 20 candidates, then select 5 maximally diverse ones
+</span>        <span class="n">retriever</span> <span class="o">=</span> <span class="n">vector_store</span><span class="p">.</span><span class="n">as_retriever</span><span class="p">(</span>
+            <span class="n">search_type</span><span class="o">=</span><span class="s">"mmr"</span><span class="p">,</span>
+            <span class="n">search_kwargs</span><span class="o">=</span><span class="p">{</span>
+                <span class="s">"k"</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>           <span class="c1"># final number of results
+</span>                <span class="s">"fetch_k"</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>    <span class="c1"># candidate pool size
+</span>                <span class="s">"lambda_mult"</span><span class="p">:</span> <span class="mf">0.7</span>  <span class="c1"># 1.0 = pure similarity, 0.0 = pure diversity
+</span>            <span class="p">}</span>
+        <span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">strategy</span> <span class="o">==</span> <span class="s">"filtered"</span><span class="p">:</span>
+        <span class="c1"># Filter by metadata before similarity search
+</span>        <span class="c1"># Useful when documents have tags, dates, categories, etc.
+</span>        <span class="n">retriever</span> <span class="o">=</span> <span class="n">vector_store</span><span class="p">.</span><span class="n">as_retriever</span><span class="p">(</span>
+            <span class="n">search_type</span><span class="o">=</span><span class="s">"similarity"</span><span class="p">,</span>
+            <span class="n">search_kwargs</span><span class="o">=</span><span class="p">{</span>
+                <span class="s">"k"</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                <span class="s">"filter"</span><span class="p">:</span> <span class="p">{</span><span class="s">"source"</span><span class="p">:</span> <span class="s">"annual_report_2025.pdf"</span><span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">retriever</span>
+
+
+<span class="k">def</span> <span class="nf">retrieve_with_scores</span><span class="p">(</span><span class="n">vector_store</span><span class="p">:</span> <span class="n">Chroma</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">):</span>
+    <span class="s">"""
+    Retrieve chunks with their similarity scores for debugging/logging.
+    """</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">vector_store</span><span class="p">.</span><span class="n">similarity_search_with_score</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"</span><span class="se">\n</span><span class="s">Query: '</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s">'"</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="s">'─'</span> <span class="o">*</span> <span class="mi">60</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="n">score</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">results</span><span class="p">):</span>
+        <span class="c1"># ChromaDB returns L2 distance (lower = more similar)
+</span>        <span class="c1"># Convert to 0-1 similarity for readability
+</span>        <span class="n">similarity</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">score</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"</span><span class="se">\n</span><span class="s">Result </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s"> | Similarity: </span><span class="si">{</span><span class="n">similarity</span><span class="p">:.</span><span class="mi">3</span><span class="n">f</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Source: </span><span class="si">{</span><span class="n">doc</span><span class="p">.</span><span class="n">metadata</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'source'</span><span class="p">,</span> <span class="s">'unknown'</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Content: </span><span class="si">{</span><span class="n">doc</span><span class="p">.</span><span class="n">page_content</span><span class="p">[:</span><span class="mi">200</span><span class="p">]</span><span class="si">}</span><span class="s">..."</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">results</span>
+
+
+<span class="c1"># --- Test retrieval ---
+</span><span class="n">retriever</span> <span class="o">=</span> <span class="n">build_retriever</span><span class="p">(</span><span class="n">vector_store</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s">"mmr"</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">retrieve_with_scores</span><span class="p">(</span>
+    <span class="n">vector_store</span><span class="p">,</span>
+    <span class="n">query</span><span class="o">=</span><span class="s">"How does self-attention work in transformers?"</span><span class="p">,</span>
+    <span class="n">k</span><span class="o">=</span><span class="mi">5</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Run this and look at the similarity scores. If your top result is below 0.75, something is off. Either your chunks are too large, your embedding model is mismatched for your domain, or your documents genuinely don’t contain a good answer to the query.</p>
+
+<h3 id="the-re-ranker-i-resisted-for-too-long">The re-ranker I resisted for too long</h3>
+
+<p>Honestly, I avoided adding a cross-encoder re-ranker for months because of the added latency. That was a mistake. The difference in retrieval quality was significant enough that I ended up adding it anyway after watching users get mediocre answers on questions that should have been easy.</p>
+
+<p>The core issue is that embedding models (bi-encoders) work by embedding the query and each document <em>independently</em> and then comparing them. They’re fast but coarse. A cross-encoder, by contrast, takes the query and a document together as a pair and scores them jointly. It’s much more accurate at judging whether a specific document actually answers a specific question.</p>
+
+<p>The trade-off: cross-encoders are slow. You wouldn’t use one to search a million documents. But used as a re-ranker on the top 20 candidates your vector store already retrieved, the latency is acceptable (usually 50-150ms for a batch of 20).</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sentence_transformers</span> <span class="kn">import</span> <span class="n">CrossEncoder</span>
+
+<span class="k">class</span> <span class="nc">CrossEncoderReranker</span><span class="p">:</span>
+    <span class="s">"""Re-rank retrieved documents using a cross-encoder model."""</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">"cross-encoder/ms-marco-MiniLM-L-6-v2"</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">CrossEncoder</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">rerank</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">documents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Document</span><span class="p">],</span>
+        <span class="n">top_n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Document</span><span class="p">]:</span>
+        <span class="s">"""
+        Score each (query, document) pair and return top_n by score.
+        """</span>
+        <span class="c1"># Build pairs for the cross-encoder
+</span>        <span class="n">pairs</span> <span class="o">=</span> <span class="p">[(</span><span class="n">query</span><span class="p">,</span> <span class="n">doc</span><span class="p">.</span><span class="n">page_content</span><span class="p">)</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">documents</span><span class="p">]</span>
+
+        <span class="c1"># Cross-encoder scores each pair (query is considered with each doc)
+</span>        <span class="n">scores</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">model</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">pairs</span><span class="p">)</span>
+
+        <span class="c1"># Sort by score descending, keep top_n
+</span>        <span class="n">ranked</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+            <span class="nb">zip</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">documents</span><span class="p">),</span>
+            <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span>
+        <span class="p">)</span>
+
+        <span class="n">top_docs</span> <span class="o">=</span> <span class="p">[</span><span class="n">doc</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">ranked</span><span class="p">[:</span><span class="n">top_n</span><span class="p">]]</span>
+
+        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Re-ranked </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span><span class="si">}</span><span class="s"> → </span><span class="si">{</span><span class="n">top_n</span><span class="si">}</span><span class="s"> documents"</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">score</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ranked</span><span class="p">[:</span><span class="n">top_n</span><span class="p">]):</span>
+            <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"  Rank </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s">: score=</span><span class="si">{</span><span class="n">score</span><span class="p">:.</span><span class="mi">3</span><span class="n">f</span><span class="si">}</span><span class="s"> | </span><span class="si">{</span><span class="n">doc</span><span class="p">.</span><span class="n">page_content</span><span class="p">[:</span><span class="mi">80</span><span class="p">]</span><span class="si">}</span><span class="s">..."</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">top_docs</span>
+
+
+<span class="c1"># --- Use the re-ranker ---
+</span><span class="n">reranker</span> <span class="o">=</span> <span class="n">CrossEncoderReranker</span><span class="p">()</span>
+<span class="n">candidate_docs</span> <span class="o">=</span> <span class="n">retriever</span><span class="p">.</span><span class="n">invoke</span><span class="p">(</span><span class="s">"How does self-attention work?"</span><span class="p">)</span>
+<span class="n">reranked_docs</span> <span class="o">=</span> <span class="n">reranker</span><span class="p">.</span><span class="n">rerank</span><span class="p">(</span>
+    <span class="n">query</span><span class="o">=</span><span class="s">"How does self-attention work?"</span><span class="p">,</span>
+    <span class="n">documents</span><span class="o">=</span><span class="n">candidate_docs</span><span class="p">,</span>
+    <span class="n">top_n</span><span class="o">=</span><span class="mi">3</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>With the re-ranker in place, your retrieval pipeline now works in two stages: the vector store does a fast, broad sweep to surface 20 candidates, and the cross-encoder does a precise, slow pass to select the best 3-5 from that pool. That’s the combination I’d use as a default for any knowledge base application.</p>
+
+<hr />
+
+<h2 id="prompt-construction-dont-waste-good-retrieval-on-a-bad-prompt">Prompt Construction: Don’t Waste Good Retrieval on a Bad Prompt</h2>
+
+<p>You’ve worked hard to get the right chunks. Now you need to actually use them well. This part is simpler than the retrieval work but still matters more than most people give it credit for.</p>
+
+<pre><code class="language-mermaid">%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#313244', 'primaryTextColor': '#CDD6F4', 'primaryBorderColor': '#45475A', 'lineColor': '#A6ADC8', 'background': '#1E1E2E', 'mainBkg': '#313244', 'fontFamily': 'JetBrains Mono, monospace', 'fontSize': '13px'}}}%%
+flowchart TD
+    classDef teal   fill:#313244,stroke:#94E2D5,color:#94E2D5
+    classDef yellow fill:#313244,stroke:#F9E2AF,color:#F9E2AF
+    classDef dim    fill:#1E1E2E,stroke:#45475A,color:#A6ADC8
+    classDef mauve  fill:#313244,stroke:#CBA6F7,color:#CBA6F7
+    classDef green  fill:#1A3A1A,stroke:#A6E3A1,color:#A6E3A1
+    classDef red    fill:#2E1A1A,stroke:#F38BA8,color:#F38BA8
+
+    RC["retrieved_chunks&lt;br/&gt;from re-ranker"]:::teal
+    UQ["user_question"]:::yellow
+    SI["system_instructions&lt;br/&gt;role + constraints"]:::dim
+
+    CF["format_context()&lt;br/&gt;add labels · tiktoken budget&lt;br/&gt;max_tokens=6000"]:::teal
+
+    PT["ChatPromptTemplate&lt;br/&gt;system | context | question"]:::yellow
+
+    LLM["ChatOpenAI&lt;br/&gt;temperature=0"]:::mauve
+
+    RES["response&lt;br/&gt;grounded answer"]:::green
+    FLAG["# flag if not grounded&lt;br/&gt;# in retrieved context"]:::red
+
+    RC --&gt;|"chunks"| CF
+    CF --&gt;|"formatted context"| PT
+    UQ --&gt; PT
+    SI --&gt; PT
+    PT --&gt;|"assembled prompt"| LLM
+    LLM --&gt; RES
+    LLM -.-&gt;|"hallucination check"| FLAG
+</code></pre>
+
+<p>Two things consistently trip people up here.</p>
+
+<p>First, token budgets. If you’re not explicitly counting tokens before building your prompt, you are relying on luck. LangChain won’t error out when you exceed the context window. It’ll silently truncate, and you’ll get answers based on incomplete context. Always count with tiktoken.</p>
+
+<p>Second, the system prompt. Tell the model to cite its sources, tell it to say “I don’t know” when the context doesn’t contain the answer, and tell it explicitly not to draw on outside knowledge. Without these constraints, GPT-4 in particular will happily synthesize an answer from its training data when the retrieved context falls short, and you’ll have no idea it’s doing it.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">langchain_openai</span> <span class="kn">import</span> <span class="n">ChatOpenAI</span>
+<span class="kn">from</span> <span class="nn">langchain.prompts</span> <span class="kn">import</span> <span class="n">ChatPromptTemplate</span>
+<span class="kn">from</span> <span class="nn">langchain.schema.output_parser</span> <span class="kn">import</span> <span class="n">StrOutputParser</span>
+<span class="kn">import</span> <span class="nn">tiktoken</span>
+
+<span class="c1"># ── Token budget management ──────────────────────────────────────────
+</span><span class="k">def</span> <span class="nf">count_tokens</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">"gpt-4o"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="s">"""Count tokens using tiktoken to avoid exceeding context window."""</span>
+    <span class="n">enc</span> <span class="o">=</span> <span class="n">tiktoken</span><span class="p">.</span><span class="n">encoding_for_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">enc</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">format_context</span><span class="p">(</span><span class="n">docs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Document</span><span class="p">],</span> <span class="n">max_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="s">"""
+    Format retrieved docs into a context string, respecting a token budget.
+    Prioritizes earlier (higher-ranked) chunks when truncating.
+    """</span>
+    <span class="n">context_parts</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">total_tokens</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">doc</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">docs</span><span class="p">):</span>
+        <span class="n">chunk_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s">"[Source </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">doc</span><span class="p">.</span><span class="n">metadata</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'source'</span><span class="p">,</span> <span class="s">'unknown'</span><span class="p">)</span><span class="si">}</span><span class="s">]</span><span class="se">\n</span><span class="si">{</span><span class="n">doc</span><span class="p">.</span><span class="n">page_content</span><span class="si">}</span><span class="s">"</span>
+        <span class="n">chunk_tokens</span> <span class="o">=</span> <span class="n">count_tokens</span><span class="p">(</span><span class="n">chunk_text</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">total_tokens</span> <span class="o">+</span> <span class="n">chunk_tokens</span> <span class="o">&gt;</span> <span class="n">max_tokens</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Token budget reached at chunk </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s">. Truncating context."</span><span class="p">)</span>
+            <span class="k">break</span>
+
+        <span class="n">context_parts</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">chunk_text</span><span class="p">)</span>
+        <span class="n">total_tokens</span> <span class="o">+=</span> <span class="n">chunk_tokens</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Context: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">context_parts</span><span class="p">)</span><span class="si">}</span><span class="s"> chunks, </span><span class="si">{</span><span class="n">total_tokens</span><span class="si">}</span><span class="s"> tokens"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s">"</span><span class="se">\n\n</span><span class="s">---</span><span class="se">\n\n</span><span class="s">"</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">context_parts</span><span class="p">)</span>
+
+
+<span class="c1"># ── Prompt Template ───────────────────────────────────────────────────
+</span><span class="n">RAG_PROMPT</span> <span class="o">=</span> <span class="n">ChatPromptTemplate</span><span class="p">.</span><span class="n">from_messages</span><span class="p">([</span>
+    <span class="p">(</span><span class="s">"system"</span><span class="p">,</span> <span class="s">"""You are a precise, helpful assistant. Answer the user's question
+using ONLY the information provided in the context below.
+
+Rules:
+- If the context doesn't contain enough information to answer confidently, say so explicitly.
+- Do not make up facts not present in the context.
+- Cite the source number (e.g. [Source 1]) when referencing specific information.
+- Be concise but complete.
+
+Context:
+{context}
+"""</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">"human"</span><span class="p">,</span> <span class="s">"{question}"</span><span class="p">)</span>
+<span class="p">])</span>
+
+
+<span class="c1"># ── Full RAG Pipeline ─────────────────────────────────────────────────
+</span><span class="k">class</span> <span class="nc">RAGPipeline</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">vector_store</span><span class="p">:</span> <span class="n">Chroma</span><span class="p">,</span>
+        <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">"gpt-4o"</span><span class="p">,</span>
+        <span class="n">retrieval_strategy</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">"mmr"</span><span class="p">,</span>
+        <span class="n">use_reranker</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">retriever</span> <span class="o">=</span> <span class="n">build_retriever</span><span class="p">(</span><span class="n">vector_store</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="n">retrieval_strategy</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">reranker</span> <span class="o">=</span> <span class="n">CrossEncoderReranker</span><span class="p">()</span> <span class="k">if</span> <span class="n">use_reranker</span> <span class="k">else</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">llm</span> <span class="o">=</span> <span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">prompt</span> <span class="o">=</span> <span class="n">RAG_PROMPT</span>
+
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="s">"""Execute the full RAG pipeline and return answer + sources."""</span>
+
+        <span class="c1"># Step 1: Retrieve candidate chunks
+</span>        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"</span><span class="se">\n</span><span class="s">[1/4] Retrieving candidates for: '</span><span class="si">{</span><span class="n">question</span><span class="si">}</span><span class="s">'"</span><span class="p">)</span>
+        <span class="n">candidates</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">retriever</span><span class="p">.</span><span class="n">invoke</span><span class="p">(</span><span class="n">question</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"      Retrieved </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">candidates</span><span class="p">)</span><span class="si">}</span><span class="s"> candidates"</span><span class="p">)</span>
+
+        <span class="c1"># Step 2: Re-rank (optional)
+</span>        <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">reranker</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"[2/4] Re-ranking candidates..."</span><span class="p">)</span>
+            <span class="n">docs</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">reranker</span><span class="p">.</span><span class="n">rerank</span><span class="p">(</span><span class="n">question</span><span class="p">,</span> <span class="n">candidates</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">docs</span> <span class="o">=</span> <span class="n">candidates</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span>
+
+        <span class="c1"># Step 3: Format context with token budget
+</span>        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"[3/4] Formatting context..."</span><span class="p">)</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">format_context</span><span class="p">(</span><span class="n">docs</span><span class="p">,</span> <span class="n">max_tokens</span><span class="o">=</span><span class="mi">6000</span><span class="p">)</span>
+
+        <span class="c1"># Step 4: Generate response
+</span>        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"[4/4] Generating response..."</span><span class="p">)</span>
+        <span class="n">chain</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">prompt</span> <span class="o">|</span> <span class="bp">self</span><span class="p">.</span><span class="n">llm</span> <span class="o">|</span> <span class="n">StrOutputParser</span><span class="p">()</span>
+        <span class="n">answer</span> <span class="o">=</span> <span class="n">chain</span><span class="p">.</span><span class="n">invoke</span><span class="p">({</span><span class="s">"context"</span><span class="p">:</span> <span class="n">context</span><span class="p">,</span> <span class="s">"question"</span><span class="p">:</span> <span class="n">question</span><span class="p">})</span>
+
+        <span class="c1"># Collect source metadata
+</span>        <span class="n">sources</span> <span class="o">=</span> <span class="nb">list</span><span class="p">({</span><span class="n">doc</span><span class="p">.</span><span class="n">metadata</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">"source"</span><span class="p">,</span> <span class="s">"unknown"</span><span class="p">)</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">docs</span><span class="p">})</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s">"question"</span><span class="p">:</span> <span class="n">question</span><span class="p">,</span>
+            <span class="s">"answer"</span><span class="p">:</span> <span class="n">answer</span><span class="p">,</span>
+            <span class="s">"sources"</span><span class="p">:</span> <span class="n">sources</span><span class="p">,</span>
+            <span class="s">"chunks_used"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">docs</span><span class="p">)</span>
+        <span class="p">}</span>
+
+
+<span class="c1"># ── Run it end-to-end ─────────────────────────────────────────────────
+</span><span class="n">pipeline</span> <span class="o">=</span> <span class="n">RAGPipeline</span><span class="p">(</span>
+    <span class="n">vector_store</span><span class="o">=</span><span class="n">vector_store</span><span class="p">,</span>
+    <span class="n">model_name</span><span class="o">=</span><span class="s">"gpt-4o"</span><span class="p">,</span>
+    <span class="n">retrieval_strategy</span><span class="o">=</span><span class="s">"mmr"</span><span class="p">,</span>
+    <span class="n">use_reranker</span><span class="o">=</span><span class="bp">True</span>
+<span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="s">"What is the difference between self-attention and cross-attention?"</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span> <span class="o">+</span> <span class="s">"═"</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Question: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s">'question'</span><span class="p">]</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Answer:</span><span class="se">\n</span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s">'answer'</span><span class="p">]</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"</span><span class="se">\n</span><span class="s">Sources: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s">'sources'</span><span class="p">]</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Chunks used: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s">'chunks_used'</span><span class="p">]</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>When you run this, you’ll see the pipeline logging each stage (retrieval, re-ranking, context formatting, generation) along with the final answer and the source documents it drew from. That logging isn’t cosmetic; it’s how you debug when something goes wrong.</p>
+
+<p>Also: <code class="language-plaintext highlighter-rouge">temperature=0</code>. I cannot stress this enough. RAG applications are not creative writing tasks. You want the model to be deterministic and faithful to its context. Set it to zero and leave it there.</p>
+
+<hr />
+
+<h2 id="you-cant-improve-what-you-dont-measure">You Can’t Improve What You Don’t Measure</h2>
+
+<p>Here’s a question most RAG tutorials skip entirely: how do you know your pipeline is actually good?</p>
+
+<p>“It seems to answer things correctly” is not an answer. I’ve seen pipelines that produce fluent, confident, well-structured responses that are subtly wrong 30% of the time. You won’t catch that without systematic evaluation.</p>
+
+<pre><code class="language-mermaid">%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#313244', 'primaryTextColor': '#CDD6F4', 'primaryBorderColor': '#45475A', 'lineColor': '#A6ADC8', 'background': '#1E1E2E', 'mainBkg': '#313244', 'clusterBkg': '#24243E', 'fontFamily': 'JetBrains Mono, monospace', 'fontSize': '13px'}}}%%
+flowchart TD
+    classDef root   fill:#45475A,stroke:#CDD6F4,color:#CDD6F4
+    classDef blue   fill:#313244,stroke:#89B4FA,color:#89B4FA
+    classDef green  fill:#313244,stroke:#A6E3A1,color:#A6E3A1
+    classDef dim    fill:#1E1E2E,stroke:#45475A,color:#A6ADC8
+
+    ROOT["evaluate(dataset)&lt;br/&gt;RAGAS"]:::root
+
+    subgraph RQ["Retrieval Quality"]
+        CR["context_recall&lt;br/&gt;# all relevant docs retrieved?"]:::blue
+        CP["context_precision&lt;br/&gt;# retrieved docs are relevant?"]:::blue
+        MR["MRR / NDCG&lt;br/&gt;# best docs ranked highest?"]:::blue
+    end
+
+    subgraph GQ["Generation Quality"]
+        FA["faithfulness&lt;br/&gt;# answer grounded in context?&lt;br/&gt;target &gt; 0.85"]:::green
+        AR["answer_relevancy&lt;br/&gt;# answer addresses question?"]:::green
+        HR["hallucination_rate&lt;br/&gt;# facts not in context?"]:::green
+    end
+
+    NOTE["# scores: 0.0 → 1.0&lt;br/&gt;# run after every pipeline change"]:::dim
+
+    ROOT --&gt; CR &amp; CP &amp; MR
+    ROOT --&gt; FA &amp; AR &amp; HR
+    FA &amp; AR &amp; HR -.-&gt; NOTE
+</code></pre>
+
+<p>RAGAS is the library I use for this. It evaluates four things that matter:</p>
+
+<p><strong>Faithfulness</strong> measures whether the answer is actually grounded in the retrieved context. This is your hallucination detector. A low score here means your LLM is drawing on its parametric memory instead of your documents.</p>
+
+<p><strong>Answer relevancy</strong> measures whether the answer actually addresses the question. You can be faithful to the context while still giving a technically correct but non-responsive answer.</p>
+
+<p><strong>Context recall</strong> and <strong>context precision</strong> measure the retrieval layer specifically: did you get the right documents, and only the right documents?</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># pip install ragas datasets
+</span><span class="kn">from</span> <span class="nn">ragas</span> <span class="kn">import</span> <span class="n">evaluate</span>
+<span class="kn">from</span> <span class="nn">ragas.metrics</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">faithfulness</span><span class="p">,</span>        <span class="c1"># Is the answer grounded in the retrieved context?
+</span>    <span class="n">answer_relevancy</span><span class="p">,</span>   <span class="c1"># Does the answer actually address the question?
+</span>    <span class="n">context_recall</span><span class="p">,</span>     <span class="c1"># Were the relevant documents retrieved?
+</span>    <span class="n">context_precision</span><span class="p">,</span>  <span class="c1"># Are the retrieved documents actually relevant?
+</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">datasets</span> <span class="kn">import</span> <span class="n">Dataset</span>
+
+<span class="k">def</span> <span class="nf">evaluate_rag_pipeline</span><span class="p">(</span><span class="n">pipeline</span><span class="p">:</span> <span class="n">RAGPipeline</span><span class="p">,</span> <span class="n">test_cases</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="s">"""
+    Evaluate the RAG pipeline on a set of test cases using RAGAS metrics.
+
+    test_cases format:
+    [
+        {
+            "question": "...",
+            "ground_truth": "...",  # Expected answer
+        },
+        ...
+    ]
+    """</span>
+
+    <span class="n">questions</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">answers</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">contexts</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">ground_truths</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Running evaluation on </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">test_cases</span><span class="p">)</span><span class="si">}</span><span class="s"> test cases..."</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">test</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">test_cases</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"  Test </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">test_cases</span><span class="p">)</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">test</span><span class="p">[</span><span class="s">'question'</span><span class="p">][:</span><span class="mi">60</span><span class="p">]</span><span class="si">}</span><span class="s">..."</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">test</span><span class="p">[</span><span class="s">"question"</span><span class="p">])</span>
+
+        <span class="c1"># Also retrieve raw context for RAGAS
+</span>        <span class="n">raw_docs</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">.</span><span class="n">retriever</span><span class="p">.</span><span class="n">invoke</span><span class="p">(</span><span class="n">test</span><span class="p">[</span><span class="s">"question"</span><span class="p">])</span>
+        <span class="n">context_texts</span> <span class="o">=</span> <span class="p">[</span><span class="n">doc</span><span class="p">.</span><span class="n">page_content</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">raw_docs</span><span class="p">[:</span><span class="mi">4</span><span class="p">]]</span>
+
+        <span class="n">questions</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">test</span><span class="p">[</span><span class="s">"question"</span><span class="p">])</span>
+        <span class="n">answers</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s">"answer"</span><span class="p">])</span>
+        <span class="n">contexts</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">context_texts</span><span class="p">)</span>
+        <span class="n">ground_truths</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">test</span><span class="p">[</span><span class="s">"ground_truth"</span><span class="p">])</span>
+
+    <span class="c1"># Build dataset for RAGAS
+</span>    <span class="n">eval_dataset</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">.</span><span class="n">from_dict</span><span class="p">({</span>
+        <span class="s">"question"</span><span class="p">:</span> <span class="n">questions</span><span class="p">,</span>
+        <span class="s">"answer"</span><span class="p">:</span> <span class="n">answers</span><span class="p">,</span>
+        <span class="s">"contexts"</span><span class="p">:</span> <span class="n">contexts</span><span class="p">,</span>
+        <span class="s">"ground_truth"</span><span class="p">:</span> <span class="n">ground_truths</span>
+    <span class="p">})</span>
+
+    <span class="c1"># Run RAGAS evaluation
+</span>    <span class="n">scores</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span>
+        <span class="n">eval_dataset</span><span class="p">,</span>
+        <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="n">faithfulness</span><span class="p">,</span> <span class="n">answer_relevancy</span><span class="p">,</span> <span class="n">context_recall</span><span class="p">,</span> <span class="n">context_precision</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">scores</span>
+
+
+<span class="c1"># --- Define test cases ---
+</span><span class="n">test_cases</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s">"question"</span><span class="p">:</span> <span class="s">"What is the role of positional encoding in transformers?"</span><span class="p">,</span>
+        <span class="s">"ground_truth"</span><span class="p">:</span> <span class="s">"Positional encoding adds information about the position of tokens in a sequence, since the transformer architecture itself has no inherent notion of order."</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s">"question"</span><span class="p">:</span> <span class="s">"How does multi-head attention differ from single-head attention?"</span><span class="p">,</span>
+        <span class="s">"ground_truth"</span><span class="p">:</span> <span class="s">"Multi-head attention runs self-attention multiple times in parallel with different learned projections, allowing the model to attend to information from different representation subspaces."</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+
+<span class="n">scores</span> <span class="o">=</span> <span class="n">evaluate_rag_pipeline</span><span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">test_cases</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">Evaluation Results:"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"  Faithfulness:       </span><span class="si">{</span><span class="n">scores</span><span class="p">[</span><span class="s">'faithfulness'</span><span class="p">]:.</span><span class="mi">3</span><span class="n">f</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"  Answer Relevancy:   </span><span class="si">{</span><span class="n">scores</span><span class="p">[</span><span class="s">'answer_relevancy'</span><span class="p">]:.</span><span class="mi">3</span><span class="n">f</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"  Context Recall:     </span><span class="si">{</span><span class="n">scores</span><span class="p">[</span><span class="s">'context_recall'</span><span class="p">]:.</span><span class="mi">3</span><span class="n">f</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"  Context Precision:  </span><span class="si">{</span><span class="n">scores</span><span class="p">[</span><span class="s">'context_precision'</span><span class="p">]:.</span><span class="mi">3</span><span class="n">f</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>You’ll get four scores between 0 and 1. Faithfulness below 0.85 tells you your LLM is going off-script. Context precision below 0.80 tells you your retrieval is pulling in irrelevant chunks. Start with a test set of 20-30 questions and treat these numbers as your baseline before you change anything else.</p>
+
+<hr />
+
+<h2 id="what-id-tell-myself-before-starting">What I’d Tell Myself Before Starting</h2>
+
+<p>A few things I’ve distilled from all of this:</p>
+
+<p><strong>Chunk size is where you should spend your debugging time first.</strong> Before you blame your embedding model or experiment with exotic retrieval strategies, print out some sample chunks and ask yourself whether they contain coherent, complete thoughts. This is unglamorous work but it pays off faster than anything else.</p>
+
+<p><strong>The indexing and query pipelines are separate systems.</strong> Build them that way from the start. Your future self will thank you when you need to re-index 50,000 documents at 2am without touching the query service.</p>
+
+<p><strong>Use MMR.</strong> Pure cosine similarity is fine for demos. In production with a real knowledge base, you’ll get redundant results constantly. MMR takes an extra parameter and fixes this. There’s no good reason not to use it.</p>
+
+<p>On re-ranking: I resisted it for too long. The latency cost (50-150ms) is real, but for a knowledge base application where users expect accurate answers, it’s worth it. If you’re building something latency-sensitive, benchmark both and decide with data rather than intuition.</p>
+
+<p>The most underrated practice here is writing test cases before you optimize anything. It’s easy to spend a day tuning chunk sizes or trying different embedding models and convince yourself things are getting better based on a handful of manual tests. RAGAS scores on a fixed test set give you a real signal. Without them, you’re just guessing.</p>
+
+<p>I’m still not 100% sure semantic chunking is worth the overhead for most applications. It produces better-quality chunks in theory, and in isolated tests I’ve seen it improve context precision by a few points. But it’s significantly slower at indexing time and adds a dependency on another embedding pass. For now, I default to recursive character splitting and only reach for semantic chunking when I have evidence that chunk quality is the bottleneck.</p>
+
+<hr />
+
+<h2 id="where-this-goes-next">Where This Goes Next</h2>
+
+<p>The honest answer is that RAG is still an unsolved problem. The pipeline in this post works well, but I’ve been watching a few developments closely.</p>
+
+<p>Query rewriting is probably the next thing I add to this stack — having the LLM rephrase the user’s raw question before retrieval catches a lot of cases where users ask things in a way that’s natural for a human but terrible for semantic search. Hybrid search (combining BM25 keyword matching with vector similarity) is also on my list, especially for domains where exact terminology matters.</p>
+
+<p>What I keep coming back to, though, is something less exciting: better document preparation. The more time I’ve spent on these systems, the more I believe that the quality of your source documents matters more than almost any retrieval optimization you can apply downstream. How they’re structured, how consistently they’re formatted, how much noise is stripped out before they hit the chunker: all of that compounds through every stage of the pipeline. Garbage in, garbage out, regardless of how clever your pipeline is.</p>
+
+<p>If you build this and hit walls, the most useful thing you can do is instrument your pipeline end to end and look at where quality is leaking. Usually it’s obvious once you’re looking at actual data rather than gut-checking demo queries.</p>
+
+<hr />
+
+            </div>
+
+            
+            <div class="tags mt-xl">
+                
+                <span class="tag">rag</span>
+                
+                <span class="tag">langchain</span>
+                
+                <span class="tag">chromadb</span>
+                
+                <span class="tag">openai</span>
+                
+                <span class="tag">vector-search</span>
+                
+                <span class="tag">llm</span>
+                
+            </div>
+            
+
+            <div class="mt-xl" style="padding-top: var(--space-xl); border-top: 1px solid var(--color-border);">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-md);">
+                    
+                    <a href="/blog/2026/03/20/zero-vibe-coding-finance-tracker/" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Previous Post
+                    </a>
+                    
+
+                    
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-xl">
+            <a href="/blog/" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Back to Blog
+            </a>
+        </div>
+    </div>
+</article>
+
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: false, theme: 'dark', fontSize: 16 });
+
+    document.querySelectorAll('pre > code.language-mermaid').forEach(function(code) {
+        const div = document.createElement('div');
+        div.className = 'mermaid';
+        div.textContent = code.textContent;
+        code.parentElement.replaceWith(div);
+    });
+
+    await mermaid.run();
+</script>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Shanmuga Sundaram Natarajan (Shan)</h3>
+          <p>Hands-on Architect & Technical Leader | 18+ Years Experience | AI-First Software Delivery</p>
+        </div>
+
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <ul class="footer-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/about/">About</a></li>
+            <li><a href="/projects/">Projects</a></li>
+            <li><a href="/blog/">Blog</a></li>
+            <li><a href="/contact/">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h3>Connect</h3>
+          <div class="social-links">
+            
+            <a href="https://github.com/shanmuga-sundaram-n" class="social-link" target="_blank" rel="noopener" aria-label="GitHub">
+              <i class="fab fa-github"></i>
+            </a>
+            
+            <a href="https://www.linkedin.com/in/shan-profile/" class="social-link" target="_blank" rel="noopener" aria-label="LinkedIn">
+              <i class="fab fa-linkedin"></i>
+            </a>
+            
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 Shanmuga Sundaram Natarajan (Shan). All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+
+    // Header scroll effect
+    const header = document.getElementById('header');
+    let lastScroll = 0;
+
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+
+      if (currentScroll > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+
+      lastScroll = currentScroll;
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+  </script>
+
+  <!-- Theme Switcher Script -->
+  <script src="/assets/js/theme-switcher.js"></script>
+
+</body>
+
+</html>
