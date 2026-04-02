@@ -1,4 +1,452 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.3">Jekyll</generator><link href="https://shanmuga-sundaram-n.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://shanmuga-sundaram-n.github.io/" rel="alternate" type="text/html" /><updated>2026-03-21T08:35:02+05:30</updated><id>https://shanmuga-sundaram-n.github.io/feed.xml</id><title type="html">Shanmuga Sundaram Natarajan’s Personal Website</title><subtitle>Hands-on Architect &amp; Technical Leader | 18+ Years Experience | AI-First Software Delivery</subtitle><author><name>Shanmuga Sundaram Natarajan (Shan)</name></author><entry><title type="html">Building RAG That Actually Works: Lessons from the Trenches</title><link href="https://shanmuga-sundaram-n.github.io/blog/2026/03/21/building-production-rag-pipeline/" rel="alternate" type="text/html" title="Building RAG That Actually Works: Lessons from the Trenches" /><published>2026-03-21T17:30:00+05:30</published><updated>2026-03-21T17:30:00+05:30</updated><id>https://shanmuga-sundaram-n.github.io/blog/2026/03/21/building-production-rag-pipeline</id><content type="html" xml:base="https://shanmuga-sundaram-n.github.io/blog/2026/03/21/building-production-rag-pipeline/">&lt;p&gt;I’ve read probably a dozen RAG tutorials. They all do the same thing: show you how to embed a handful of PDFs into a vector store, run a similarity search, stuff the results into a prompt, and call it a production pipeline. Then you try to use the same approach on real data — thousands of documents, mixed formats, users with messy natural language queries — and the whole thing falls apart. The answers are vague, wrong, or confidently referencing documents that have nothing to do with the question.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.3">Jekyll</generator><link href="https://shanmuga-sundaram-n.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://shanmuga-sundaram-n.github.io/" rel="alternate" type="text/html" /><updated>2026-04-02T19:10:58+05:30</updated><id>https://shanmuga-sundaram-n.github.io/feed.xml</id><title type="html">Shanmuga Sundaram Natarajan’s Personal Website</title><subtitle>Hands-on Architect &amp; Technical Leader | 18+ Years Experience | AI-First Software Delivery</subtitle><author><name>Shanmuga Sundaram Natarajan (Shan)</name></author><entry><title type="html">Why Most Teams Fail at Collaboration — And How Domain-Driven Design Fixes It</title><link href="https://shanmuga-sundaram-n.github.io/blog/2026/04/01/why-teams-fail-at-collaboration-ddd/" rel="alternate" type="text/html" title="Why Most Teams Fail at Collaboration — And How Domain-Driven Design Fixes It" /><published>2026-04-01T17:30:00+05:30</published><updated>2026-04-01T17:30:00+05:30</updated><id>https://shanmuga-sundaram-n.github.io/blog/2026/04/01/why-teams-fail-at-collaboration-ddd</id><content type="html" xml:base="https://shanmuga-sundaram-n.github.io/blog/2026/04/01/why-teams-fail-at-collaboration-ddd/">&lt;p&gt;Let me tell you about a bug that took three weeks to track down.&lt;/p&gt;
+
+&lt;p&gt;The backend team had added a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;status&lt;/code&gt; column to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;users&lt;/code&gt; table. They meant it to track onboarding progress — steps 0 through 4. The frontend team read the same field and treated it as a boolean: account active or not. The data team exported it weekly and bucketed users into cold, warm, and hot engagement tiers.&lt;/p&gt;
+
+&lt;p&gt;No one documented any of this. No one thought they needed to. The column was called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;status&lt;/code&gt;. What could be clearer?&lt;/p&gt;
+
+&lt;p&gt;Three teams. One column. Three completely different mental models quietly coexisting in production until the day they collided — a badly timed migration that broke the frontend, corrupted the analytics pipeline, and sent the on-call engineer on a three-week archaeological dig through git history.&lt;/p&gt;
+
+&lt;p&gt;That’s the thing about collaboration failures. They don’t announce themselves. They hide in the gap between what you think a word means and what your colleague thinks it means. And by the time you find them, you’re usually staring at a production incident at 2am.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-mermaid&quot;&gt;%%{init: {&apos;theme&apos;: &apos;dark&apos;, &apos;themeVariables&apos;: {&apos;primaryColor&apos;: &apos;#313244&apos;, &apos;primaryTextColor&apos;: &apos;#CDD6F4&apos;, &apos;primaryBorderColor&apos;: &apos;#45475A&apos;, &apos;lineColor&apos;: &apos;#A6ADC8&apos;, &apos;background&apos;: &apos;#1E1E2E&apos;, &apos;mainBkg&apos;: &apos;#313244&apos;, &apos;clusterBkg&apos;: &apos;#24243E&apos;, &apos;fontFamily&apos;: &apos;JetBrains Mono, monospace&apos;, &apos;fontSize&apos;: &apos;13px&apos;}}}%%
+graph TD
+    classDef yellow fill:#313244,stroke:#F9E2AF,color:#F9E2AF
+    classDef blue   fill:#313244,stroke:#89B4FA,color:#89B4FA
+    classDef green  fill:#1A3A1A,stroke:#A6E3A1,color:#A6E3A1
+    classDef red    fill:#2E1A1A,stroke:#F38BA8,color:#F38BA8
+    classDef mauve  fill:#313244,stroke:#CBA6F7,color:#CBA6F7
+    classDef teal   fill:#313244,stroke:#94E2D5,color:#94E2D5
+    classDef dim    fill:#1E1E2E,stroke:#45475A,color:#A6ADC8
+
+    FIELD[&quot;users.status&amp;lt;br/&amp;gt;one column,&amp;lt;br/&amp;gt;zero documentation&quot;]:::yellow
+
+    FIELD --&amp;gt; BE[&quot;Backend&amp;lt;br/&amp;gt;status = onboarding step&amp;lt;br/&amp;gt;0 · 1 · 2 · 3 · 4&quot;]:::blue
+    FIELD --&amp;gt; FE[&quot;Frontend&amp;lt;br/&amp;gt;status = account live?&amp;lt;br/&amp;gt;true · false&quot;]:::blue
+    FIELD --&amp;gt; DA[&quot;Analytics&amp;lt;br/&amp;gt;status = engagement tier&amp;lt;br/&amp;gt;cold · warm · hot&quot;]:::blue
+
+    BE --&amp;gt; OOF[&quot;💥 3-week incident&amp;lt;br/&amp;gt;Nobody was lying.&amp;lt;br/&amp;gt;Nobody was wrong.&amp;lt;br/&amp;gt;Nobody talked.&quot;]:::red
+
+    FE --&amp;gt; OOF
+    DA --&amp;gt; OOF
+
+    OOF --&amp;gt; LESSON[&quot;The problem wasn&apos;t technical.&amp;lt;br/&amp;gt;It was a missing shared model.&quot;]:::dim
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;its-not-a-people-problem-its-a-structure-problem&quot;&gt;It’s not a people problem. It’s a structure problem.&lt;/h2&gt;
+
+&lt;p&gt;Most engineering managers diagnose this as a communication failure and reach for process. More standups. Mandatory documentation. A new confluence page that everyone writes to once and nobody ever reads again.&lt;/p&gt;
+
+&lt;p&gt;I’ve watched this play out at startups, at mid-sized companies, at enterprises. The Agile ceremonies don’t fix it. The retrospectives surface it but don’t solve it. The reason is that this isn’t a people problem or a process problem. It’s a &lt;strong&gt;structural&lt;/strong&gt; problem.&lt;/p&gt;
+
+&lt;p&gt;When teams don’t share a coherent model of the domain they’re working in, every handoff becomes a translation exercise. And unlike foreign-language translation, nobody knows a translation is even happening. People assume they’re speaking the same language because they’re using the same words. They’re not.&lt;/p&gt;
+
+&lt;p&gt;This is what Domain-Driven Design (DDD) addresses. Eric Evans introduced the term in 2003 and the core idea is deceptively simple: the structure of your software should reflect the structure of the business. Not the structure of your database. Not the structure of your org chart from three reorgs ago. The actual domain — the problem space your business exists to solve.&lt;/p&gt;
+
+&lt;p&gt;Where DDD gets interesting is in how deeply it treats language as a first-class design concern.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;shared-language-isnt-a-soft-skill--its-an-architecture-decision&quot;&gt;Shared Language Isn’t a Soft Skill — It’s an Architecture Decision&lt;/h2&gt;
+
+&lt;p&gt;DDD calls this &lt;em&gt;Ubiquitous Language&lt;/em&gt;. The idea is that every team — engineers, product managers, designers, analysts — uses the exact same vocabulary to describe the domain. No synonyms. No “well, we call it an order but finance calls it a transaction.” Just one term, one definition, used everywhere consistently.&lt;/p&gt;
+
+&lt;p&gt;That includes the code.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-mermaid&quot;&gt;%%{init: {&apos;theme&apos;: &apos;dark&apos;, &apos;themeVariables&apos;: {&apos;primaryColor&apos;: &apos;#313244&apos;, &apos;primaryTextColor&apos;: &apos;#CDD6F4&apos;, &apos;primaryBorderColor&apos;: &apos;#45475A&apos;, &apos;lineColor&apos;: &apos;#A6ADC8&apos;, &apos;background&apos;: &apos;#1E1E2E&apos;, &apos;mainBkg&apos;: &apos;#313244&apos;, &apos;clusterBkg&apos;: &apos;#24243E&apos;, &apos;fontFamily&apos;: &apos;JetBrains Mono, monospace&apos;, &apos;fontSize&apos;: &apos;13px&apos;}}}%%
+flowchart LR
+    classDef yellow fill:#313244,stroke:#F9E2AF,color:#F9E2AF
+    classDef blue   fill:#313244,stroke:#89B4FA,color:#89B4FA
+    classDef green  fill:#1A3A1A,stroke:#A6E3A1,color:#A6E3A1
+    classDef red    fill:#2E1A1A,stroke:#F38BA8,color:#F38BA8
+    classDef mauve  fill:#313244,stroke:#CBA6F7,color:#CBA6F7
+    classDef teal   fill:#313244,stroke:#94E2D5,color:#94E2D5
+    classDef dim    fill:#1E1E2E,stroke:#45475A,color:#A6ADC8
+
+    subgraph BEFORE[&quot;Before — everyone improvises&quot;]
+        direction TB
+        P1[&quot;PM writes: &apos;Purchase&apos;&quot;]:::red
+        P2[&quot;Eng codes: &apos;Transaction&apos;&quot;]:::red
+        P3[&quot;Design mocks: &apos;Booking&apos;&quot;]:::red
+        P4[&quot;Analyst queries: &apos;Order&apos;&quot;]:::red
+        P1 &amp;amp; P2 &amp;amp; P3 &amp;amp; P4 --&amp;gt; CHAOS[&quot;4 mental models.&amp;lt;br/&amp;gt;Nobody catches it&amp;lt;br/&amp;gt;until it breaks.&quot;]:::red
+    end
+
+    subgraph AFTER[&quot;After — one shared glossary&quot;]
+        direction TB
+        G[&quot;Order&amp;lt;br/&amp;gt;─────────────────────&amp;lt;br/&amp;gt;A confirmed purchase with&amp;lt;br/&amp;gt;payment intent, owned by&amp;lt;br/&amp;gt;a Customer, containing&amp;lt;br/&amp;gt;one or more LineItems.&amp;lt;br/&amp;gt;Not a cart. Not a quote.&quot;]:::mauve
+        Q1[&quot;PM&quot;]:::yellow
+        Q2[&quot;Eng&quot;]:::yellow
+        Q3[&quot;Design&quot;]:::yellow
+        Q4[&quot;Analyst&quot;]:::yellow
+        Q1 &amp;amp; Q2 &amp;amp; Q3 &amp;amp; Q4 --&amp;gt; G --&amp;gt; GOOD[&quot;One model.&amp;lt;br/&amp;gt;Code matches the spec.&amp;lt;br/&amp;gt;Spec matches the meeting.&quot;]:::green
+    end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;When engineers name their classes and methods using the same language the business uses, something subtle but powerful happens: a product manager can read the code and recognise the concepts. An engineer can read a product spec without mentally translating it. Bugs that come from misunderstanding requirements — a whole category of bugs — start to disappear.&lt;/p&gt;
+
+&lt;p&gt;The discipline this requires is harder than it sounds. You have to resist the urge to rename things to what &lt;em&gt;you&lt;/em&gt; think is cleaner. You have to resist the abstraction instinct. If the business calls it an “Order”, the class is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Order&lt;/code&gt;. Not &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PurchaseRecord&lt;/code&gt;, not &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TxnEntity&lt;/code&gt;, not &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SaleModel&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;The payoff is enormous. Teams that build on a shared language move noticeably faster because the gap between “what we decided” and “what we built” closes.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;every-big-model-eventually-collapses-under-its-own-weight&quot;&gt;Every Big Model Eventually Collapses Under Its Own Weight&lt;/h2&gt;
+
+&lt;p&gt;Here’s a trap almost every growing company falls into.&lt;/p&gt;
+
+&lt;p&gt;Things start simple. You have a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Customer&lt;/code&gt; object. It has a name, an email, maybe a billing address. Everyone uses it. Fine.&lt;/p&gt;
+
+&lt;p&gt;Then Sales needs to add a preferred rep. Support needs to track open ticket counts. Finance needs invoice history and credit limits. Marketing wants engagement scores. Twelve months later, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Customer&lt;/code&gt; has 60 fields, a confusing network of relationships, and a comment at the top of the file that says &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;// DO NOT TOUCH - ask @someone before changing anything&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Nobody owns it, so everybody owns it. Which means nobody does.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-mermaid&quot;&gt;%%{init: {&apos;theme&apos;: &apos;dark&apos;, &apos;themeVariables&apos;: {&apos;primaryColor&apos;: &apos;#313244&apos;, &apos;primaryTextColor&apos;: &apos;#CDD6F4&apos;, &apos;primaryBorderColor&apos;: &apos;#45475A&apos;, &apos;lineColor&apos;: &apos;#A6ADC8&apos;, &apos;background&apos;: &apos;#1E1E2E&apos;, &apos;mainBkg&apos;: &apos;#313244&apos;, &apos;clusterBkg&apos;: &apos;#24243E&apos;, &apos;fontFamily&apos;: &apos;JetBrains Mono, monospace&apos;, &apos;fontSize&apos;: &apos;13px&apos;}}}%%
+graph LR
+    classDef yellow fill:#313244,stroke:#F9E2AF,color:#F9E2AF
+    classDef blue   fill:#313244,stroke:#89B4FA,color:#89B4FA
+    classDef green  fill:#1A3A1A,stroke:#A6E3A1,color:#A6E3A1
+    classDef red    fill:#2E1A1A,stroke:#F38BA8,color:#F38BA8
+    classDef mauve  fill:#313244,stroke:#CBA6F7,color:#CBA6F7
+    classDef teal   fill:#313244,stroke:#94E2D5,color:#94E2D5
+    classDef dim    fill:#1E1E2E,stroke:#45475A,color:#A6ADC8
+
+    subgraph SALES[&quot;Sales Context  ·  Team: Commerce&quot;]
+        C1[&quot;Customer&amp;lt;br/&amp;gt;─────────────&amp;lt;br/&amp;gt;Shopping cart&amp;lt;br/&amp;gt;Purchase history&amp;lt;br/&amp;gt;Wishlist&amp;lt;br/&amp;gt;Assigned rep&quot;]:::yellow
+    end
+
+    subgraph SUPPORT[&quot;Support Context  ·  Team: CX&quot;]
+        C2[&quot;Customer&amp;lt;br/&amp;gt;─────────────&amp;lt;br/&amp;gt;Open tickets&amp;lt;br/&amp;gt;Case history&amp;lt;br/&amp;gt;CSAT score&amp;lt;br/&amp;gt;SLA tier&quot;]:::teal
+    end
+
+    subgraph FINANCE[&quot;Finance Context  ·  Team: Finance&quot;]
+        C3[&quot;Customer&amp;lt;br/&amp;gt;─────────────&amp;lt;br/&amp;gt;Invoice history&amp;lt;br/&amp;gt;Payment methods&amp;lt;br/&amp;gt;Credit limit&amp;lt;br/&amp;gt;Tax status&quot;]:::blue
+    end
+
+    NOTE[&quot;Same word. Three lean models.&amp;lt;br/&amp;gt;Each team owns theirs.&amp;lt;br/&amp;gt;No one drowns in a god object.&quot;]:::dim
+
+    C1 -.-&amp;gt;|&quot;CustomerID only&quot;| NOTE
+    C2 -.-&amp;gt;|&quot;CustomerID only&quot;| NOTE
+    C3 -.-&amp;gt;|&quot;CustomerID only&quot;| NOTE
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;DDD gives you the concept of a &lt;strong&gt;Bounded Context&lt;/strong&gt; to deal with this. A Bounded Context is just a boundary — explicit, named, intentional — within which your model applies. Inside Sales, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Customer&lt;/code&gt; means one thing. Inside Finance, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Customer&lt;/code&gt; means something else. Both are valid. Neither one bleeds into the other.&lt;/p&gt;
+
+&lt;p&gt;The only thing they share is a stable identifier (a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CustomerID&lt;/code&gt;) that lets them talk about the same real-world entity without needing to agree on every attribute.&lt;/p&gt;
+
+&lt;p&gt;This isn’t just a modelling technique. It’s a team ownership technique. Bounded Contexts map directly to team responsibilities. The Sales context is the Commerce team’s problem. The Finance context is the Finance team’s problem. When something breaks in Finance’s &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Customer&lt;/code&gt; model, you know exactly whose phone to call. And crucially, the Commerce team doesn’t need to be in that conversation at all.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;drawing-the-map-nobody-draws&quot;&gt;Drawing the Map Nobody Draws&lt;/h2&gt;
+
+&lt;p&gt;Most teams have multiple contexts whether they know it or not. The problem is they’re invisible. Dependencies between teams exist but nobody’s written them down. You discover them when something changes upstream and breaks three things downstream that nobody knew were connected.&lt;/p&gt;
+
+&lt;p&gt;A &lt;strong&gt;Context Map&lt;/strong&gt; makes the invisible visible. It’s a diagram — doesn’t have to be fancy, hand-drawn is fine — showing all your contexts and how they relate to each other.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-mermaid&quot;&gt;%%{init: {&apos;theme&apos;: &apos;dark&apos;, &apos;themeVariables&apos;: {&apos;primaryColor&apos;: &apos;#313244&apos;, &apos;primaryTextColor&apos;: &apos;#CDD6F4&apos;, &apos;primaryBorderColor&apos;: &apos;#45475A&apos;, &apos;lineColor&apos;: &apos;#A6ADC8&apos;, &apos;background&apos;: &apos;#1E1E2E&apos;, &apos;mainBkg&apos;: &apos;#313244&apos;, &apos;clusterBkg&apos;: &apos;#24243E&apos;, &apos;fontFamily&apos;: &apos;JetBrains Mono, monospace&apos;, &apos;fontSize&apos;: &apos;13px&apos;}}}%%
+graph TD
+    classDef yellow fill:#313244,stroke:#F9E2AF,color:#F9E2AF
+    classDef blue   fill:#313244,stroke:#89B4FA,color:#89B4FA
+    classDef green  fill:#1A3A1A,stroke:#A6E3A1,color:#A6E3A1
+    classDef red    fill:#2E1A1A,stroke:#F38BA8,color:#F38BA8
+    classDef mauve  fill:#313244,stroke:#CBA6F7,color:#CBA6F7
+    classDef teal   fill:#313244,stroke:#94E2D5,color:#94E2D5
+    classDef dim    fill:#1E1E2E,stroke:#45475A,color:#A6ADC8
+
+    INVENTORY[&quot;📦 Inventory&amp;lt;br/&amp;gt;Team: Fulfillment&quot;]:::yellow
+    PAYMENTS[&quot;💳 Payments&amp;lt;br/&amp;gt;Team: Finance&quot;]:::yellow
+    IDENTITY[&quot;🪪 Identity&amp;lt;br/&amp;gt;Team: Platform&quot;]:::yellow
+
+    ACL[&quot;Anti-Corruption Layer&amp;lt;br/&amp;gt;we translate their mess&amp;lt;br/&amp;gt;so it doesn&apos;t leak in&quot;]:::red
+
+    ORDERS[&quot;🛒 Orders&amp;lt;br/&amp;gt;Team: Commerce&amp;lt;br/&amp;gt;— this is the core —&quot;]:::mauve
+
+    BUS[&quot;Event Bus&amp;lt;br/&amp;gt;OrderPlaced · OrderShipped&amp;lt;br/&amp;gt;PaymentSettled · OrderCancelled&quot;]:::teal
+
+    NOTIF[&quot;🔔 Notifications&amp;lt;br/&amp;gt;Team: Engagement&quot;]:::green
+    REPORT[&quot;📊 Reporting&amp;lt;br/&amp;gt;Team: Analytics&quot;]:::green
+    SUPPORT[&quot;🎧 Support&amp;lt;br/&amp;gt;Team: CX&quot;]:::green
+
+    L1[&quot;Open Host Service&amp;lt;br/&amp;gt;they expose a stable API&quot;]:::dim
+    L2[&quot;Shared Kernel&amp;lt;br/&amp;gt;just the user identity bits&quot;]:::dim
+    L3[&quot;Customer / Supplier&amp;lt;br/&amp;gt;we told them what we need&quot;]:::dim
+
+    INVENTORY --&amp;gt; ACL --&amp;gt; ORDERS
+    PAYMENTS --&amp;gt; L1 --&amp;gt; ORDERS
+    IDENTITY --&amp;gt; L2 --&amp;gt; ORDERS
+
+    ORDERS --&amp;gt; BUS
+    BUS --&amp;gt; NOTIF
+    BUS --&amp;gt; REPORT
+    ORDERS --&amp;gt; L3 --&amp;gt; SUPPORT
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;What makes this useful isn’t just the picture — it’s the relationship labels. DDD has names for the different ways contexts can relate, and those names carry a lot of weight:&lt;/p&gt;
+
+&lt;p&gt;An &lt;strong&gt;Anti-Corruption Layer&lt;/strong&gt; is what you build when you have to integrate with a system that has a messy model you don’t control. You write a translation layer that converts their concepts into yours, so their chaos doesn’t leak into your clean domain. If you’ve ever written an adapter for a third-party API with bizarre field names and six levels of nesting, you’ve built an ACL without knowing what to call it.&lt;/p&gt;
+
+&lt;p&gt;A &lt;strong&gt;Shared Kernel&lt;/strong&gt; means two teams own a small, explicitly agreed piece of the model together. Changes require coordination. Use this sparingly — shared ownership is shared risk.&lt;/p&gt;
+
+&lt;p&gt;A &lt;strong&gt;Customer/Supplier&lt;/strong&gt; relationship is refreshingly honest. The downstream team (customer) tells the upstream team (supplier) what they need, and the upstream team tries to deliver it. Not always with perfect success, but at least it’s named.&lt;/p&gt;
+
+&lt;p&gt;Having names for these things matters because it lets you have more precise conversations. Instead of “we have a dependency,” you can say “we’re downstream from Payments in a Customer/Supplier relationship, and they keep breaking our integration.” That’s a different conversation.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;your-architecture-is-just-your-team-structure-reflected-back-at-you&quot;&gt;Your Architecture Is Just Your Team Structure, Reflected Back at You&lt;/h2&gt;
+
+&lt;p&gt;Conway’s Law is one of those observations that sounds cynical but is actually just true: any organisation that designs a system will produce a design whose structure mirrors the organisation’s communication structure.&lt;/p&gt;
+
+&lt;p&gt;Teams that don’t talk produce systems with unclear interfaces between them. Teams organised by technology layer — a frontend team, a backend team, a database team — produce a layered monolith. Not because anyone planned it that way, but because that’s how the Conway attractor works.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-mermaid&quot;&gt;%%{init: {&apos;theme&apos;: &apos;dark&apos;, &apos;themeVariables&apos;: {&apos;primaryColor&apos;: &apos;#313244&apos;, &apos;primaryTextColor&apos;: &apos;#CDD6F4&apos;, &apos;primaryBorderColor&apos;: &apos;#45475A&apos;, &apos;lineColor&apos;: &apos;#A6ADC8&apos;, &apos;background&apos;: &apos;#1E1E2E&apos;, &apos;mainBkg&apos;: &apos;#313244&apos;, &apos;clusterBkg&apos;: &apos;#24243E&apos;, &apos;fontFamily&apos;: &apos;JetBrains Mono, monospace&apos;, &apos;fontSize&apos;: &apos;13px&apos;}}}%%
+graph TB
+    classDef yellow fill:#313244,stroke:#F9E2AF,color:#F9E2AF
+    classDef blue   fill:#313244,stroke:#89B4FA,color:#89B4FA
+    classDef green  fill:#1A3A1A,stroke:#A6E3A1,color:#A6E3A1
+    classDef red    fill:#2E1A1A,stroke:#F38BA8,color:#F38BA8
+    classDef mauve  fill:#313244,stroke:#CBA6F7,color:#CBA6F7
+    classDef teal   fill:#313244,stroke:#94E2D5,color:#94E2D5
+    classDef dim    fill:#1E1E2E,stroke:#45475A,color:#A6ADC8
+
+    subgraph BAD[&quot;❌ Org by tech layer → distributed monolith&quot;]
+        direction LR
+        FET[&quot;Frontend Team&quot;]:::red --&amp;gt; FEA[&quot;React App&quot;]:::red
+        BET[&quot;Backend Team&quot;]:::red --&amp;gt; BEA[&quot;One giant API&quot;]:::red
+        DBT[&quot;DB Team&quot;]:::red --&amp;gt; DBA[&quot;Shared DB everyone writes to&quot;]:::red
+        FEA --&amp;gt; BEA --&amp;gt; DBA
+    end
+
+    subgraph GOOD[&quot;✅ Org by domain → real autonomy&quot;]
+        direction LR
+        CT[&quot;Commerce Team&quot;]:::yellow --&amp;gt; CS[&quot;Order Service + its own DB&quot;]:::green
+        IT[&quot;Identity Team&quot;]:::yellow --&amp;gt; IS[&quot;Auth Service + its own DB&quot;]:::green
+        AT[&quot;Analytics Team&quot;]:::yellow --&amp;gt; AS[&quot;Reporting Service + its own DB&quot;]:::green
+    end
+
+    CONWAY[&quot;Conway&apos;s Law in action.&amp;lt;br/&amp;gt;Flip your org structure&amp;lt;br/&amp;gt;and the architecture follows.&quot;]:::dim
+
+    BAD -.-&amp;gt; CONWAY
+    GOOD -.-&amp;gt; CONWAY
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The insight DDD gives you here is to use Conway’s Law deliberately. If you want an architecture that’s organised by business domain, organise your teams by business domain first. The architecture will naturally follow. This is sometimes called the “Inverse Conway Maneuver” and it’s more effective than any amount of architectural governance.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;a-vocabulary-for-the-code-itself&quot;&gt;A Vocabulary for the Code Itself&lt;/h2&gt;
+
+&lt;p&gt;The strategic stuff — contexts, maps, language — gets the most attention, but DDD also has a set of tactical patterns that give engineers a shared vocabulary for implementation. These are the building blocks you use once you’ve drawn your boundaries.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-mermaid&quot;&gt;%%{init: {&apos;theme&apos;: &apos;dark&apos;, &apos;themeVariables&apos;: {&apos;primaryColor&apos;: &apos;#313244&apos;, &apos;primaryTextColor&apos;: &apos;#CDD6F4&apos;, &apos;primaryBorderColor&apos;: &apos;#45475A&apos;, &apos;lineColor&apos;: &apos;#A6ADC8&apos;, &apos;background&apos;: &apos;#1E1E2E&apos;, &apos;mainBkg&apos;: &apos;#313244&apos;, &apos;clusterBkg&apos;: &apos;#24243E&apos;, &apos;fontFamily&apos;: &apos;JetBrains Mono, monospace&apos;, &apos;fontSize&apos;: &apos;13px&apos;}}}%%
+classDiagram
+    class Order {
+        &amp;lt;&amp;lt;Aggregate Root&amp;gt;&amp;gt;
+        +OrderId id
+        +CustomerId customerId
+        +OrderStatus status
+        +List~LineItem~ items
+        +Money total
+        +place() OrderPlaced
+        +cancel() OrderCancelled
+        +addItem(productId, qty)
+    }
+
+    class LineItem {
+        &amp;lt;&amp;lt;Entity&amp;gt;&amp;gt;
+        +LineItemId id
+        +ProductId productId
+        +Quantity qty
+        +Money unitPrice
+        +subtotal() Money
+    }
+
+    class Money {
+        &amp;lt;&amp;lt;Value Object&amp;gt;&amp;gt;
+        +Decimal amount
+        +Currency currency
+        +add(Money) Money
+        +equals(Money) bool
+    }
+
+    class OrderStatus {
+        &amp;lt;&amp;lt;Value Object&amp;gt;&amp;gt;
+        PENDING
+        CONFIRMED
+        SHIPPED
+        CANCELLED
+    }
+
+    class OrderPlaced {
+        &amp;lt;&amp;lt;Domain Event&amp;gt;&amp;gt;
+        +OrderId orderId
+        +CustomerId customerId
+        +Money total
+        +DateTime occurredAt
+    }
+
+    class OrderRepository {
+        &amp;lt;&amp;lt;Repository&amp;gt;&amp;gt;
+        +findById(OrderId) Order
+        +save(Order) void
+        +findByCustomer(CustomerId) List~Order~
+    }
+
+    Order &quot;1&quot; *-- &quot;1..*&quot; LineItem : contains
+    Order *-- Money : total
+    Order *-- OrderStatus : status
+    Order ..&amp;gt; OrderPlaced : emits
+    OrderRepository ..&amp;gt; Order : persists
+    LineItem *-- Money : unitPrice
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;An &lt;strong&gt;Aggregate&lt;/strong&gt; is a cluster of objects that change together, with a single root that controls access. In the diagram above, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Order&lt;/code&gt; is the root. You never reach into a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;LineItem&lt;/code&gt; directly from outside — you always go through &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Order&lt;/code&gt;. This enforces consistency boundaries in a way that’s explicit and understandable.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Value Objects&lt;/strong&gt; are immutable. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Money&lt;/code&gt; has no identity — a $10 value object is interchangeable with any other $10 value object of the same currency. This is a meaningful design decision that prevents a whole class of bugs (mutating a price on one object and accidentally affecting another).&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Domain Events&lt;/strong&gt; record facts. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;OrderPlaced&lt;/code&gt; means something happened — past tense, immutable, true. It’s not a command. It’s not a request. Something happened and we’re recording it. This distinction matters for how teams interact with each other.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;domain-events-are-how-teams-stop-stepping-on-each-other&quot;&gt;Domain Events Are How Teams Stop Stepping on Each Other&lt;/h2&gt;
+
+&lt;p&gt;The thing that changed how I think about team autonomy was understanding Domain Events properly. When a context publishes an event, it’s announcing a fact to the rest of the world without knowing or caring who’s listening. Other contexts react. No direct coupling. No “we need to call the Notifications team’s endpoint before we can ship.”&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-mermaid&quot;&gt;%%{init: {&apos;theme&apos;: &apos;dark&apos;, &apos;themeVariables&apos;: {&apos;primaryColor&apos;: &apos;#313244&apos;, &apos;primaryTextColor&apos;: &apos;#CDD6F4&apos;, &apos;primaryBorderColor&apos;: &apos;#45475A&apos;, &apos;lineColor&apos;: &apos;#A6ADC8&apos;, &apos;background&apos;: &apos;#1E1E2E&apos;, &apos;mainBkg&apos;: &apos;#313244&apos;, &apos;clusterBkg&apos;: &apos;#24243E&apos;, &apos;fontFamily&apos;: &apos;JetBrains Mono, monospace&apos;, &apos;fontSize&apos;: &apos;13px&apos;}}}%%
+sequenceDiagram
+    participant C as Customer
+    participant O as Orders&amp;lt;br/&amp;gt;(Commerce Team)
+    participant B as Event Bus
+    participant P as Payments&amp;lt;br/&amp;gt;(Finance Team)
+    participant N as Notifications&amp;lt;br/&amp;gt;(Engagement Team)
+    participant R as Reporting&amp;lt;br/&amp;gt;(Analytics Team)
+
+    C-&amp;gt;&amp;gt;O: place order
+    O-&amp;gt;&amp;gt;O: validate, create Order aggregate
+    O--&amp;gt;&amp;gt;B: OrderPlaced { orderId, total, customerId }
+    Note over O,B: Commerce ships this.&amp;lt;br/&amp;gt;Nobody else was consulted.
+
+    B--&amp;gt;&amp;gt;P: OrderPlaced
+    P-&amp;gt;&amp;gt;P: charge card, record transaction
+    P--&amp;gt;&amp;gt;B: PaymentSucceeded { orderId, txnId }
+
+    B--&amp;gt;&amp;gt;N: PaymentSucceeded
+    N-&amp;gt;&amp;gt;C: confirmation email
+
+    B--&amp;gt;&amp;gt;R: OrderPlaced + PaymentSucceeded
+    R-&amp;gt;&amp;gt;R: update revenue dashboard
+
+    Note over P,R: All three teams deploy&amp;lt;br/&amp;gt;on their own schedule.&amp;lt;br/&amp;gt;No cross-team standups to ship.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Notice what’s missing: the Commerce team never calls the Notifications team directly. Engagement never has to wait on Finance to expose an API. Analytics doesn’t need to ask Commerce for access to order data. Everyone reacts to shared facts. Everyone can ship without scheduling around everyone else.&lt;/p&gt;
+
+&lt;p&gt;This is the real payoff of Domain Events for collaboration. It’s not a technical trick — it’s a social contract encoded in architecture. “We commit to publishing accurate events. Do what you want with them.”&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;what-this-actually-looked-like-at-a-real-company&quot;&gt;What This Actually Looked Like at a Real Company&lt;/h2&gt;
+
+&lt;p&gt;A fintech startup I know had three teams sharing a Rails monolith. Payments, Accounts, and Reporting all worked in the same codebase, all writing to the same &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Account&lt;/code&gt; model. It had accumulated 60-something fields over 18 months. Nobody wanted to touch it.&lt;/p&gt;
+
+&lt;p&gt;Releasing anything required all three teams to coordinate. A Reporting query that nobody noticed would fail silently when Payments changed an account state transition. The Accounts team had a standing rule that any migration needed sign-off from two other teams before it went out. Releases happened every three weeks. Everyone was exhausted.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-mermaid&quot;&gt;%%{init: {&apos;theme&apos;: &apos;dark&apos;, &apos;themeVariables&apos;: {&apos;primaryColor&apos;: &apos;#313244&apos;, &apos;primaryTextColor&apos;: &apos;#CDD6F4&apos;, &apos;primaryBorderColor&apos;: &apos;#45475A&apos;, &apos;lineColor&apos;: &apos;#A6ADC8&apos;, &apos;background&apos;: &apos;#1E1E2E&apos;, &apos;mainBkg&apos;: &apos;#313244&apos;, &apos;clusterBkg&apos;: &apos;#24243E&apos;, &apos;fontFamily&apos;: &apos;JetBrains Mono, monospace&apos;, &apos;fontSize&apos;: &apos;13px&apos;}}}%%
+graph TB
+    classDef yellow fill:#313244,stroke:#F9E2AF,color:#F9E2AF
+    classDef blue   fill:#313244,stroke:#89B4FA,color:#89B4FA
+    classDef green  fill:#1A3A1A,stroke:#A6E3A1,color:#A6E3A1
+    classDef red    fill:#2E1A1A,stroke:#F38BA8,color:#F38BA8
+    classDef mauve  fill:#313244,stroke:#CBA6F7,color:#CBA6F7
+    classDef teal   fill:#313244,stroke:#94E2D5,color:#94E2D5
+    classDef dim    fill:#1E1E2E,stroke:#45475A,color:#A6ADC8
+
+    subgraph BEFORE[&quot;Before — one model, three teams, constant friction&quot;]
+        direction TB
+        SHARED[&quot;Account&amp;lt;br/&amp;gt;60+ fields · 20+ associations&amp;lt;br/&amp;gt;// DO NOT TOUCH&amp;lt;br/&amp;gt;// ask someone first&quot;]:::red
+        PT[&quot;Payments Team&quot;]:::yellow --&amp;gt; SHARED
+        AT[&quot;Accounts Team&quot;]:::yellow --&amp;gt; SHARED
+        RT[&quot;Reporting Team&quot;]:::yellow --&amp;gt; SHARED
+        SHARED --&amp;gt; PAIN[&quot;3-week release cycles.&amp;lt;br/&amp;gt;Every migration needs&amp;lt;br/&amp;gt;sign-off from 2 other teams.&amp;lt;br/&amp;gt;Everyone is tired.&quot;]:::red
+    end
+
+    subgraph AFTER[&quot;After — three contexts, events, autonomy&quot;]
+        direction LR
+        PC[&quot;Payment Processing&amp;lt;br/&amp;gt;owns: charge lifecycle&amp;lt;br/&amp;gt;refunds · disputes&quot;]:::mauve
+        AC[&quot;Account Management&amp;lt;br/&amp;gt;owns: balance · ledger&amp;lt;br/&amp;gt;account state&quot;]:::mauve
+        BUS2[&quot;Event Bus&amp;lt;br/&amp;gt;PaymentSettled&amp;lt;br/&amp;gt;AccountCredited&amp;lt;br/&amp;gt;AccountDebited&quot;]:::teal
+        RC[&quot;Financial Reporting&amp;lt;br/&amp;gt;owns: its own read model&amp;lt;br/&amp;gt;built from events&quot;]:::green
+        PC --&amp;gt; BUS2
+        AC --&amp;gt; BUS2
+        BUS2 --&amp;gt; RC
+    end
+
+    RESULT[&quot;Each team ships when ready.&amp;lt;br/&amp;gt;Cycle time: days not weeks.&amp;lt;br/&amp;gt;Cross-team meetings dropped by half.&quot;]:::dim
+    AFTER --&amp;gt; RESULT
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;They ran an Event Storming workshop — three hours, lots of sticky notes, some heated arguments about what “account” actually meant. They came out with three clearly named contexts, a rough event schema, and the realisation that Reporting didn’t actually need access to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Account&lt;/code&gt; model at all. It just needed events.&lt;/p&gt;
+
+&lt;p&gt;Six months later they were shipping daily. The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Account&lt;/code&gt; model still existed in its original bloated form in Accounts context, but it was that team’s problem to clean up on their own timeline. Finance had a lean model. Reporting had a read model built from events. Everyone owned their own thing.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;you-dont-have-to-do-all-of-this-at-once&quot;&gt;You Don’t Have to Do All of This at Once&lt;/h2&gt;
+
+&lt;p&gt;The reason DDD gets a reputation for being heavyweight is that people treat it as an all-or-nothing proposition. They read Evans’ book, see 560 pages, and either implement everything or none of it. Neither is the right call.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-mermaid&quot;&gt;%%{init: {&apos;theme&apos;: &apos;dark&apos;, &apos;themeVariables&apos;: {&apos;primaryColor&apos;: &apos;#313244&apos;, &apos;primaryTextColor&apos;: &apos;#CDD6F4&apos;, &apos;primaryBorderColor&apos;: &apos;#45475A&apos;, &apos;lineColor&apos;: &apos;#A6ADC8&apos;, &apos;background&apos;: &apos;#1E1E2E&apos;, &apos;mainBkg&apos;: &apos;#313244&apos;, &apos;clusterBkg&apos;: &apos;#24243E&apos;, &apos;fontFamily&apos;: &apos;JetBrains Mono, monospace&apos;, &apos;fontSize&apos;: &apos;13px&apos;}}}%%
+flowchart LR
+    classDef yellow fill:#313244,stroke:#F9E2AF,color:#F9E2AF
+    classDef blue   fill:#313244,stroke:#89B4FA,color:#89B4FA
+    classDef green  fill:#1A3A1A,stroke:#A6E3A1,color:#A6E3A1
+    classDef red    fill:#2E1A1A,stroke:#F38BA8,color:#F38BA8
+    classDef mauve  fill:#313244,stroke:#CBA6F7,color:#CBA6F7
+    classDef teal   fill:#313244,stroke:#94E2D5,color:#94E2D5
+    classDef dim    fill:#1E1E2E,stroke:#45475A,color:#A6ADC8
+
+    S1[&quot;1. Event Storming&amp;lt;br/&amp;gt;──────────&amp;lt;br/&amp;gt;3 hours, sticky notes,&amp;lt;br/&amp;gt;domain experts in the room.&amp;lt;br/&amp;gt;Surfaces what you don&apos;t know.&quot;]:::yellow
+
+    S2[&quot;2. Shared Glossary&amp;lt;br/&amp;gt;──────────&amp;lt;br/&amp;gt;Pick your 5 most&amp;lt;br/&amp;gt;misused terms.&amp;lt;br/&amp;gt;Write definitions. Get sign-off.&quot;]:::blue
+
+    S3[&quot;3. Context Map&amp;lt;br/&amp;gt;──────────&amp;lt;br/&amp;gt;Draw the boundaries&amp;lt;br/&amp;gt;that already exist&amp;lt;br/&amp;gt;but aren&apos;t documented.&quot;]:::mauve
+
+    S4[&quot;4. Tactical Patterns&amp;lt;br/&amp;gt;──────────&amp;lt;br/&amp;gt;Value Objects for money.&amp;lt;br/&amp;gt;Domain Events for&amp;lt;br/&amp;gt;cross-team handoffs.&quot;]:::teal
+
+    S5[&quot;5. Protect Boundaries&amp;lt;br/&amp;gt;──────────&amp;lt;br/&amp;gt;Anti-Corruption Layers&amp;lt;br/&amp;gt;for legacy systems and&amp;lt;br/&amp;gt;third-party APIs.&quot;]:::green
+
+    S1 --&amp;gt; S2 --&amp;gt; S3 --&amp;gt; S4 --&amp;gt; S5
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Start with the thing that gives you the most value with the least disruption. For most teams that’s a combination of steps 1 and 2. Run an Event Storming session — just a few hours, domain experts and engineers in the same room, mapping out what actually happens in the business. Then build a glossary for the five terms that cause the most confusion in your standups.&lt;/p&gt;
+
+&lt;p&gt;You can do both of those things without touching your architecture. You’ll still get an immediate improvement in how clearly your team communicates. The rest — the context boundaries, the tactical patterns, the event-driven integration — you layer in when it makes sense.&lt;/p&gt;
+
+&lt;p&gt;The trap to avoid is introducing DDD vocabulary without the discipline. If half the team calls it an Order and the other half still says Transaction, you haven’t adopted Ubiquitous Language — you’ve just added jargon. Full commitment to the shared vocabulary is the one thing that shouldn’t be done halfway.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;the-real-unlock&quot;&gt;The Real Unlock&lt;/h2&gt;
+
+&lt;p&gt;Here’s the thing that doesn’t get said enough about DDD: the primary benefit isn’t better architecture. It’s &lt;strong&gt;faster trust&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;When teams have explicit boundaries, they can trust each other to stay inside them. When events are the handoff mechanism, no team can break another team’s internals. When the language is shared, you stop wasting half a meeting realising you’ve been talking past each other.&lt;/p&gt;
+
+&lt;p&gt;That’s what makes collaboration actually work at scale. Not more process. Not more documentation. Structures that make the right thing easy and the wrong thing obvious — so teams can move fast without constantly stepping on each other.&lt;/p&gt;
+
+&lt;p&gt;DDD gives you those structures. It took the software world a while to really absorb what Evans was getting at, but the core insight holds up: the way you model your domain determines how well your teams can work together. Get the model right, and a lot of the collaboration friction disappears.&lt;/p&gt;
+
+&lt;p&gt;Get it wrong, and no amount of Agile ceremony will save you.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;em&gt;If you made it this far, your next move is simple: schedule a two-hour Event Storming session with your team. Bring in someone from product, someone from the business side, and your senior engineers. You’ll be surprised how quickly the domain’s real shape reveals itself — and how much everyone disagrees on terms you all thought you shared.&lt;/em&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Tags:&lt;/strong&gt; Domain-Driven Design · Software Architecture · Team Collaboration · Engineering Culture · Microservices&lt;/p&gt;</content><author><name>Shanmuga Sundaram Natarajan (Shan)</name></author><category term="engineering" /><category term="architecture" /><category term="ddd" /><category term="domain-driven-design" /><category term="software-architecture" /><category term="team-collaboration" /><category term="engineering-culture" /><category term="microservices" /><category term="bounded-context" /><summary type="html">Let me tell you about a bug that took three weeks to track down.</summary></entry><entry><title type="html">Building RAG That Actually Works: Lessons from the Trenches</title><link href="https://shanmuga-sundaram-n.github.io/blog/2026/03/21/building-production-rag-pipeline/" rel="alternate" type="text/html" title="Building RAG That Actually Works: Lessons from the Trenches" /><published>2026-03-21T17:30:00+05:30</published><updated>2026-03-21T17:30:00+05:30</updated><id>https://shanmuga-sundaram-n.github.io/blog/2026/03/21/building-production-rag-pipeline</id><content type="html" xml:base="https://shanmuga-sundaram-n.github.io/blog/2026/03/21/building-production-rag-pipeline/">&lt;p&gt;I’ve read probably a dozen RAG tutorials. They all do the same thing: show you how to embed a handful of PDFs into a vector store, run a similarity search, stuff the results into a prompt, and call it a production pipeline. Then you try to use the same approach on real data — thousands of documents, mixed formats, users with messy natural language queries — and the whole thing falls apart. The answers are vague, wrong, or confidently referencing documents that have nothing to do with the question.&lt;/p&gt;
 
 &lt;p&gt;That gap between “works in the tutorial” and “works in production” is what this post is about. I’ve built a few of these pipelines now, and I’ve made almost every mistake there is to make — wrong chunk sizes, no overlap, skipping the re-ranker, shipping without any evaluation. I’m going to walk through the full pipeline — from chunking to evaluation — not as a sanitized tutorial, but as the thing I wish I’d had when I started building this stuff for real.&lt;/p&gt;
 
