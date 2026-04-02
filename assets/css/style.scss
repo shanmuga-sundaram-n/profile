@@ -1124,6 +1124,28 @@ strong {
   font-size: var(--font-size-sm);
 }
 
+.footer-counter {
+  margin-top: var(--space-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.footer-counter-link {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+  text-decoration: none;
+  opacity: 0.6;
+  transition: opacity var(--transition-fast);
+
+  &:hover {
+    opacity: 1;
+    color: var(--color-accent-primary);
+  }
+}
+
 /* ============================================
    SECTION HEADERS
    ============================================ */
