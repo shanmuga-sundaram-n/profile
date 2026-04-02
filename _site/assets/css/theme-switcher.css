@@ -42,8 +42,18 @@
     z-index: 1;
 }
 
-/* Slide knob to the right when checked (light mode) */
+/* Slide knob to the right when checked (light mode) — JS-driven */
 .mode-switch input:checked + .mode-slider::after {
+    transform: translateX(28px);
+}
+
+/*
+ * FOUC-free knob position: driven by [data-mode="light"] on <html>,
+ * which is set by the inline head script before any CSS paints.
+ * This mirrors the input:checked rule above so the knob is always
+ * in the right place from the very first frame — no JS lag, no flash.
+ */
+[data-mode="light"] .mode-slider::after {
     transform: translateX(28px);
 }
 
@@ -97,6 +107,11 @@
     }
 
     .mode-switch input:checked + .mode-slider::after {
+        transform: translateX(24px);
+    }
+
+    /* FOUC-free version for mobile too */
+    [data-mode="light"] .mode-slider::after {
         transform: translateX(24px);
     }
 }
