@@ -1,8 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-mode="dark" data-theme="orange-red">
 
 <head>
   <meta charset="UTF-8">
+
+  <!-- ⚡ Anti-FOUC: read theme from localStorage and apply BEFORE any render -->
+  <script>
+    (function () {
+      var mode = localStorage.getItem('site-mode') || 'dark';
+      var html = document.documentElement;
+      html.setAttribute('data-mode', mode);
+      html.setAttribute('data-theme', 'orange-red');
+      // Suppress transition animations on first paint
+      html.classList.add('no-transitions');
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -37,6 +49,13 @@
   <!-- Stylesheets -->
   <link rel="stylesheet" href="/assets/css/style.css">
   <link rel="stylesheet" href="/assets/css/theme-switcher.css">
+
+  <!-- Remove no-transitions class after first paint so user interactions animate normally -->
+  <script>
+    window.addEventListener('load', function () {
+      document.documentElement.classList.remove('no-transitions');
+    });
+  </script>
 
   <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -78,7 +97,16 @@
         <span></span>
       </button>
 
-      <div id="modeToggleContainer"></div>
+      <!-- Theme toggle rendered inline — avoids JS-injection flicker -->
+      <div id="modeToggleContainer">
+        <label class="mode-switch" aria-label="Toggle dark/light mode">
+          <input type="checkbox" id="modeToggle">
+          <span class="mode-slider">
+            <i class="fas fa-sun mode-icon-sun"></i>
+            <i class="fas fa-moon mode-icon-moon"></i>
+          </span>
+        </label>
+      </div>
 
       <ul class="nav-links" id="navLinks">
         <li><a href="/" class="nav-link ">Home</a></li>
