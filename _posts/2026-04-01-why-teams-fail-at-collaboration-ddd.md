@@ -167,6 +167,7 @@ graph TD
     classDef mauve  fill:#313244,stroke:#CBA6F7,color:#CBA6F7
     classDef teal   fill:#313244,stroke:#94E2D5,color:#94E2D5
     classDef dim    fill:#1E1E2E,stroke:#45475A,color:#A6ADC8
+    
 
     INVENTORY["📦 Inventory<br/>Team: Fulfillment"]:::yellow
     PAYMENTS["💳 Payments<br/>Team: Finance"]:::yellow
