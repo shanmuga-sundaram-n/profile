@@ -65,7 +65,7 @@ strong { font-weight: 600; color: var(--color-text-primary); }
 .section-sm { padding: var(--space-xl) 0; }
 
 /* ============================================ HEADER & NAVIGATION ============================================ */
-.site-header { position: fixed; top: 0; left: 0; right: 0; z-index: var(--z-fixed); background: rgba(10, 14, 39, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid var(--color-border); transition: all var(--transition-base); }
+.site-header { position: fixed; top: 0; left: 0; right: 0; z-index: var(--z-fixed); background: rgba(10, 14, 39, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid var(--color-border); transition: background var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base); }
 
 .site-header.scrolled { background: rgba(10, 14, 39, 0.95); box-shadow: var(--shadow-md); }
 
@@ -79,7 +79,10 @@ strong { font-weight: 600; color: var(--color-text-primary); }
 
 .site-logo:hover { transform: scale(1.05); }
 
-.nav-links { display: flex; gap: var(--space-md); list-style: none; margin-left: auto; padding-right: var(--space-sm); }
+/* Push toggle after nav-links on desktop (DOM order places it before nav-links) */
+#modeToggleContainer { order: 3; }
+
+.nav-links { display: flex; gap: var(--space-md); list-style: none; margin-left: auto; padding-right: var(--space-sm); order: 2; }
 
 .nav-link { color: var(--color-text-secondary); font-weight: 500; font-size: var(--font-size-sm); text-transform: uppercase; letter-spacing: 0.05em; padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-sm); transition: all var(--transition-base); position: relative; }
 
@@ -271,6 +274,11 @@ strong { font-weight: 600; color: var(--color-text-primary); }
 
 .footer-bottom { text-align: center; padding-top: var(--space-lg); border-top: 1px solid var(--color-border); color: var(--color-text-tertiary); font-size: var(--font-size-sm); }
 
+.footer-counter { margin-top: var(--space-sm); display: flex; align-items: center; justify-content: center; gap: var(--space-xs); flex-wrap: wrap; }
+
+.footer-counter-link { font-size: var(--font-size-xs); color: var(--color-text-tertiary); text-decoration: none; opacity: 0.6; transition: opacity var(--transition-fast); }
+.footer-counter-link:hover { opacity: 1; color: var(--color-accent-primary); }
+
 /* ============================================ SECTION HEADERS ============================================ */
 .section-header { text-align: center; margin-bottom: var(--space-lg); }
 
@@ -320,7 +328,9 @@ strong { font-weight: 600; color: var(--color-text-primary); }
 /* ============================================ MEDIA QUERIES ============================================ */
 @media (max-width: 768px) { :root { --font-size-5xl: 2.5rem; --font-size-4xl: 2rem; --font-size-3xl: 1.75rem; --space-3xl: 4rem; }
   .site-nav { flex-wrap: wrap; }
-  .nav-links { display: none; width: 100%; flex-direction: column; gap: var(--space-sm); padding-top: var(--space-md); background: var(--color-bg-secondary); position: absolute; top: 100%; left: 0; right: 0; padding: var(--space-md); border-bottom: 1px solid var(--color-border); }
+  /* Keep toggle next to hamburger on mobile (DOM order: hamburger → toggle → nav-links) */
+  #modeToggleContainer { order: 0; }
+  .nav-links { display: none; order: 10; width: 100%; flex-direction: column; gap: var(--space-sm); background: var(--color-bg-secondary); position: absolute; top: 100%; left: 0; right: 0; padding: var(--space-md); border-bottom: 1px solid var(--color-border); z-index: var(--z-dropdown); }
   .nav-links.active { display: flex; }
   .menu-toggle { display: flex; }
   .hero-cta { flex-direction: column; align-items: stretch; }

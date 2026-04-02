@@ -317,7 +317,7 @@ strong {
   background: rgba(10, 14, 39, 0.8);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--color-border);
-  transition: all var(--transition-base);
+  transition: background var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
 }
 
 .site-header.scrolled {
@@ -361,12 +361,18 @@ strong {
   transform: scale(1.05);
 }
 
+/* Push toggle after nav-links on desktop (DOM order places it before nav-links) */
+#modeToggleContainer {
+  order: 3;
+}
+
 .nav-links {
   display: flex;
   gap: var(--space-md);
   list-style: none;
   margin-left: auto;
   padding-right: var(--space-sm);
+  order: 2;
 }
 
 .nav-link {
@@ -1351,12 +1357,17 @@ strong {
     flex-wrap: wrap;
   }
 
+  /* Keep toggle next to hamburger on mobile (DOM order: hamburger → toggle → nav-links) */
+  #modeToggleContainer {
+    order: 0;
+  }
+
   .nav-links {
     display: none;
+    order: 10;
     width: 100%;
     flex-direction: column;
     gap: var(--space-sm);
-    padding-top: var(--space-md);
     background: var(--color-bg-secondary);
     position: absolute;
     top: 100%;
@@ -1364,6 +1375,7 @@ strong {
     right: 0;
     padding: var(--space-md);
     border-bottom: 1px solid var(--color-border);
+    z-index: var(--z-dropdown);
   }
 
   .nav-links.active {
