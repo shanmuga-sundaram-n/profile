@@ -27,6 +27,8 @@ blog_search: true
 <div id="pagination-controls" class="blog-pagination"></div>
 <p id="no-results" class="no-results-msg" hidden>No posts found.</p>
 
+{% include subscribe-section.html %}
+
 <script id="post-data" type="application/json">
 [{% for post in site.posts %}
   {

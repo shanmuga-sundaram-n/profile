@@ -1,0 +1,73 @@
+name: Notify Subscribers on New Post
+
+on:
+  push:
+    branches:
+      - gh-pages
+    paths:
+      - '_posts/**'
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Detect new blog post
+        id: detect
+        run: |
+          # Find files added in _posts/ in this push
+          NEW_POST=$(git diff --name-status HEAD~1 HEAD -- '_posts/*.md' | grep '^A' | awk '{print $2}' | head -1)
+
+          if [ -z "$NEW_POST" ]; then
+            echo "No new post detected."
+            echo "new_post=" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "New post detected: $NEW_POST"
+          echo "new_post=$NEW_POST" >> $GITHUB_OUTPUT
+
+          # Extract front matter fields
+          TITLE=$(grep '^title:' "$NEW_POST" | head -1 | sed 's/^title:[[:space:]]*//' | tr -d '"'"'" )
+          DESCRIPTION=$(grep '^description:' "$NEW_POST" | head -1 | sed 's/^description:[[:space:]]*//' | tr -d '"'"'" )
+          DATE=$(grep '^date:' "$NEW_POST" | head -1 | sed 's/^date:[[:space:]]*//' | awk '{print $1}')
+
+          # Derive URL from filename: _posts/YYYY-MM-DD-slug.md -> /blog/YYYY/MM/DD/slug/
+          FILENAME=$(basename "$NEW_POST" .md)
+          YEAR=$(echo "$FILENAME" | cut -d'-' -f1)
+          MONTH=$(echo "$FILENAME" | cut -d'-' -f2)
+          DAY=$(echo "$FILENAME" | cut -d'-' -f3)
+          SLUG=$(echo "$FILENAME" | cut -d'-' -f4-)
+          POST_URL="https://shanmugasundaram.in/blog/${YEAR}/${MONTH}/${DAY}/${SLUG}/"
+
+          echo "title=$TITLE" >> $GITHUB_OUTPUT
+          echo "description=$DESCRIPTION" >> $GITHUB_OUTPUT
+          echo "post_url=$POST_URL" >> $GITHUB_OUTPUT
+
+      - name: Send newsletter via Buttondown
+        if: steps.detect.outputs.new_post != ''
+        env:
+          BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
+        run: |
+          TITLE="${{ steps.detect.outputs.title }}"
+          DESCRIPTION="${{ steps.detect.outputs.description }}"
+          POST_URL="${{ steps.detect.outputs.post_url }}"
+
+          EMAIL_BODY="<h2>${TITLE}</h2>
+          <p>${DESCRIPTION}</p>
+          <p><a href=\"${POST_URL}\" style=\"background: linear-gradient(135deg, #f59e0b, #ef4444); color: #fff; padding: 12px 24px; border-radius: 999px; text-decoration: none; font-weight: 600; display: inline-block;\">Read the article →</a></p>
+          <hr>
+          <p style=\"font-size: 0.85rem; color: #888;\">You're receiving this because you subscribed to Shan's blog. <a href=\"%unsubscribe_url%\">Unsubscribe</a></p>"
+
+          curl -s -X POST "https://api.buttondown.email/v1/emails" \
+            -H "Authorization: Token ${BUTTONDOWN_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"subject\": \"New post: ${TITLE}\",
+              \"body\": $(echo "$EMAIL_BODY" | python3 -c 'import sys, json; print(json.dumps(sys.stdin.read()))'),
+              \"status\": \"about_to_send\"
+            }"
