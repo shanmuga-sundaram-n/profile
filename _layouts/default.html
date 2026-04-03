@@ -112,41 +112,25 @@
   <!-- Footer -->
   <footer class="site-footer">
     <div class="container">
-      <div class="footer-content">
-        <div class="footer-section">
-          <h3>{{ site.author }}</h3>
-          <p>{{ site.description }}</p>
-        </div>
-
-        <div class="footer-section">
-          <h3>Quick Links</h3>
-          <ul class="footer-links">
-            <li><a href="{{ '/' | relative_url }}">Home</a></li>
-            <li><a href="{{ '/about/' | relative_url }}">About</a></li>
-            <li><a href="{{ '/projects/' | relative_url }}">Projects</a></li>
-            <li><a href="{{ '/blog/' | relative_url }}">Blog</a></li>
-            <li><a href="{{ '/contact/' | relative_url }}">Contact</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-section">
-          <h3>Connect</h3>
-          <div class="social-links">
-            {% for link in site.social_links %}
-            <a href="{{ link.url }}" class="social-link" target="_blank" rel="noopener" aria-label="{{ link.name }}">
-              <i class="{{ link.icon }}"></i>
-            </a>
-            {% endfor %}
-          </div>
-        </div>
-      </div>
-
       <div class="footer-bottom">
-        <p>&copy; {{ 'now' | date: "%Y" }} {{ site.author }}. All rights reserved.</p>
+        <div class="social-links">
+          {% for link in site.social_links %}
+          <a href="{{ link.url }}" class="social-link" target="_blank" rel="noopener" aria-label="{{ link.name }}">
+            <i class="{{ link.icon }}"></i>
+          </a>
+          {% endfor %}
+          <a href="tel:+919790050474" class="social-link" aria-label="Phone">
+            <i class="fas fa-phone-alt"></i>
+          </a>
+          <a href="https://wa.me/919790050474" class="social-link" target="_blank" rel="noopener" aria-label="WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+          </a>
+        </div>
+        <p class="footer-copy">&copy; {{ 'now' | date: "%Y" }} {{ site.author }}. All rights reserved.</p>
         <div class="footer-counter">
           <script type='text/javascript' src='https://www.freevisitorcounters.com/auth.php?id=5eae4d5930301d43fb2dd3648a2cd2c207fb0d34'></script>
           <script type="text/javascript" src="https://www.freevisitorcounters.com/en/home/counter/1529109/t/5"></script>
-          <a href='https://www.free-counters.org/' class="footer-counter-link">Visitors by Free-Counters.org</a>
+          <a href='https://www.free-counters.org/' class="footer-counter-link">Visitors</a>
         </div>
       </div>
     </div>

@@ -16,14 +16,6 @@ layout: default
                 Hands-on Software Architect | Cloud, AI & Distributed Systems<br>
                 AI for Software Delivery (AIFSD)
             </p>
-            <div class="hero-cta">
-                <a href="{{ '/projects/' | relative_url }}" class="btn btn-primary">
-                    <i class="fas fa-code"></i> View Projects
-                </a>
-                <a href="{{ '/contact/' | relative_url }}" class="btn btn-secondary">
-                    <i class="fas fa-envelope"></i> Get in Touch
-                </a>
-            </div>
         </div>
     </div>
 </div>
@@ -61,7 +53,7 @@ layout: default
 </section>
 
 <!-- Skills Preview -->
-<section class="section" style="background: var(--color-bg-secondary);">
+<section class="section">
     <div class="container">
         <div class="section-header">
             <h2 class="section-title">Skills & Technologies</h2>
@@ -162,6 +154,39 @@ layout: default
     </div>
 </section>
 
+<!-- Latest Blog Posts -->
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Latest Blog Posts</h2>
+            <p class="section-subtitle">Thoughts, tutorials, and insights</p>
+        </div>
+
+        <div class="grid grid-2">
+            {% for post in site.posts limit:3 %}
+            <article class="post-card">
+                <div class="post-meta">
+                    <span><i class="far fa-calendar"></i> {{ post.date | date: "%B %d, %Y" }}</span>
+                </div>
+                <h3 class="post-title">
+                    <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+                </h3>
+                <p class="post-excerpt">{{ post.excerpt | strip_html | truncate: 150 }}</p>
+                <a href="{{ post.url | relative_url }}" class="read-more">
+                    Read More <i class="fas fa-arrow-right"></i>
+                </a>
+            </article>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-xl">
+            <a href="{{ '/blog/' | relative_url }}" class="btn btn-outline">
+                View All Posts <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
 <!-- Featured Projects -->
 <section class="section">
     <div class="container">
@@ -207,50 +232,10 @@ layout: default
     </div>
 </section>
 
-<!-- Latest Blog Posts -->
-<section class="section" style="background: var(--color-bg-secondary);">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title">Latest Blog Posts</h2>
-            <p class="section-subtitle">Thoughts, tutorials, and insights</p>
-        </div>
-
-        <div class="grid grid-2">
-            {% for post in site.posts limit:3 %}
-            <article class="post-card">
-                <div class="post-meta">
-                    <span><i class="far fa-calendar"></i> {{ post.date | date: "%B %d, %Y" }}</span>
-                </div>
-                <h3 class="post-title">
-                    <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-                </h3>
-                <p class="post-excerpt">{{ post.excerpt | strip_html | truncate: 150 }}</p>
-                <a href="{{ post.url | relative_url }}" class="read-more">
-                    Read More <i class="fas fa-arrow-right"></i>
-                </a>
-            </article>
-            {% endfor %}
-        </div>
-
-        <div class="text-center mt-xl">
-            <a href="{{ '/blog/' | relative_url }}" class="btn btn-outline">
-                View All Posts <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-    </div>
-</section>
-
-<!-- CTA Section -->
+<!-- Subscribe Section -->
 <section class="section">
     <div class="container">
-        <div class="card card-glass text-center" style="padding: var(--space-2xl);">
-            <h2 class="text-gradient">Let's Work Together</h2>
-            <p style="font-size: var(--font-size-lg); margin-bottom: var(--space-xl);">
-                I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
-            </p>
-            <a href="{{ '/contact/' | relative_url }}" class="btn btn-primary">
-                <i class="fas fa-paper-plane"></i> Get in Touch
-            </a>
-        </div>
+        {% include subscribe-section.html %}
     </div>
 </section>
+

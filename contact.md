@@ -9,17 +9,24 @@ permalink: /contact/
   <div class="card card-glass">
     <h3><i class="fas fa-envelope"></i> Email</h3>
     <p>Feel free to reach out via email for any inquiries or collaborations.</p>
-    <a href="mailto:{{ site.email }}" class="btn btn-primary btn-sm">
-      <i class="fas fa-paper-plane"></i> Send Email
-    </a>
+    <div class="social-links" style="margin-top: var(--space-md);">
+      <a href="mailto:{{ site.email }}" class="social-link" aria-label="Send Email">
+        <i class="fas fa-paper-plane"></i>
+      </a>
+    </div>
   </div>
 
   <div class="card card-glass">
     <h3><i class="fas fa-phone-alt"></i> Phone</h3>
     <p>For direct discussions, feel free to call or WhatsApp.</p>
-    <a href="tel:+919790050474" class="btn btn-primary btn-sm">
-      <i class="fas fa-phone-alt"></i> +91 97900 50474
-    </a>
+    <div class="social-links" style="margin-top: var(--space-md);">
+      <a href="tel:+919790050474" class="social-link" aria-label="Call">
+        <i class="fas fa-phone-alt"></i>
+      </a>
+      <a href="https://wa.me/919790050474" class="social-link" target="_blank" rel="noopener" aria-label="WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+      </a>
+    </div>
   </div>
   
   <div class="card card-glass">
@@ -64,12 +71,5 @@ permalink: /contact/
 </div>
 
 
-<div class="card text-center" style="background: var(--gradient-primary); padding: var(--space-2xl); margin-top: var(--space-2xl);">
-  <h2 style="color: white; margin-bottom: var(--space-md);">Have a Project in Mind?</h2>
-  <p style="color: rgba(255, 255, 255, 0.9); font-size: var(--font-size-lg); margin-bottom: var(--space-xl);">
-    I'd love to hear about it! Whether it's a new opportunity, a collaboration, or just a chat about technology, don't hesitate to reach out.
-  </p>
-  <a href="mailto:{{ site.email }}" class="btn btn-secondary" style="background: white; color: var(--color-accent-primary);">
-    <i class="fas fa-envelope"></i> Get in Touch
-  </a>
-</div>
+<div style="margin-top: var(--space-xl);">{% include subscribe-section.html %}</div>
+

@@ -216,28 +216,4 @@ permalink: /about/
     </div>
 </div>
 
-<div class="mt-xl">
-    <div class="section-header">
-        <h2 class="section-title">Let's Connect</h2>
-        <p class="section-subtitle">Feel free to reach out for collaborations or just a friendly chat</p>
-    </div>
-    
-    <div class="grid grid-3">
-        <div class="card card-glass text-center">
-            <div class="skill-icon" style="margin-bottom: var(--space-sm);"><i class="fas fa-envelope"></i></div>
-            <h4>Email</h4>
-            <p><a href="mailto:{{ site.email }}">{{ site.email }}</a></p>
-        </div>
-        <div class="card card-glass text-center">
-            <div class="skill-icon" style="margin-bottom: var(--space-sm);"><i class="fas fa-phone-alt"></i></div>
-            <h4>Phone</h4>
-            <p><a href="tel:+919790050474">+91 97900 50474</a></p>
-        </div>
-        <div class="card card-glass text-center">
-            <div class="skill-icon" style="margin-bottom: var(--space-sm);"><i class="fab fa-linkedin"></i></div>
-            <h4>LinkedIn</h4>
-            <p><a href="https://www.linkedin.com/in/shan-profile/" target="_blank">shan-profile</a></p>
-        </div>
-    </div>
-</div>
 
