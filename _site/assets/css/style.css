@@ -85,7 +85,7 @@ strong { font-weight: 600; color: var(--color-text-primary); }
 /* Push toggle after nav-links on desktop (DOM order places it before nav-links) */
 #modeToggleContainer { order: 3; }
 
-.nav-links { display: flex; gap: var(--space-sm); list-style: none; margin-left: auto; padding-right: var(--space-sm); order: 2; }
+.nav-links { display: flex; gap: var(--space-xs); list-style: none; margin-left: auto; padding-right: var(--space-sm); order: 2; }
 
 .nav-link { color: var(--color-text-secondary); font-weight: 500; font-size: var(--font-size-sm); text-transform: uppercase; letter-spacing: 0.05em; padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-sm); transition: all var(--transition-base); position: relative; }
 
