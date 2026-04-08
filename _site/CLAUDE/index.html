@@ -96,6 +96,12 @@
         <span></span>
       </button>
 
+      <!-- Search button -->
+      <button class="site-search-btn" id="site-search-btn" aria-label="Search site (Ctrl+K)" title="Search (⌘K)">
+        <i class="fas fa-search"></i>
+        <span class="site-search-btn-hint">⌘K</span>
+      </button>
+
       <!-- Theme toggle rendered inline — avoids JS-injection flicker -->
       <div id="modeToggleContainer">
         <label class="mode-switch" aria-label="Toggle dark/light mode">
@@ -299,8 +305,40 @@ serve.py             # Python dev server for static preview (serves _site/)
     });
   </script>
 
+  <!-- Site Search Modal -->
+  <div id="site-search-overlay" class="site-search-overlay" role="dialog" aria-modal="true" aria-label="Site search">
+    <div class="site-search-modal">
+      <div class="site-search-header">
+        <i class="fas fa-search site-search-icon"></i>
+        <input
+          type="text"
+          id="site-search-input"
+          class="site-search-input"
+          placeholder="Search pages, posts, projects…"
+          autocomplete="off"
+          spellcheck="false"
+        >
+        <button class="site-search-close" id="site-search-close" aria-label="Close search">
+          <kbd>Esc</kbd>
+        </button>
+      </div>
+      <div id="site-search-results" class="site-search-results">
+        <p class="site-search-hint">Type to search pages, posts &amp; projects…</p>
+      </div>
+      <div class="site-search-footer">
+        <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
+        <span><kbd>↵</kbd> open</span>
+        <span><kbd>Esc</kbd> close</span>
+      </div>
+    </div>
+  </div>
+
   <!-- Theme Switcher Script -->
   <script src="/assets/js/theme-switcher.js"></script>
+
+  <!-- Fuse.js + Site Search -->
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
+  <script src="/assets/js/site-search.js"></script>
 
 </body>
 

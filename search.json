@@ -1,0 +1,20 @@
+---
+layout: none
+---
+[
+  {% assign pages_and_posts = site.pages | concat: site.posts %}
+  {% for item in pages_and_posts %}
+    {% unless item.url contains '/assets' or item.url contains '/feed' or item.url contains '/sitemap' or item.url contains '/robots' or item.url == '/404.html' %}
+    {
+      "title": {{ item.title | default: item.name | jsonify }},
+      "url": {{ item.url | relative_url | jsonify }},
+      "description": {{ item.description | default: "" | jsonify }},
+      "excerpt": {{ item.excerpt | default: "" | strip_html | strip_newlines | truncate: 300 | jsonify }},
+      "type": {% if item.date %}"post"{% else %}"page"{% endif %},
+      "date": {{ item.date | date: "%B %d, %Y" | default: "" | jsonify }},
+      "tags": {{ item.tags | default: "" | jsonify }},
+      "categories": {{ item.categories | default: "" | jsonify }}
+    }{% unless forloop.last %},{% endunless %}
+    {% endunless %}
+  {% endfor %}
+]

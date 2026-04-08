@@ -1,0 +1,248 @@
+[
+  
+  
+    
+  
+    
+    {
+      "title": "About Me",
+      "url": "/about/",
+      "description": "Learn more about my background, experience, and expertise",
+      "excerpt": "",
+      "type": "page",
+      "date": "",
+      "tags": "",
+      "categories": ""
+    },
+    
+  
+    
+    {
+      "title": "Contact",
+      "url": "/contact/",
+      "description": "Get in touch with me",
+      "excerpt": "",
+      "type": "page",
+      "date": "",
+      "tags": "",
+      "categories": ""
+    },
+    
+  
+    
+    {
+      "title": "Blog",
+      "url": "/blog/",
+      "description": "Technical articles, tutorials, and insights",
+      "excerpt": "",
+      "type": "page",
+      "date": "",
+      "tags": "",
+      "categories": ""
+    },
+    
+  
+    
+    {
+      "title": "Welcome to Shan's Personal Website",
+      "url": "/",
+      "description": "",
+      "excerpt": "",
+      "type": "page",
+      "date": "",
+      "tags": "",
+      "categories": ""
+    },
+    
+  
+    
+    {
+      "title": "Projects",
+      "url": "/projects/",
+      "description": "Explore my portfolio of projects and technical work",
+      "excerpt": "",
+      "type": "page",
+      "date": "",
+      "tags": "",
+      "categories": ""
+    },
+    
+  
+    
+    {
+      "title": "search.json",
+      "url": "/search.json",
+      "description": "",
+      "excerpt": "",
+      "type": "page",
+      "date": "",
+      "tags": "",
+      "categories": ""
+    },
+    
+  
+    
+  
+    
+    {
+      "title": "CLAUDE.md - Project Guide",
+      "url": "/CLAUDE/",
+      "description": "",
+      "excerpt": "",
+      "type": "page",
+      "date": "",
+      "tags": "",
+      "categories": ""
+    },
+    
+  
+    
+    {
+      "title": "Local Development Guide",
+      "url": "/LOCAL_DEVELOPMENT/",
+      "description": "",
+      "excerpt": "",
+      "type": "page",
+      "date": "",
+      "tags": "",
+      "categories": ""
+    },
+    
+  
+    
+  
+    
+  
+    
+  
+    
+    {
+      "title": "Why Most Teams Fail at Collaboration — And How Domain-Driven Design Fixes It",
+      "url": "/blog/2026/04/01/why-teams-fail-at-collaboration-ddd/",
+      "description": "Three teams. One database column. Three different mental models — until it all broke at 2am. Here's how Domain-Driven Design gives you the structures that make collaboration actually work at scale.",
+      "excerpt": "Let me tell you about a bug that took three weeks to track down.",
+      "type": "post",
+      "date": "April 01, 2026",
+      "tags": ["domain-driven-design","software-architecture","team-collaboration","engineering-culture","microservices","bounded-context"],
+      "categories": ["engineering","architecture","ddd"]
+    },
+    
+  
+    
+    {
+      "title": "Building RAG That Actually Works: Lessons from the Trenches",
+      "url": "/blog/2026/03/21/building-production-rag-pipeline/",
+      "description": "A practitioner's guide to building production-grade RAG pipelines — covering chunking strategy, retrieval tuning, re-ranking, and evaluation. Lessons from real failures, not sanitized tutorials.",
+      "excerpt": "I’ve read probably a dozen RAG tutorials. They all do the same thing: show you how to embed a handful of PDFs into a vector store, run a similarity search, stuff the results into a prompt, and call it a production pipeline. Then you try to use the same approach on real data — thousands of documen...",
+      "type": "post",
+      "date": "March 21, 2026",
+      "tags": ["rag","langchain","chromadb","openai","vector-search","llm"],
+      "categories": ["ai","engineering","rag"]
+    },
+    
+  
+    
+    {
+      "title": "Zero Vibe Coding: How I Engineered a Full-Stack Finance App with Claude Code's Multi-Agent Pipeline",
+      "url": "/blog/2026/03/20/zero-vibe-coding-finance-tracker/",
+      "description": "How I built a production-ready Personal Finance Tracker entirely from the terminal using Claude Code CLI with a strict 7-agent spec-driven pipeline — no UI MCP tools, no vibe coding.",
+      "excerpt": "When we talk about AI-assisted coding, the conversation usually revolves around “vibe coding” — throwing vague prompts at an LLM, connecting a UI layout tool, and crossing our fingers that the underlying architecture holds together.",
+      "type": "post",
+      "date": "March 20, 2026",
+      "tags": ["claude-code","multi-agent","hexagonal-architecture","spring-boot","react"],
+      "categories": ["ai","engineering","claude-code"]
+    },
+    
+  
+    
+    {
+      "title": "LLM Tokenizers: The Hidden Engine Behind AI Language Models",
+      "url": "/blog/2025/03/08/llm-tokenizers-hidden-engine/",
+      "description": "Tokenizers are the invisible foundation of every large language model — shaping context limits, API costs, cross-lingual fairness, and model reasoning. Here's how they work and why they matter.",
+      "excerpt": "",
+      "type": "post",
+      "date": "March 08, 2025",
+      "tags": ["llm","tokenization","nlp","ai","machine-learning","transformers"],
+      "categories": ["ai","ml"]
+    },
+    
+  
+    
+    {
+      "title": "Mastering Backpressure in Reactive Programming: A Deep Dive",
+      "url": "/blog/2024/12/28/mastering-backpressure-reactive-programming/",
+      "description": "Backpressure is the fundamental mechanism that keeps reactive systems from collapsing under load. This deep dive covers what it is, why it matters, and how to implement it correctly across Project Reactor, RxJava, and Akka Streams.",
+      "excerpt": "",
+      "type": "post",
+      "date": "December 28, 2024",
+      "tags": ["reactive-programming","backpressure","project-reactor","rxjava","akka","java","streaming"],
+      "categories": ["engineering","java"]
+    },
+    
+  
+    
+    {
+      "title": "Traditional Coding vs AI-Assisted Coding vs Vibe Coding: A New Spectrum",
+      "url": "/blog/2024/12/01/traditional-vs-ai-vs-vibe-coding/",
+      "description": "Modern software development has evolved into three distinct modes — traditional, AI-assisted, and vibe coding. Understanding when to use each is becoming a core engineering skill.",
+      "excerpt": "",
+      "type": "post",
+      "date": "December 01, 2024",
+      "tags": ["ai","coding","vibe-coding","productivity","software-engineering","claude-code"],
+      "categories": ["ai","engineering"]
+    },
+    
+  
+    
+    {
+      "title": "LlamaCoder: Turn Your Idea into an App in Minutes",
+      "url": "/blog/2024/11/25/llamacoder-ai-app-builder/",
+      "description": "An introduction to LlamaCoder — the AI-powered platform that converts plain language descriptions into functional application code, democratising app development for everyone.",
+      "excerpt": "",
+      "type": "post",
+      "date": "November 25, 2024",
+      "tags": ["ai","llm","code-generation","llamacoder","no-code","productivity"],
+      "categories": ["ai","tools"]
+    },
+    
+  
+    
+    {
+      "title": "Architectural Trade-off: Serverless APIs vs. Kubernetes APIs",
+      "url": "/blog/2024/11/17/serverless-vs-kubernetes-apis/",
+      "description": "A structured comparison of serverless and Kubernetes as API deployment paradigms — trade-offs across operational overhead, scalability, cost, control, and vendor lock-in to help you choose the right architecture for your context.",
+      "excerpt": "",
+      "type": "post",
+      "date": "November 17, 2024",
+      "tags": ["serverless","kubernetes","cloud","architecture","devops","apis"],
+      "categories": ["engineering","architecture"]
+    },
+    
+  
+    
+    {
+      "title": "Exploring Threads and Virtual Threads in Java: A Comprehensive Guide",
+      "url": "/blog/2024/11/13/java-threads-and-virtual-threads/",
+      "description": "A deep dive into traditional Java threads vs virtual threads (Project Loom) — how they work internally, when to use each, and why virtual threads are a game changer for I/O-bound applications.",
+      "excerpt": "",
+      "type": "post",
+      "date": "November 13, 2024",
+      "tags": ["java","concurrency","virtual-threads","project-loom","performance"],
+      "categories": ["engineering","java"]
+    },
+    
+  
+    
+    {
+      "title": "Why is Kafka So Fast? Unveiling the Secrets Behind Kafka's Speed",
+      "url": "/blog/2024/10/17/why-kafka-is-so-fast/",
+      "description": "A deep dive into the engineering decisions that make Apache Kafka one of the fastest messaging systems — sequential I/O, zero-copy, batching, compression, and intelligent caching.",
+      "excerpt": "",
+      "type": "post",
+      "date": "October 17, 2024",
+      "tags": ["kafka","performance","distributed-systems","streaming","backend"],
+      "categories": ["engineering","distributed-systems"]
+    }
+    
+  
+]
