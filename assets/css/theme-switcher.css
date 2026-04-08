@@ -6,7 +6,6 @@
     display: inline-block;
     width: 56px;
     height: 28px;
-    margin-left: var(--space-sm);
     cursor: pointer;
 }
 

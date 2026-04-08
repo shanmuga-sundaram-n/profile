@@ -82,13 +82,15 @@
 
         fuse = new Fuse(items, {
           keys: [
-            { name: 'title',       weight: 0.5 },
+            { name: 'title',       weight: 0.4 },
             { name: 'description', weight: 0.25 },
-            { name: 'excerpt',     weight: 0.15 },
-            { name: 'tags',        weight: 0.07 },
-            { name: 'categories',  weight: 0.03 }
+            { name: 'content',     weight: 0.2 },
+            { name: 'excerpt',     weight: 0.1 },
+            { name: 'tags',        weight: 0.03 },
+            { name: 'categories',  weight: 0.02 }
           ],
-          threshold: 0.4,
+          threshold: 0.35,
+          ignoreLocation: true,
           includeMatches: true,
           minMatchCharLength: 2
         });
@@ -121,8 +123,8 @@
 
     var html = hits.map(function (hit, i) {
       var item = hit.item;
-      var typeIcon = item.type === 'post' ? 'fa-newspaper' : 'fa-file-alt';
-      var typeLabel = item.type === 'post' ? 'Post' : 'Page';
+      var typeIcon = item.type === 'post' ? 'fa-newspaper' : item.type === 'project' ? 'fa-project-diagram' : 'fa-file-alt';
+      var typeLabel = item.type === 'post' ? 'Post' : item.type === 'project' ? 'Project' : 'Page';
       var desc = item.description || item.excerpt || '';
       if (desc.length > 120) desc = desc.slice(0, 120) + '…';
 
