@@ -29,6 +29,7 @@ def main():
         print("Please run 'jekyll build' first to generate the site.")
         sys.exit(1)
     
+    socketserver.TCPServer.allow_reuse_address = True
     with socketserver.TCPServer(("", PORT), MyHTTPRequestHandler) as httpd:
         print(f"✓ Server running at http://localhost:{PORT}/")
         print(f"✓ Serving files from: {os.path.abspath(DIRECTORY)}")
