@@ -1,4 +1,776 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.3">Jekyll</generator><link href="https://shanmuga-sundaram-n.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://shanmuga-sundaram-n.github.io/" rel="alternate" type="text/html" /><updated>2026-04-08T06:20:59+05:30</updated><id>https://shanmuga-sundaram-n.github.io/feed.xml</id><title type="html">Shanmuga Sundaram Natarajan’s Personal Website</title><subtitle>Hands-on Architect &amp; Technical Leader | 18+ Years Experience | AI-First Software Delivery</subtitle><author><name>Shanmuga Sundaram Natarajan (Shan)</name></author><entry><title type="html">Why Most Teams Fail at Collaboration — And How Domain-Driven Design Fixes It</title><link href="https://shanmuga-sundaram-n.github.io/blog/2026/04/01/why-teams-fail-at-collaboration-ddd/" rel="alternate" type="text/html" title="Why Most Teams Fail at Collaboration — And How Domain-Driven Design Fixes It" /><published>2026-04-01T17:30:00+05:30</published><updated>2026-04-01T17:30:00+05:30</updated><id>https://shanmuga-sundaram-n.github.io/blog/2026/04/01/why-teams-fail-at-collaboration-ddd</id><content type="html" xml:base="https://shanmuga-sundaram-n.github.io/blog/2026/04/01/why-teams-fail-at-collaboration-ddd/">&lt;p&gt;Let me tell you about a bug that took three weeks to track down.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.3">Jekyll</generator><link href="https://shanmuga-sundaram-n.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://shanmuga-sundaram-n.github.io/" rel="alternate" type="text/html" /><updated>2026-06-06T19:21:06+05:30</updated><id>https://shanmuga-sundaram-n.github.io/feed.xml</id><title type="html">Shanmuga Sundaram Natarajan’s Personal Website</title><subtitle>Hands-on Architect &amp; Technical Leader | 18+ Years Experience | AI-First Software Delivery</subtitle><author><name>Shanmuga Sundaram Natarajan (Shan)</name></author><entry><title type="html">SDLC Factory: Autonomous Software Delivery with AI Agents</title><link href="https://shanmuga-sundaram-n.github.io/blog/2026/06/06/sdlc-factory-autonomous-multi-agent-pipeline/" rel="alternate" type="text/html" title="SDLC Factory: Autonomous Software Delivery with AI Agents" /><published>2026-06-06T14:30:00+05:30</published><updated>2026-06-06T14:30:00+05:30</updated><id>https://shanmuga-sundaram-n.github.io/blog/2026/06/06/sdlc-factory-autonomous-multi-agent-pipeline</id><content type="html" xml:base="https://shanmuga-sundaram-n.github.io/blog/2026/06/06/sdlc-factory-autonomous-multi-agent-pipeline/">&lt;p&gt;Software delivery has a translation problem. An idea starts clear in someone’s head, gets degraded through six rounds of meetings, three Confluence pages, a Jira backlog nobody reads, and ends up as code that solves last quarter’s version of the problem. Even when teams work well together, the handoffs between product, architecture, development, and QA introduce latency and information loss at every boundary.&lt;/p&gt;
+
+&lt;p&gt;I spent the last few months building something to attack this problem head-on: &lt;strong&gt;SDLC Factory&lt;/strong&gt; — an autonomous multi-agent system that takes a plain-English product idea and drives it through a full software delivery pipeline using 10 specialized AI agents, enforced artifact contracts between every stage, and human approval gates where it actually matters.&lt;/p&gt;
+
+&lt;p&gt;This isn’t a wrapper around a chatbot. It’s a structured pipeline with real engineering discipline baked in — parallel development threads, a QA auto-fix loop, context compression for long conversations, prompt injection scanning, multi-tenant isolation, and a cost tracker. This post walks through how I built it, the design decisions that mattered, and the things I got wrong the first time.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;the-problem-with-existing-agentic-approaches&quot;&gt;The Problem With Existing Agentic Approaches&lt;/h2&gt;
+
+&lt;p&gt;Most “AI coding agents” today are either:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;Single-agent loops&lt;/strong&gt; — one model doing everything: requirements, design, code, tests. It loses track of what it decided three pages ago and produces code that doesn’t match its own spec.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Unstructured multi-agent systems&lt;/strong&gt; — agents that can spawn sub-agents freely, pass arbitrary messages, and coordinate through natural language. Sounds powerful; in practice, the coordination overhead eats the gains and debugging is a nightmare.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Neither of these enforces that &lt;em&gt;the output of one stage is a valid input to the next&lt;/em&gt;. Requirements drift from architecture. Architecture drifts from code. There’s no contract.&lt;/p&gt;
+
+&lt;p&gt;SDLC Factory enforces contracts. Every stage produces a JSON artifact validated against a schema. The next stage gets only what it needs from prior stages — no raw conversation history, no hallucinated context. Structured handoffs, like real engineering.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;system-architecture-the-full-layer-map&quot;&gt;System Architecture: The Full Layer Map&lt;/h2&gt;
+
+&lt;p&gt;Before diving into individual components, here’s how the whole system fits together:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-mermaid&quot;&gt;%%{init: {&apos;theme&apos;: &apos;dark&apos;, &apos;themeVariables&apos;: {&apos;primaryColor&apos;: &apos;#313244&apos;, &apos;primaryTextColor&apos;: &apos;#CDD6F4&apos;, &apos;primaryBorderColor&apos;: &apos;#89B4FA&apos;, &apos;lineColor&apos;: &apos;#A6ADC8&apos;, &apos;secondaryColor&apos;: &apos;#1E1E2E&apos;, &apos;background&apos;: &apos;#1E1E2E&apos;, &apos;mainBkg&apos;: &apos;#313244&apos;, &apos;clusterBkg&apos;: &apos;#24243E&apos;, &apos;clusterBorder&apos;: &apos;#45475A&apos;, &apos;titleColor&apos;: &apos;#CDD6F4&apos;, &apos;edgeLabelBackground&apos;: &apos;#1E1E2E&apos;, &apos;fontFamily&apos;: &apos;JetBrains Mono, monospace&apos;, &apos;fontSize&apos;: &apos;13px&apos;}}}%%
+flowchart TB
+    classDef entry  fill:#1A3A2A,stroke:#A6E3A1,color:#A6E3A1
+    classDef orch   fill:#1A2A3A,stroke:#89B4FA,color:#89B4FA
+    classDef agent  fill:#2A1A3A,stroke:#CBA6F7,color:#CBA6F7
+    classDef tool   fill:#3A2A1A,stroke:#FAB387,color:#FAB387
+    classDef mem    fill:#3A1A2A,stroke:#F38BA8,color:#F38BA8
+    classDef db     fill:#2A3A1A,stroke:#A6E3A1,color:#A6E3A1
+    classDef gw     fill:#1A3A3A,stroke:#94E2D5,color:#94E2D5
+    classDef tel    fill:#3A3A1A,stroke:#F9E2AF,color:#F9E2AF
+
+    subgraph Entry[&quot;Entry Points&quot;]
+        CLI[&quot;CLI · sdlc.py&quot;]:::entry
+        API[&quot;Web API · FastAPI&quot;]:::entry
+        WH[&quot;Webhook · HITL callback&quot;]:::entry
+        QUE[&quot;Programmatic · ApprovalQueue&quot;]:::entry
+    end
+
+    subgraph Orch[&quot;Pipeline Orchestrator  core/pipeline.py&quot;]
+        SM[&quot;Stage machine · artifact routing\ngate evaluation · checkpoint/resume\nasync disk writer&quot;]:::orch
+    end
+
+    subgraph AgentL[&quot;Agent Layer  agents/&quot;]
+        BASE[&quot;BaseSDLCAgent subclasses per role\nSKILL.md system prompt · scoped toolset\nartifact producer · iteration budget&quot;]:::agent
+    end
+
+    subgraph Runtime[&quot;Agent Runtime  core/agent_runtime.py&quot;]
+        LOOP[&quot;Model call loop · tool dispatch\ncontext compression · OTel spans&quot;]:::orch
+    end
+
+    subgraph Tools[&quot;Tool Pipeline  tools/&quot;]
+        TR[&quot;Self-registering modules\nTTL-cached availability checks\nfile · terminal · pytest · docker · github · kanban&quot;]:::tool
+    end
+
+    subgraph Mem[&quot;Shared Memory  core/memory.py&quot;]
+        PM[&quot;Tier 1: ProjectMemory\nTier 2: ArtifactBundle\nTier 3: Kanban Blackboard\nStreamingContextScrubber\nPrompt injection scanner&quot;]:::mem
+    end
+
+    subgraph DB[&quot;Persistence  core/session.py — SQLite WAL&quot;]
+        TABLES[&quot;pipeline_runs · stage_artifacts · audit_log\nkanban_tasks · kanban_events · artifact_fts FTS5&quot;]:::db
+    end
+
+    subgraph GW[&quot;HITL Gateway  gateway/hitl.py&quot;]
+        MODES[&quot;cli · auto · slack · webhook · queue\nApprovalQueue · audit record&quot;]:::gw
+    end
+
+    subgraph Tel[&quot;Telemetry  core/telemetry.py&quot;]
+        OT[&quot;OpenTelemetry spans\nno-op fallback · JSON structured logs&quot;]:::tel
+    end
+
+    Entry --&amp;gt; Orch
+    Orch  --&amp;gt; AgentL
+    AgentL --&amp;gt; Runtime
+    Runtime --&amp;gt; Tools
+    Runtime --&amp;gt; Mem
+    Mem --&amp;gt; DB
+    Orch --&amp;gt; GW
+    Runtime --&amp;gt; Tel
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Each layer has a single responsibility and communicates upward through structured interfaces — no layer talks to a non-adjacent layer directly.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;seven-stages-ten-agents&quot;&gt;Seven Stages, Ten Agents&lt;/h2&gt;
+
+&lt;p&gt;The pipeline runs seven sequential stages, with HITL gates after the four highest-stakes decisions:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-mermaid&quot;&gt;%%{init: {&apos;theme&apos;: &apos;dark&apos;, &apos;themeVariables&apos;: {&apos;primaryColor&apos;: &apos;#313244&apos;, &apos;primaryTextColor&apos;: &apos;#CDD6F4&apos;, &apos;primaryBorderColor&apos;: &apos;#89B4FA&apos;, &apos;lineColor&apos;: &apos;#A6ADC8&apos;, &apos;secondaryColor&apos;: &apos;#1E1E2E&apos;, &apos;background&apos;: &apos;#1E1E2E&apos;, &apos;mainBkg&apos;: &apos;#313244&apos;, &apos;clusterBkg&apos;: &apos;#24243E&apos;, &apos;clusterBorder&apos;: &apos;#45475A&apos;, &apos;titleColor&apos;: &apos;#CDD6F4&apos;, &apos;edgeLabelBackground&apos;: &apos;#1E1E2E&apos;, &apos;fontFamily&apos;: &apos;JetBrains Mono, monospace&apos;, &apos;fontSize&apos;: &apos;13px&apos;}}}%%
+flowchart TD
+    classDef stage  fill:#313244,stroke:#89B4FA,color:#CDD6F4
+    classDef gate   fill:#3A1A2A,stroke:#F38BA8,color:#F38BA8
+    classDef done   fill:#1A3A2A,stroke:#A6E3A1,color:#A6E3A1
+    classDef start  fill:#1A2A3A,stroke:#89B4FA,color:#89B4FA
+
+    I([&quot; Idea &quot;]):::start --&amp;gt; D0
+
+    subgraph D0[&quot;Stage 0 · Discovery&quot;]
+        DE[&quot;Domain Expert\n+ Product Owner&quot;]:::stage
+    end
+    subgraph D1[&quot;Stage 1 · Requirements&quot;]
+        BA[&quot;Business Analyst&quot;]:::stage
+    end
+    subgraph D2[&quot;Stage 2 · Architecture&quot;]
+        AR[&quot;Architect&quot;]:::stage
+    end
+    subgraph D3[&quot;Stage 3 · Planning&quot;]
+        TL[&quot;Tech Lead&quot;]:::stage
+    end
+    subgraph D4[&quot;Stage 4 · Development  ⟨parallel⟩&quot;]
+        BK[&quot;Backend Dev&quot;]:::stage
+        UI[&quot;UI Dev&quot;]:::stage
+        DO[&quot;DevOps Dev&quot;]:::stage
+    end
+    subgraph D5[&quot;Stage 5 · Quality Gate&quot;]
+        QA[&quot;QA Engineer&quot;]:::stage
+    end
+    subgraph D6[&quot;Stage 6 · Delivery&quot;]
+        RM[&quot;Release Manager&quot;]:::stage
+    end
+
+    D0 --&amp;gt; D1
+    D1 --&amp;gt; G1[/&quot;HITL Gate&quot;/]:::gate
+    G1 --&amp;gt;|APPROVED| D2
+    D2 --&amp;gt; G2[/&quot;HITL Gate&quot;/]:::gate
+    G2 --&amp;gt;|APPROVED| D3
+    D3 --&amp;gt; D4
+    D4 --&amp;gt; D5
+    D5 --&amp;gt; G3[/&quot;HITL Gate&quot;/]:::gate
+    G3 --&amp;gt;|APPROVED| D6
+    D6 --&amp;gt; G4[/&quot;HITL Gate&quot;/]:::gate
+    G4 --&amp;gt;|APPROVED| DONE([&quot;Completed&quot;]):::done
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The 10 roles map onto these stages. Each is a thin subclass of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BaseSDLCAgent&lt;/code&gt; with a fixed output schema:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# core/pipeline.py
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SDLC_STAGES&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;StageDefinition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;discovery&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;    &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;domain_expert&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;product_owner&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]),&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;StageDefinition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;requirements&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;business_analyst&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;         &lt;span class=&quot;n&quot;&gt;hitl_gate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;StageDefinition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;architecture&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;architect&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;                &lt;span class=&quot;n&quot;&gt;hitl_gate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;StageDefinition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;planning&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;     &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;tech_lead&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]),&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;StageDefinition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;development&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;  &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;developer_backend&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;developer_ui&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;developer_devops&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;parallel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;StageDefinition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;quality_gate&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;qa_engineer&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;             &lt;span class=&quot;n&quot;&gt;hitl_gate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;StageDefinition&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;delivery&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;     &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;release_manager&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;          &lt;span class=&quot;n&quot;&gt;hitl_gate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;the-agent-contract&quot;&gt;The Agent Contract&lt;/h3&gt;
+
+&lt;p&gt;The agent hierarchy is the core abstraction. Every role declares exactly what it needs, what tools it can use, and what it must produce:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-mermaid&quot;&gt;%%{init: {&apos;theme&apos;: &apos;dark&apos;, &apos;themeVariables&apos;: {&apos;primaryColor&apos;: &apos;#313244&apos;, &apos;primaryTextColor&apos;: &apos;#CDD6F4&apos;, &apos;primaryBorderColor&apos;: &apos;#89B4FA&apos;, &apos;lineColor&apos;: &apos;#A6ADC8&apos;, &apos;secondaryColor&apos;: &apos;#1E1E2E&apos;, &apos;background&apos;: &apos;#1E1E2E&apos;, &apos;mainBkg&apos;: &apos;#313244&apos;, &apos;clusterBkg&apos;: &apos;#24243E&apos;, &apos;clusterBorder&apos;: &apos;#45475A&apos;, &apos;titleColor&apos;: &apos;#CDD6F4&apos;, &apos;edgeLabelBackground&apos;: &apos;#1E1E2E&apos;, &apos;fontFamily&apos;: &apos;JetBrains Mono, monospace&apos;, &apos;fontSize&apos;: &apos;13px&apos;}}}%%
+classDiagram
+    class BaseSDLCAgent {
+        +ROLE str
+        +OUTPUT_SCHEMA dict
+        +ENABLED_TOOLSETS list
+        +run(idea, bundle, run_id)
+        +prior_stages() list
+        -_run_loop(system_prompt, messages, budget)
+        -skill_md() str
+    }
+
+    class DomainExpertAgent {
+        +tools: web_search, read_file, memory
+    }
+    class ProductOwnerAgent {
+        +tools: read_file, memory, write_file
+    }
+    class BusinessAnalystAgent {
+        +tools: read_file, memory, write_file
+    }
+    class ArchitectAgent {
+        +tools: read_file, web_search, write_file
+    }
+    class TechLeadAgent {
+        +tools: read_file, write_file, kanban_create
+    }
+    class DeveloperBackendAgent {
+        +tools: full_stack
+    }
+    class DeveloperUIAgent {
+        +tools: full_stack, browser
+    }
+    class DeveloperDevOpsAgent {
+        +tools: full_stack, terminal
+    }
+    class QAEngineerAgent {
+        +tools: read_file, terminal, execute_code
+    }
+    class ReleaseManagerAgent {
+        +tools: read_file, write_file, terminal
+    }
+
+    BaseSDLCAgent &amp;lt;|-- DomainExpertAgent
+    BaseSDLCAgent &amp;lt;|-- ProductOwnerAgent
+    BaseSDLCAgent &amp;lt;|-- BusinessAnalystAgent
+    BaseSDLCAgent &amp;lt;|-- ArchitectAgent
+    BaseSDLCAgent &amp;lt;|-- TechLeadAgent
+    BaseSDLCAgent &amp;lt;|-- DeveloperBackendAgent
+    BaseSDLCAgent &amp;lt;|-- DeveloperUIAgent
+    BaseSDLCAgent &amp;lt;|-- DeveloperDevOpsAgent
+    BaseSDLCAgent &amp;lt;|-- QAEngineerAgent
+    BaseSDLCAgent &amp;lt;|-- ReleaseManagerAgent
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Every subclass declares:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;OUTPUT_SCHEMA&lt;/code&gt; — JSON Schema that the runtime validates the artifact against before advancing&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ENABLED_TOOLSETS&lt;/code&gt; — scoped tool access (read-only roles like Architect can’t call &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;terminal&lt;/code&gt;)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;prior_stages()&lt;/code&gt; — which prior artifacts get injected into this agent’s context&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;prior_stages()&lt;/code&gt; is the key. The Architect sees the glossary and business requirements. It does not see the Product Owner’s raw conversation. No noise, no hallucination amplification.&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ArchitectAgent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BaseSDLCAgent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;ROLE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;architect&quot;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;ENABLED_TOOLSETS&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;read_file&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;write_file&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;skill_list&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;skill_view&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;OUTPUT_SCHEMA&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;object&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;required&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;adrs&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;component_diagram&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;tech_stack&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;properties&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;s&quot;&gt;&quot;adrs&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;s&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;array&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;s&quot;&gt;&quot;items&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;object&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;required&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;title&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;context&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;decision&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;consequences&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]}&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+            &lt;span class=&quot;s&quot;&gt;&quot;tech_stack&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;object&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;required&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;backend&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;frontend&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;database&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;infra&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;prior_stages&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;discovery&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;requirements&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;three-tier-memory-system&quot;&gt;Three-Tier Memory System&lt;/h2&gt;
+
+&lt;p&gt;Instead of dumping everything into one context window, the pipeline uses a three-tier memory system that routes the right context to the right agent:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-mermaid&quot;&gt;%%{init: {&apos;theme&apos;: &apos;dark&apos;, &apos;themeVariables&apos;: {&apos;primaryColor&apos;: &apos;#313244&apos;, &apos;primaryTextColor&apos;: &apos;#CDD6F4&apos;, &apos;primaryBorderColor&apos;: &apos;#89B4FA&apos;, &apos;lineColor&apos;: &apos;#A6ADC8&apos;, &apos;secondaryColor&apos;: &apos;#1E1E2E&apos;, &apos;background&apos;: &apos;#1E1E2E&apos;, &apos;mainBkg&apos;: &apos;#313244&apos;, &apos;clusterBkg&apos;: &apos;#24243E&apos;, &apos;clusterBorder&apos;: &apos;#45475A&apos;, &apos;titleColor&apos;: &apos;#CDD6F4&apos;, &apos;edgeLabelBackground&apos;: &apos;#1E1E2E&apos;, &apos;fontFamily&apos;: &apos;JetBrains Mono, monospace&apos;, &apos;fontSize&apos;: &apos;13px&apos;}}}%%
+graph LR
+    classDef t1 fill:#1A3A2A,stroke:#A6E3A1,color:#A6E3A1
+    classDef t2 fill:#1A2A3A,stroke:#89B4FA,color:#89B4FA
+    classDef t3 fill:#2A1A3A,stroke:#CBA6F7,color:#CBA6F7
+    classDef ag fill:#313244,stroke:#A6ADC8,color:#CDD6F4
+
+    subgraph T1[&quot;Tier 1 — Project Glossary&quot;]
+        PM[&quot;PROJECT_MEMORY.md\nWritten by Domain Expert once\nInjected into ALL agent system prompts\nShared vocabulary, bounded contexts&quot;]:::t1
+    end
+
+    subgraph T2[&quot;Tier 2 — Stage Artifacts&quot;]
+        AB[&quot;SQLite stage_artifacts\nPer-stage validated JSON\nEach agent receives only prior_stages()&quot;]:::t2
+        SC[&quot;StreamingContextScrubber\nStrips fence tags from output\nin real time&quot;]:::t2
+        AB --&amp;gt; SC
+    end
+
+    subgraph T3[&quot;Tier 3 — Kanban Blackboard&quot;]
+        KB[&quot;kanban_tasks + kanban_events\nEphemeral per run\nDev agents post task state\nParent dispatcher reads board&quot;]:::t3
+    end
+
+    T1 --&amp;gt;|system prompt| AG([&quot; Agents &quot;]):::ag
+    T2 --&amp;gt;|context block| AG
+    T3 --&amp;gt;|task metadata| AG
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Tier 1 — Project Memory&lt;/strong&gt; (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PROJECT_MEMORY.md&lt;/code&gt;): Written by the Domain Expert on the first turn. Contains the shared glossary, bounded contexts, and project conventions. Injected into &lt;em&gt;every&lt;/em&gt; agent’s system prompt, verbatim. This is the shared language of the project.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Tier 2 — Artifact Bundle&lt;/strong&gt; (SQLite + in-memory): Each completed stage writes a validated JSON artifact. Agents receive only the stages listed in their &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;prior_stages()&lt;/code&gt; declaration, injected as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;stage-context&amp;gt;&lt;/code&gt; fence blocks. A &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;StreamingContextScrubber&lt;/code&gt; strips these tags from the model’s output in real-time to prevent the agent from echoing context blocks back.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Tier 3 — Kanban Blackboard&lt;/strong&gt; (SQLite): Used by parallel development agents to coordinate without sharing message histories. Developers post task state transitions (ready → in_progress → done) and JSON comments. The parent dispatcher reads the board; individual agents never see each other’s prompts.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;the-parallel-development-stage&quot;&gt;The Parallel Development Stage&lt;/h2&gt;
+
+&lt;p&gt;The development stage fans out three agents concurrently in a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ThreadPoolExecutor&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-mermaid&quot;&gt;%%{init: {&apos;theme&apos;: &apos;dark&apos;, &apos;themeVariables&apos;: {&apos;primaryColor&apos;: &apos;#313244&apos;, &apos;primaryTextColor&apos;: &apos;#CDD6F4&apos;, &apos;primaryBorderColor&apos;: &apos;#89B4FA&apos;, &apos;lineColor&apos;: &apos;#A6ADC8&apos;, &apos;secondaryColor&apos;: &apos;#1E1E2E&apos;, &apos;background&apos;: &apos;#1E1E2E&apos;, &apos;mainBkg&apos;: &apos;#313244&apos;, &apos;clusterBkg&apos;: &apos;#24243E&apos;, &apos;clusterBorder&apos;: &apos;#45475A&apos;, &apos;titleColor&apos;: &apos;#CDD6F4&apos;, &apos;edgeLabelBackground&apos;: &apos;#1E1E2E&apos;, &apos;fontFamily&apos;: &apos;JetBrains Mono, monospace&apos;, &apos;fontSize&apos;: &apos;13px&apos;}}}%%
+flowchart TD
+    classDef lead  fill:#1A3A3A,stroke:#94E2D5,color:#94E2D5
+    classDef pool  fill:#313244,stroke:#A6ADC8,color:#CDD6F4
+    classDef dev   fill:#1A2A3A,stroke:#89B4FA,color:#89B4FA
+    classDef qa    fill:#2A1A3A,stroke:#CBA6F7,color:#CBA6F7
+    classDef kb    fill:#3A2A1A,stroke:#FAB387,color:#FAB387
+
+    TL[&quot;TechLeadAgent\nCreates task cards in planning stage&quot;]:::lead --&amp;gt;|populates| KB[(Kanban Board\nSQLite)]:::kb
+
+    KB --&amp;gt; POOL[&quot;ThreadPoolExecutor\nmax_workers = max_concurrent_developers&quot;]:::pool
+
+    POOL --&amp;gt; B[&quot;DeveloperBackendAgent\nAPI task cards · Thread 1\nscoped to src/task_id/&quot;]:::dev
+    POOL --&amp;gt; U[&quot;DeveloperUIAgent\nUI task cards · Thread 2\nscoped to src/task_id/&quot;]:::dev
+    POOL --&amp;gt; D[&quot;DeveloperDevOpsAgent\nIaC task card · Thread 3\nscoped to src/task_id/&quot;]:::dev
+
+    B --&amp;gt;|kanban_complete| KB
+    U --&amp;gt;|kanban_complete| KB
+    D --&amp;gt;|kanban_complete| KB
+
+    B --&amp;gt; JOIN[&quot;All threads joined\nDevelopment artifact merged&quot;]:::pool
+    U --&amp;gt; JOIN
+    D --&amp;gt; JOIN
+
+    JOIN --&amp;gt; QA[&quot;QAEngineerAgent\nblocked until all devs done&quot;]:::qa
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Each developer thread:&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;Gets a &lt;strong&gt;fresh message history&lt;/strong&gt; — zero cross-agent context leak&lt;/li&gt;
+  &lt;li&gt;Is scoped to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;output/&amp;lt;run_id&amp;gt;/src/&amp;lt;task_id&amp;gt;/&lt;/code&gt; with path traversal protection&lt;/li&gt;
+  &lt;li&gt;Coordinates only via kanban task state — no direct inter-agent communication&lt;/li&gt;
+  &lt;li&gt;Has &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;clarify&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;send_message&lt;/code&gt;, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;delegate_task&lt;/code&gt; tools blocked — no recursive sub-agent spawning&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# core/pipeline.py
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ThreadPoolExecutor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;max_workers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pool&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;futures&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;pool&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;submit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;agent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;workspace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;db_session&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;agent&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;agent&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dev_agents&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;future&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;as_completed&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;futures&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;artifacts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;future&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The first version had all three developers writing to a shared directory. They clobbered each other’s files within the first test run. Path-scoped namespacing was the obvious fix in retrospect.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;the-qa-auto-fix-loop&quot;&gt;The QA Auto-Fix Loop&lt;/h2&gt;
+
+&lt;p&gt;When QA fails, most pipelines stop and wait for a human. That’s right for some failures. It’s wrong for the 80% of failures that are fixable in one pass — a missing import, a mismatched API signature, a forgotten migration.&lt;/p&gt;
+
+&lt;p&gt;The QA loop handles this automatically:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-mermaid&quot;&gt;%%{init: {&apos;theme&apos;: &apos;dark&apos;, &apos;themeVariables&apos;: {&apos;primaryColor&apos;: &apos;#313244&apos;, &apos;primaryTextColor&apos;: &apos;#CDD6F4&apos;, &apos;primaryBorderColor&apos;: &apos;#89B4FA&apos;, &apos;lineColor&apos;: &apos;#A6ADC8&apos;, &apos;secondaryColor&apos;: &apos;#1E1E2E&apos;, &apos;background&apos;: &apos;#1E1E2E&apos;, &apos;mainBkg&apos;: &apos;#313244&apos;, &apos;clusterBkg&apos;: &apos;#24243E&apos;, &apos;clusterBorder&apos;: &apos;#45475A&apos;, &apos;titleColor&apos;: &apos;#CDD6F4&apos;, &apos;edgeLabelBackground&apos;: &apos;#1E1E2E&apos;, &apos;fontFamily&apos;: &apos;JetBrains Mono, monospace&apos;, &apos;fontSize&apos;: &apos;13px&apos;}}}%%
+flowchart TD
+    classDef qa    fill:#2A1A3A,stroke:#CBA6F7,color:#CBA6F7
+    classDef dev   fill:#1A2A3A,stroke:#89B4FA,color:#89B4FA
+    classDef gate  fill:#3A1A2A,stroke:#F38BA8,color:#F38BA8
+    classDef done  fill:#1A3A2A,stroke:#A6E3A1,color:#A6E3A1
+
+    QA[&quot;QA Engineer\nruns full test suite&quot;]:::qa --&amp;gt; CHK{&quot;All pass?&quot;}
+
+    CHK --&amp;gt;|yes| ADV[&quot;Advance pipeline&quot;]:::done
+
+    CHK --&amp;gt;|no| GRP[&quot;Group failing tests\nby owning developer task&quot;]:::dev
+    GRP --&amp;gt; FIX[&quot;Re-dispatch original\ndeveloper agent per group&quot;]:::dev
+    FIX --&amp;gt; RE[&quot;QA re-runs&quot;]:::qa
+    RE --&amp;gt; ITER{&quot;Iteration ≤ 3?&quot;}
+
+    ITER --&amp;gt;|yes| CHK
+    ITER --&amp;gt;|no| ESC[&quot;escalated_to_hitl = true\nPause for human review&quot;]:::gate
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The key is “group by owning developer task.” Each developer wrote code under their namespace. When those tests fail, the fix goes back to that developer — not to a generic fix agent that doesn’t know the codebase structure.&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# core/qa_loop.py
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;QALoop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;qa_agent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dev_agents&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;workspace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;db&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;iteration&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;max_iterations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;report&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;qa_agent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;workspace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;db&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;report&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;gate_passed&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]:&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;report&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;failing_by_task&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_group_failures&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;report&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;failing_tests&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;task_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;failures&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;failing_by_task&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;items&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_find_owner&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;task_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dev_agents&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fix&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;failures&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;workspace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;db&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;report&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;escalated_to_hitl&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;report&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Three iterations handles almost everything I’ve tested against. If a fourth is needed, it’s usually a design issue — which means a human should look at it.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;hitl-governance-five-modes-one-interface&quot;&gt;HITL Governance: Five Modes, One Interface&lt;/h2&gt;
+
+&lt;p&gt;Human-in-the-loop gates exist at Requirements, Architecture, Quality Gate, and Delivery. “Human in the loop” means different things in different contexts — CLI prompt for solo dev, Slack reaction for team review, webhook for enterprise approval systems. All five modes sit behind a single interface:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-mermaid&quot;&gt;%%{init: {&apos;theme&apos;: &apos;dark&apos;, &apos;themeVariables&apos;: {&apos;primaryColor&apos;: &apos;#313244&apos;, &apos;primaryTextColor&apos;: &apos;#CDD6F4&apos;, &apos;primaryBorderColor&apos;: &apos;#89B4FA&apos;, &apos;lineColor&apos;: &apos;#A6ADC8&apos;, &apos;secondaryColor&apos;: &apos;#1E1E2E&apos;, &apos;background&apos;: &apos;#1E1E2E&apos;, &apos;mainBkg&apos;: &apos;#313244&apos;, &apos;clusterBkg&apos;: &apos;#24243E&apos;, &apos;clusterBorder&apos;: &apos;#45475A&apos;, &apos;titleColor&apos;: &apos;#CDD6F4&apos;, &apos;edgeLabelBackground&apos;: &apos;#1E1E2E&apos;, &apos;fontFamily&apos;: &apos;JetBrains Mono, monospace&apos;, &apos;fontSize&apos;: &apos;13px&apos;}}}%%
+flowchart TD
+    classDef gwStyle   fill:#1A3A3A,stroke:#94E2D5,color:#94E2D5
+    classDef provStyle fill:#313244,stroke:#A6ADC8,color:#CDD6F4
+    classDef okStyle   fill:#1A3A2A,stroke:#A6E3A1,color:#A6E3A1
+    classDef failStyle fill:#3A1A2A,stroke:#F38BA8,color:#F38BA8
+    classDef chgStyle  fill:#3A2A1A,stroke:#FAB387,color:#FAB387
+    classDef recStyle  fill:#313244,stroke:#F9E2AF,color:#F9E2AF
+
+    PL[Pipeline]:::gwStyle --&amp;gt; EVAL[PipelineGate.evaluate]:::gwStyle
+    EVAL --&amp;gt; MODE{&quot;Gate mode&quot;}
+    MODE --&amp;gt;|auto| AE[AutoEvaluator]:::provStyle
+    MODE --&amp;gt;|cli| CL[CLI Approval]:::provStyle
+    MODE --&amp;gt;|slack| SL[Slack Approval]:::provStyle
+    MODE --&amp;gt;|webhook| WH[Webhook Approval]:::provStyle
+    MODE --&amp;gt;|queue| QU[Approval Queue]:::provStyle
+    AE --&amp;gt; DEC{&quot;Decision&quot;}
+    CL --&amp;gt; DEC
+    SL --&amp;gt; DEC
+    WH --&amp;gt; DEC
+    QU --&amp;gt; DEC
+    DEC --&amp;gt;|APPROVED| ADV[Advance Pipeline]:::okStyle
+    DEC --&amp;gt;|REJECTED| HALT[Pause Pipeline]:::failStyle
+    DEC --&amp;gt;|AMENDED| AMD[Update Artifact]:::chgStyle
+    ADV --&amp;gt; LOG[Audit Log]:::recStyle
+    HALT --&amp;gt; LOG
+    AMD --&amp;gt; LOG
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AMENDED&lt;/code&gt; decision is the one that makes the system practical. If a reviewer fixes an ADR or adjusts an API contract, the pipeline mutates the artifact in-place, clears downstream stages, and continues from that point. You’re not blocked waiting for the agent to regenerate something — you fix it yourself and move on. Every decision is immutably recorded with actor and rationale.&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# gateway/hitl.py
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;HITLGateway&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;request_approval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;run_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;artifact&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ApprovalResponse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;mode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get_mode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;cli&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_cli_prompt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;artifact&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;elif&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;auto&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_auto_evaluate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;artifact&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;elif&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;slack&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_slack_poll&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;run_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;artifact&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;elif&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;webhook&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_webhook_poll&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;run_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;artifact&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;elif&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;queue&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_queue_wait&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;run_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;artifact&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;context-compression-for-long-agent-conversations&quot;&gt;Context Compression for Long Agent Conversations&lt;/h2&gt;
+
+&lt;p&gt;Developer agents on large projects can burn through a context window. A backend developer writing a full REST API with auth, migrations, and tests can produce 40+ turns of tool calls and responses.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ContextCompressor&lt;/code&gt; handles this transparently:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Monitor token count after every turn&lt;/li&gt;
+  &lt;li&gt;When count exceeds 80% of model limit, trigger compression&lt;/li&gt;
+  &lt;li&gt;Run an auxiliary model (Haiku — fast, cheap) to summarize the middle turns&lt;/li&gt;
+  &lt;li&gt;Preserve: system prompt (head) + last 2,000 tokens (tail)&lt;/li&gt;
+  &lt;li&gt;Inject a structured &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[STAGE COMPACTION]&lt;/code&gt; block:&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[STAGE COMPACTION — turn 18 of 34]
+Resolved Requirements: user auth via JWT, PostgreSQL backend, Redis session cache
+Code Written: auth/models.py, auth/routes.py, auth/middleware.py, migrations/001_users.sql
+Open Questions: rate limiting strategy — defaulting to 100 req/min per user
+Remaining Work: unit tests, integration tests, OpenAPI docs
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The agent continues from this compact summary without seeing the full history. The model picks up the structured summary the same way a developer picks up a standup note. In testing, quality after compaction is nearly identical to without it.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;observability-otel-span-hierarchy&quot;&gt;Observability: OTel Span Hierarchy&lt;/h2&gt;
+
+&lt;p&gt;Every agent turn emits a structured JSON log to stdout:&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;ts&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2026-06-01T10:00:00Z&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;run_id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;run-abc123&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;stage&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;architecture&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;agent&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;architect&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;turn&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;tool_calls&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;read_file&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;write_file&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;tokens_in&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8420&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;tokens_out&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1200&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;cost_usd&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.042&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;iteration_budget_used&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;iteration_budget_max&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;50&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Optional OpenTelemetry integration adds distributed tracing across the full pipeline. The OTel SDK is an optional dependency — if not installed, a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_NoOpTracer&lt;/code&gt; silently takes over with zero performance cost:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-mermaid&quot;&gt;%%{init: {&apos;theme&apos;: &apos;dark&apos;, &apos;themeVariables&apos;: {&apos;primaryColor&apos;: &apos;#313244&apos;, &apos;primaryTextColor&apos;: &apos;#CDD6F4&apos;, &apos;primaryBorderColor&apos;: &apos;#89B4FA&apos;, &apos;lineColor&apos;: &apos;#A6ADC8&apos;, &apos;secondaryColor&apos;: &apos;#1E1E2E&apos;, &apos;background&apos;: &apos;#1E1E2E&apos;, &apos;mainBkg&apos;: &apos;#313244&apos;, &apos;clusterBkg&apos;: &apos;#24243E&apos;, &apos;clusterBorder&apos;: &apos;#45475A&apos;, &apos;titleColor&apos;: &apos;#CDD6F4&apos;, &apos;edgeLabelBackground&apos;: &apos;#1E1E2E&apos;, &apos;fontFamily&apos;: &apos;JetBrains Mono, monospace&apos;, &apos;fontSize&apos;: &apos;13px&apos;}}}%%
+graph TD
+    classDef pipeline fill:#1A2A3A,stroke:#89B4FA,color:#89B4FA
+    classDef stage    fill:#313244,stroke:#A6ADC8,color:#CDD6F4
+    classDef agent    fill:#2A1A3A,stroke:#CBA6F7,color:#CBA6F7
+
+    PR[&quot;sdlc.pipeline.run\nrun_id · idea · outcome&quot;]:::pipeline
+
+    PR --&amp;gt; SD[&quot;sdlc.stage.discovery&quot;]:::stage
+    PR --&amp;gt; SR[&quot;sdlc.stage.requirements&quot;]:::stage
+    PR --&amp;gt; SA[&quot;sdlc.stage.architecture&quot;]:::stage
+    PR --&amp;gt; SP[&quot;sdlc.stage.planning&quot;]:::stage
+    PR --&amp;gt; SV[&quot;sdlc.stage.development · parallel=true&quot;]:::stage
+    PR --&amp;gt; SQ[&quot;sdlc.stage.quality_gate&quot;]:::stage
+    PR --&amp;gt; SL[&quot;sdlc.stage.delivery&quot;]:::stage
+
+    SD --&amp;gt; ADE[&quot;sdlc.agent.domain_expert&quot;]:::agent
+    SD --&amp;gt; APO[&quot;sdlc.agent.product_owner&quot;]:::agent
+    SR --&amp;gt; ABA[&quot;sdlc.agent.business_analyst&quot;]:::agent
+    SA --&amp;gt; AAR[&quot;sdlc.agent.architect&quot;]:::agent
+    SP --&amp;gt; ATL[&quot;sdlc.agent.tech_lead&quot;]:::agent
+    SV --&amp;gt; ABE[&quot;sdlc.agent.developer_backend&quot;]:::agent
+    SV --&amp;gt; AUI[&quot;sdlc.agent.developer_ui&quot;]:::agent
+    SV --&amp;gt; ADO[&quot;sdlc.agent.developer_devops&quot;]:::agent
+    SQ --&amp;gt; AQA[&quot;sdlc.agent.qa_engineer&quot;]:::agent
+    SL --&amp;gt; ARM[&quot;sdlc.agent.release_manager&quot;]:::agent
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;prompt-injection-scanning&quot;&gt;Prompt Injection Scanning&lt;/h2&gt;
+
+&lt;p&gt;Before creating a run ID, the system scans the input for injection attempts across six pattern families:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# core/memory.py
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;INJECTION_PATTERNS&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+    &lt;span class=&quot;sa&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ignore (your|all) (previous|prior) instructions&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;sa&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;\b(act as|you are now|pretend you are)\b&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;sa&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;^system:\s&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;sa&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&amp;lt;stage-context&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;sa&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;\b(dan mode|developer mode|jailbreak)\b&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;sa&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;reveal your (system )?prompt&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;scan_for_injection&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;idea&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pattern&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;INJECTION_PATTERNS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;re&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;search&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pattern&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;idea&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;re&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IGNORECASE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;re&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MULTILINE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;raise&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PromptInjectionError&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sa&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Input rejected: matched pattern &apos;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pattern&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The scan runs before the run_id is created — no audit trail entry, no database record, no token spend.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;sqlite-as-the-persistence-backbone&quot;&gt;SQLite as the Persistence Backbone&lt;/h2&gt;
+
+&lt;p&gt;I spent about ten minutes considering PostgreSQL. Then I remembered this is a pipeline, not a web server. Concurrency is bounded — a handful of parallel developer threads. SQLite in WAL mode handles this with zero setup.&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;-- 7 tables in pipeline.db&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pipeline_runs&lt;/span&gt;   &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;run_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;idea&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;config_json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;started_at&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;completed_at&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stage_artifacts&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;run_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;artifact_json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;created_at&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;approved_by&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;audit_log&lt;/span&gt;       &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;run_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;decision&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;actor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rationale&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;timestamp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;kanban_tasks&lt;/span&gt;    &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;task_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;run_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;assignee&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;metadata_json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;kanban_events&lt;/span&gt;   &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;task_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;event_type&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;payload&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;timestamp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;token_usage&lt;/span&gt;     &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;run_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;agent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tokens_in&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tokens_out&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cost_usd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;VIRTUAL&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;artifact_fts&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;USING&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fts5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;run_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;content&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;content&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;stage_artifacts&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;WAL mode + jittered exponential backoff handles concurrent developer threads cleanly:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;_execute_with_retry&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;query&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;max_attempts&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;attempt&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;max_attempts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;conn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;query&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;except&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sqlite3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;OperationalError&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;database is locked&quot;&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.05&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;attempt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;random&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;uniform&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.01&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;raise&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;raise&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;RuntimeError&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;DB lock not released after max retries&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;FTS5 on &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;stage_artifacts&lt;/code&gt; lets you search all artifact content with a single query — find every run that mentioned a specific API endpoint or technology.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;provider-failover-and-multi-key-rate-limit-recovery&quot;&gt;Provider Failover and Multi-Key Rate Limit Recovery&lt;/h2&gt;
+
+&lt;p&gt;Production LLM usage at pipeline scale hits rate limits. The solution is rotating across a credential pool:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# core/agent_runtime.py
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CredentialPool&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;__init__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;keys&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;v&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;environ&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;items&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;re&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;match&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sa&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;OPENAI_API_KEY(_\d+)?$&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_idx&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_lock&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;threading&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Lock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;next_key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_lock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;keys&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_idx&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;keys&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_idx&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;On a 429 response, rotate to the next key and retry immediately. On 5xx, exponential backoff on the same key. On auth or context-length errors, raise immediately — retrying won’t help.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;model-selection-by-role&quot;&gt;Model Selection by Role&lt;/h2&gt;
+
+&lt;p&gt;Not all agents need the same model. The cost difference between Opus and Haiku is roughly 60x.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Role&lt;/th&gt;
+      &lt;th&gt;Model&lt;/th&gt;
+      &lt;th&gt;Reason&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Architect&lt;/td&gt;
+      &lt;td&gt;claude-opus-4-8&lt;/td&gt;
+      &lt;td&gt;Complex multi-step ADR reasoning, C4 diagramming&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;All developers&lt;/td&gt;
+      &lt;td&gt;claude-sonnet-4-6&lt;/td&gt;
+      &lt;td&gt;Best cost/quality for long code generation sessions&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Domain Expert, BA, PM&lt;/td&gt;
+      &lt;td&gt;claude-sonnet-4-6&lt;/td&gt;
+      &lt;td&gt;Structured output, moderate complexity&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Context Compressor&lt;/td&gt;
+      &lt;td&gt;claude-haiku-4-5&lt;/td&gt;
+      &lt;td&gt;Fast summarization, simple task, high volume&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;These are configurable per-role in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdlc_config.yaml&lt;/code&gt;. Swapping Sonnet for everything is a reasonable budget trade.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;custom-roles-without-code&quot;&gt;Custom Roles Without Code&lt;/h2&gt;
+
+&lt;p&gt;Adding a new agent role requires zero Python:&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# custom_roles/data_engineer.yaml&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;role&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;data_engineer&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;display_name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Data Engineer&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;authority_statement&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;|&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;You design ETL pipelines, data models, and stream processing architectures.&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;You write production-ready PySpark, dbt, and Airflow DAGs.&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;max_iterations&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;35&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;enabled_toolsets&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;read_file&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;write_file&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;terminal&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;execute_code&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;output_schema&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;object&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;required&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;pipeline_steps&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;schemas_created&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;quality_checks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;]&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;properties&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;pipeline_steps&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;array&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;items&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;object&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;required&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;source&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;destination&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;transformation&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;agents/custom_loader.py&lt;/code&gt; walks &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;custom_roles/*.yaml&lt;/code&gt; at startup and dynamically generates agent classes. Drop a YAML file in the directory, restart, and the new role is available for any &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;StageDefinition&lt;/code&gt;. Teams can add roles in the language they already know.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;what-the-cli-looks-like&quot;&gt;What the CLI Looks Like&lt;/h2&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Start a new run&lt;/span&gt;
+python sdlc.py run &lt;span class=&quot;s2&quot;&gt;&quot;Build a FastAPI todo app with user auth and PostgreSQL&quot;&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# With auto-approval and custom config&lt;/span&gt;
+python sdlc.py run &lt;span class=&quot;s2&quot;&gt;&quot;idea&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--config&lt;/span&gt; sdlc_config.yaml &lt;span class=&quot;nt&quot;&gt;--auto-approve&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# Resume after a HITL pause or crash&lt;/span&gt;
+python sdlc.py resume run-abc123
+
+&lt;span class=&quot;c&quot;&gt;# Approve a gate from the CLI&lt;/span&gt;
+python sdlc.py approve run-abc123 architecture &lt;span class=&quot;nt&quot;&gt;--decision&lt;/span&gt; APPROVED &lt;span class=&quot;nt&quot;&gt;--rationale&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;ADRs look solid&quot;&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# Amend an artifact before advancing&lt;/span&gt;
+python sdlc.py approve run-abc123 requirements &lt;span class=&quot;nt&quot;&gt;--decision&lt;/span&gt; AMENDED &lt;span class=&quot;nt&quot;&gt;--amended-artifact&lt;/span&gt; requirements_v2.json
+
+&lt;span class=&quot;c&quot;&gt;# Check status and costs&lt;/span&gt;
+python sdlc.py status run-abc123
+python sdlc.py cost run-abc123
+
+&lt;span class=&quot;c&quot;&gt;# View the kanban board&lt;/span&gt;
+python sdlc.py kanban run-abc123
+
+&lt;span class=&quot;c&quot;&gt;# Launch the web dashboard&lt;/span&gt;
+python sdlc.py ui &lt;span class=&quot;nt&quot;&gt;--host&lt;/span&gt; 127.0.0.1 &lt;span class=&quot;nt&quot;&gt;--port&lt;/span&gt; 7474
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;web-dashboard&quot;&gt;Web Dashboard&lt;/h2&gt;
+
+&lt;p&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdlc.py ui&lt;/code&gt; command launches a FastAPI web server with a real-time dashboard. Pipeline runs auto-refresh every few seconds — you can track status, stage progress, and cost without touching the CLI.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/projects/sdlc-factory-ui.png&quot; alt=&quot;SDLC Factory Dashboard — Pipeline Runs overview with status cards&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The dashboard shows all runs with their current stage, status badge (Running / Completed / Failed / Paused), start time, and duration. The stat cards at the top give a live count across all states so you can see at a glance what’s in-flight.&lt;/p&gt;
+
+&lt;p&gt;Clicking a run opens the run detail view — a stage pipeline with clickable nodes, each revealing its artifact, kanban tasks, audit trail, and cost breakdown in tabbed panels.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/projects/sdlc-factory-pipeline.png&quot; alt=&quot;SDLC Factory Run Detail — stage pipeline with 7 stages, HITL gates highlighted, artifact JSON viewer&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The pipeline progress bar shows all 7 stages. Stages with HITL gates are marked with a ⏸ GATE label. Approved stages show who signed off (pipeline auto-approve vs. human operator) and the timestamp. The Architecture stage here was reviewed and approved via CLI with the rationale recorded.&lt;/p&gt;
+
+&lt;h3 id=&quot;hitl-audit-log&quot;&gt;HITL Audit Log&lt;/h3&gt;
+
+&lt;p&gt;Every gate decision — Approved, Rejected, or Amended — is timestamped and stored. The audit log view shows the full decision history for a run:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/projects/sdlc-factory-audit.png&quot; alt=&quot;SDLC Factory Audit Log — HITL gate decisions with timeline, actors, and rationale&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Rejections with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cli: interrupted&lt;/code&gt; are operator-side ctrl+C interrupts before the gate prompt completed — the pipeline pauses and re-presents the gate on the next &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;resume&lt;/code&gt;. Human approvals carry the actor name and rationale string verbatim.&lt;/p&gt;
+
+&lt;h3 id=&quot;kanban-blackboard&quot;&gt;Kanban Blackboard&lt;/h3&gt;
+
+&lt;p&gt;During the parallel development stage, each developer agent claims tasks from a shared kanban board backed by SQLite. The board live-updates as agents progress:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/projects/sdlc-factory-kanban.png&quot; alt=&quot;SDLC Factory Kanban Board — development stage tasks across Pending, In Progress, Blocked, Done columns&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The 20 blocked tasks here reflect a provider API error (tool_results role mismatch) that stopped the development agents mid-iteration — exactly the kind of failure the checkpoint/resume system is designed to recover from.&lt;/p&gt;
+
+&lt;h3 id=&quot;token-usage-and-cost&quot;&gt;Token Usage and Cost&lt;/h3&gt;
+
+&lt;p&gt;Every agent turn records tokens in, tokens out, model used, and duration. The cost tab breaks this down by stage and role:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/projects/sdlc-factory-cost.png&quot; alt=&quot;SDLC Factory Cost Breakdown — 49,717 tokens in, 36,307 out, $1.31 total across stages and models&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Architecture is the most expensive stage ($0.77) because it uses Claude Opus with a large context window loading all prior discovery and requirements artifacts. The Business Analyst (requirements) comes second at $0.28 for the longest wall-clock run (~10 minutes). Development registers $0 here because the agents failed before making any API calls — cost tracking is per-turn so partially-completed agent runs are fully accounted for.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;what-i-got-wrong-and-fixed&quot;&gt;What I Got Wrong (And Fixed)&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Shared filesystem for parallel developers.&lt;/strong&gt; Three agents writing to the same directory clobbered each other’s files within seconds. Fix: path-scoped namespacing — each developer owns &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;output/&amp;lt;run_id&amp;gt;/src/&amp;lt;task_id&amp;gt;/&lt;/code&gt; exclusively, with path traversal validation on every write.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Too much context injected too early.&lt;/strong&gt; Early versions injected all prior stage artifacts into every agent. The Architect was seeing the Product Owner’s raw conversation. Context budgets burned on noise, agents hallucinated based on conversational artefacts rather than structured ones. Fix: the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;prior_stages()&lt;/code&gt; declaration — each agent gets only what it needs, as validated JSON.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;No iteration budget.&lt;/strong&gt; Without a turn limit, agents on ambiguous tasks would loop indefinitely — rewriting the same file, retrying the same tool call, asking clarifying questions to themselves. Fix: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;IterationBudget&lt;/code&gt; with role-appropriate defaults (50 turns for Architect, 30 for developers, 20 for others).&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Sync SQLite under concurrent threads.&lt;/strong&gt; Without WAL mode and retry logic, concurrent developer threads deadlocked on DB writes constantly. Fix: WAL mode at connection open, jittered exponential backoff on &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;OperationalError&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;No AMENDED path in HITL.&lt;/strong&gt; Early gates had only APPROVED and REJECTED. Rejection meant restarting from scratch — far too heavy for “I want to tweak this one ADR.” Adding the AMENDED path required rebuilding the gate interface but it’s the feature that made the system practical.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;checkpoint-and-resume&quot;&gt;Checkpoint and Resume&lt;/h2&gt;
+
+&lt;p&gt;Every completed stage writes artifacts to both SQLite and disk:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;output/&amp;lt;run_id&amp;gt;/
+  artifacts/
+    discovery.json
+    requirements.json
+    architecture.json
+    ...
+  src/
+    backend/
+    ui/
+    devops/
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;On crash or manual pause, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdlc resume &amp;lt;run_id&amp;gt;&lt;/code&gt; reloads all completed artifacts from SQLite and starts from the first non-completed stage. No data loss, no regeneration cost for finished work.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;closing-thoughts&quot;&gt;Closing Thoughts&lt;/h2&gt;
+
+&lt;p&gt;Building SDLC Factory changed how I think about agentic systems. The instinct with AI agents is to give them maximum freedom — let them spawn sub-agents, share context freely, figure out coordination themselves. What I found is that the opposite is true for reliable pipelines: tight contracts, scoped context, enforced schemas, explicit coordination protocols.&lt;/p&gt;
+
+&lt;p&gt;The complexity in this system isn’t in the agents — it’s in the connective tissue. The three-tier memory system, the artifact contracts, the HITL gateway, the QA loop, the context compressor. Each was built to solve a specific failure mode I hit in an earlier version. None of them are glamorous. All of them are necessary.&lt;/p&gt;
+
+&lt;p&gt;If you’re building agentic systems for production use, start with the handoffs, not the agents. Get the contracts right first. The agents are the easy part.&lt;/p&gt;
+
+&lt;p&gt;The full codebase is at &lt;a href=&quot;https://github.com/shanmuga-sundaram-n/sdlc-factory&quot;&gt;github.com/shanmuga-sundaram-n/sdlc-factory&lt;/a&gt;. Questions and contributions welcome.&lt;/p&gt;</content><author><name>Shanmuga Sundaram Natarajan (Shan)</name></author><category term="ai" /><category term="engineering" /><category term="agents" /><category term="multi-agent" /><category term="llm" /><category term="sdlc" /><category term="claude" /><category term="openai" /><category term="python" /><category term="fastapi" /><category term="sqlite" /><category term="devops" /><category term="agentic-ai" /><summary type="html">Software delivery has a translation problem. An idea starts clear in someone’s head, gets degraded through six rounds of meetings, three Confluence pages, a Jira backlog nobody reads, and ends up as code that solves last quarter’s version of the problem. Even when teams work well together, the handoffs between product, architecture, development, and QA introduce latency and information loss at every boundary.</summary></entry><entry><title type="html">Why Most Teams Fail at Collaboration — And How Domain-Driven Design Fixes It</title><link href="https://shanmuga-sundaram-n.github.io/blog/2026/04/01/why-teams-fail-at-collaboration-ddd/" rel="alternate" type="text/html" title="Why Most Teams Fail at Collaboration — And How Domain-Driven Design Fixes It" /><published>2026-04-01T17:30:00+05:30</published><updated>2026-04-01T17:30:00+05:30</updated><id>https://shanmuga-sundaram-n.github.io/blog/2026/04/01/why-teams-fail-at-collaboration-ddd</id><content type="html" xml:base="https://shanmuga-sundaram-n.github.io/blog/2026/04/01/why-teams-fail-at-collaboration-ddd/">&lt;p&gt;Let me tell you about a bug that took three weeks to track down.&lt;/p&gt;
 
 &lt;p&gt;The backend team had added a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;status&lt;/code&gt; column to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;users&lt;/code&gt; table. They meant it to track onboarding progress — steps 0 through 4. The frontend team read the same field and treated it as a boolean: account active or not. The data team exported it weekly and bucketed users into cold, warm, and hot engagement tiers.&lt;/p&gt;
 
@@ -1263,9 +2035,9 @@ flowchart TD
 
 &lt;p&gt;If you build this and hit walls, the most useful thing you can do is instrument your pipeline end to end and look at where quality is leaking. Usually it’s obvious once you’re looking at actual data rather than gut-checking demo queries.&lt;/p&gt;
 
-&lt;hr /&gt;</content><author><name>Shanmuga Sundaram Natarajan (Shan)</name></author><category term="ai" /><category term="engineering" /><category term="rag" /><category term="rag" /><category term="langchain" /><category term="chromadb" /><category term="openai" /><category term="vector-search" /><category term="llm" /><summary type="html">I’ve read probably a dozen RAG tutorials. They all do the same thing: show you how to embed a handful of PDFs into a vector store, run a similarity search, stuff the results into a prompt, and call it a production pipeline. Then you try to use the same approach on real data — thousands of documents, mixed formats, users with messy natural language queries — and the whole thing falls apart. The answers are vague, wrong, or confidently referencing documents that have nothing to do with the question.</summary></entry><entry><title type="html">Zero Vibe Coding: How I Engineered a Full-Stack Finance App with Claude Code’s Multi-Agent Pipeline</title><link href="https://shanmuga-sundaram-n.github.io/blog/2026/03/20/zero-vibe-coding-finance-tracker/" rel="alternate" type="text/html" title="Zero Vibe Coding: How I Engineered a Full-Stack Finance App with Claude Code’s Multi-Agent Pipeline" /><published>2026-03-20T17:30:00+05:30</published><updated>2026-03-20T17:30:00+05:30</updated><id>https://shanmuga-sundaram-n.github.io/blog/2026/03/20/zero-vibe-coding-finance-tracker</id><content type="html" xml:base="https://shanmuga-sundaram-n.github.io/blog/2026/03/20/zero-vibe-coding-finance-tracker/">&lt;p&gt;When we talk about AI-assisted coding, the conversation usually revolves around “vibe coding” — throwing vague prompts at an LLM, connecting a UI layout tool, and crossing our fingers that the underlying architecture holds together.&lt;/p&gt;
+&lt;hr /&gt;</content><author><name>Shanmuga Sundaram Natarajan (Shan)</name></author><category term="ai" /><category term="engineering" /><category term="rag" /><category term="rag" /><category term="langchain" /><category term="chromadb" /><category term="openai" /><category term="vector-search" /><category term="llm" /><summary type="html">I’ve read probably a dozen RAG tutorials. They all do the same thing: show you how to embed a handful of PDFs into a vector store, run a similarity search, stuff the results into a prompt, and call it a production pipeline. Then you try to use the same approach on real data — thousands of documents, mixed formats, users with messy natural language queries — and the whole thing falls apart. The answers are vague, wrong, or confidently referencing documents that have nothing to do with the question.</summary></entry><entry><title type="html">Zero Vibe Coding with Claude Code Agents</title><link href="https://shanmuga-sundaram-n.github.io/blog/2026/03/20/zero-vibe-coding-finance-tracker/" rel="alternate" type="text/html" title="Zero Vibe Coding with Claude Code Agents" /><published>2026-03-20T17:30:00+05:30</published><updated>2026-03-20T17:30:00+05:30</updated><id>https://shanmuga-sundaram-n.github.io/blog/2026/03/20/zero-vibe-coding-finance-tracker</id><content type="html" xml:base="https://shanmuga-sundaram-n.github.io/blog/2026/03/20/zero-vibe-coding-finance-tracker/">&lt;p&gt;When we talk about AI-assisted coding, the conversation usually revolves around “vibe coding” — throwing vague prompts at an LLM, connecting a UI layout tool, and crossing our fingers that the underlying architecture holds together.&lt;/p&gt;
 
-&lt;p&gt;I wanted to see what happens when you treat AI not as a magic wand, but as an embedded enterprise engineering team. To test this, I built a production-ready Personal Finance Tracker entirely from the terminal. I strictly avoided UI Model Context Protocol (MCP) integrations like Figma. Instead, I forced the &lt;strong&gt;Claude Code CLI&lt;/strong&gt; into a rigid, Spec-Driven, Multi-Agent Development Environment.&lt;/p&gt;
+&lt;p&gt;I wanted to see what happens when you treat AI not as a magic wand, but as an embedded enterprise engineering team. To test this, I built a production-ready Personal Finance Tracker entirely from the terminal. I strictly avoided UI Model Context Protocol (MCP) integrations like Figma. Instead, I forced the &lt;strong&gt;Claude Code CLI&lt;/strong&gt; into a rigid, Spec-Driven, Multi-Agent Development Environment — &lt;strong&gt;nine agents, five pipeline tracks, four points of parallel execution, and five automated hooks&lt;/strong&gt; that enforced quality at the filesystem level.&lt;/p&gt;
 
 &lt;p&gt;You can check out the final codebase here: &lt;a href=&quot;https://github.com/shanmuga-sundaram-n/personal-finance-tracker&quot;&gt;Personal Finance Tracker on GitHub&lt;/a&gt;&lt;/p&gt;
 
@@ -1320,47 +2092,525 @@ Would you like me to spawn `full-stack-dev` to implement this now? (Y/n) &amp;gt
 
 &lt;hr /&gt;
 
-&lt;h2 id=&quot;2-coordinated-execution-the-7-agent-pipeline&quot;&gt;2. Coordinated Execution: The 7-Agent Pipeline&lt;/h2&gt;
+&lt;h2 id=&quot;2-setting-up-the-claude-pipeline&quot;&gt;2. Setting Up the Claude Pipeline&lt;/h2&gt;
 
-&lt;p&gt;Instead of hooking up an external Figma MCP and letting a single AI guess at the UI and database simultaneously, I enforced spec-driven development using a pipeline of 7 distinct Markdown-based personas inside &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.claude/agents/&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Before the agents could collaborate, I had to build the scaffolding they would live in. The entire pipeline is defined inside a single &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.claude/&lt;/code&gt; directory committed alongside the codebase — no external services, no cloud orchestration, no additional accounts.&lt;/p&gt;
 
-&lt;p&gt;The most impressive part wasn’t the AI’s coding ability — it was &lt;strong&gt;the strict handoff mechanism&lt;/strong&gt; between agents. They never “spoke” in a chaotic group chat. They communicated by writing strict Markdown files (Briefs) to each other, orchestrated entirely by the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;solution-planner&lt;/code&gt;.&lt;/p&gt;
+&lt;h3 id=&quot;the-folder-structure&quot;&gt;The Folder Structure&lt;/h3&gt;
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;User Request
+&lt;p&gt;Every file in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.claude/&lt;/code&gt; plays a specific role. Agents carry their own persistent memory, hooks enforce quality gates automatically, and the Feature Brief is the single source of truth that flows through every phase:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;personal-finance-tracker/
+└── .claude/
+    ├── agents/                              ← 9 agent persona definitions (Markdown)
+    │   ├── engineering-manager.md           ← Single entry point — owns ALL tracks  [model: opus]
+    │   ├── personal-finance-analyst.md      ← Domain rules, Phase 1A               [model: sonnet]
+    │   ├── tech-lead.md                     ← Architecture brief + reviews 3A/3D/3E [model: sonnet]
+    │   ├── full-stack-dev.md                ← Backend + frontend impl, Phase 2A/2C  [model: sonnet]
+    │   ├── ux-ui-designer.md                ← Design spec 2B + a11y review 4B       [model: sonnet]
+    │   ├── qa-automation-tester.md          ← Unit + integration tests, Phase 4A    [model: sonnet]
+    │   ├── security-reviewer.md             ← Auth gaps + data exposure, Phase 3B   [model: sonnet]
+    │   ├── performance-reviewer.md          ← N+1 queries + indexes, Phase 3C       [model: sonnet]
+    │   └── devops-engineer.md               ← Docker + CI/CD + deploy, Phase 2/6    [model: sonnet]
     │
-    ▼
-solution-planner (Orchestrator)
+    ├── agent-memory/                        ← Per-agent persistent context
+    │   ├── engineering-manager/
+    │   │   ├── MEMORY.md
+    │   │   └── feature-briefs/              ← One Feature Brief .md file per feature
+    │   ├── personal-finance-analyst/
+    │   │   ├── DOMAIN-OWNERSHIP.md          ← Authoritative domain rules (all bounded contexts)
+    │   │   ├── brief-for-tech-lead.md       ← Running log of domain decisions passed to arch
+    │   │   └── MEMORY.md
+    │   ├── tech-lead/
+    │   │   ├── architecture-decisions.md    ← All ADRs
+    │   │   ├── hexagonal-architecture.md    ← Ports/adapters spec
+    │   │   └── MEMORY.md
+    │   ├── qa-automation-tester/
+    │   │   ├── testing-strategy.md
+    │   │   └── MEMORY.md
+    │   ├── ux-ui-designer/
+    │   │   ├── design-system.md
+    │   │   └── MEMORY.md
+    │   └── [full-stack-dev|security-reviewer|performance-reviewer|devops-engineer]/MEMORY.md
     │
-    ├── 1. personal-finance-analyst  → Domain Brief
-    ├── 2. tech-lead                 → Architecture Brief
-    ├── 3. full-stack-dev            → Implementation
-    ├── 4. ux-ui-designer            → Accessibility Audit
-    ├── 5. qa-automation-tester      → Test Gatekeeper
-    └── 6. devops-engineer           → CI/CD &amp;amp; Containers
-                                            │
-                                            ▼
-                                    Feature Complete
+    └── hooks/                               ← Automated quality enforcement
+        ├── pipeline-guard.sh                ← UserPromptSubmit: injects routing rules on EVERY message
+        ├── pre-domain-purity.sh             ← PreToolUse (Edit/Write): blocks Spring/JPA in domain/ at edit time
+        ├── pre-migration-guard.sh           ← PreToolUse (Edit): blocks modifying existing Liquibase migrations
+        ├── post-edit-lint.sh                ← PostToolUse (Edit/Write): auto-lint .ts/.tsx files
+        └── verify-app-health.sh             ← Manual: 5-layer health check run at end of every track
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Here’s exactly how a feature flowed through this virtual team:&lt;/p&gt;
+&lt;h3 id=&quot;anatomy-of-an-agent-definition&quot;&gt;Anatomy of an Agent Definition&lt;/h3&gt;
 
-&lt;p&gt;&lt;strong&gt;Step 1 — &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;solution-planner&lt;/code&gt; (The Orchestrator):&lt;/strong&gt; The central brain. This agent was explicitly instructed to &lt;em&gt;never&lt;/em&gt; write software code. Its only job was to take my feature request, kickstart the pipeline, and gather outputs from the analysts.&lt;/p&gt;
+&lt;p&gt;Each file in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.claude/agents/&lt;/code&gt; is a Markdown document with YAML front matter that tells Claude Code when and how to use the agent. Here’s the actual front matter for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;engineering-manager.md&lt;/code&gt; — the single entry point that owns all tracks:&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;Step 2 — &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;personal-finance-analyst&lt;/code&gt; (Domain Brief):&lt;/strong&gt; Before pushing code, the planner invoked the analyst. This agent evaluated feature requests against strict PRDs, caught financial edge cases like rounding errors, and generated a &lt;strong&gt;Domain Brief&lt;/strong&gt;.&lt;/p&gt;
+&lt;div class=&quot;language-markdown highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nn&quot;&gt;---&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;engineering-manager&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;description&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;|&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;ALWAYS use this agent FIRST for ANY request — feature, bug, refactor, research, or UI change.&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;This is the mandatory entry point for all tracks. It classifies the request, selects the correct&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;pipeline track, orchestrates all agents, manages all gates, and owns delivery end-to-end.&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;Never bypass this agent. Never implement directly without going through engineering-manager first.&lt;/span&gt;
 
-&lt;p&gt;&lt;strong&gt;Step 3 — &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tech-lead&lt;/code&gt; (Architecture Brief):&lt;/strong&gt; The architect analyzed business rules and translated them into Hexagonal Architecture and Liquibase schema designs. It generated an &lt;strong&gt;Architecture Brief&lt;/strong&gt; outlining exact Java classes, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Transactional&lt;/code&gt; boundaries, and interfaces — catching cross-context import violations before they happened.&lt;/p&gt;
+  &lt;span class=&quot;s&quot;&gt;Examples:&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;- User: &apos;I want to add budget rollover&apos; → engineering-manager (FEATURE track)&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;- User: &apos;App is broken / not starting&apos; → engineering-manager (HOTFIX track)&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;- User: &apos;Upgrade Spring Boot version&apos; → engineering-manager (CHORE track)&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;- User: &apos;Should we use Redis for sessions?&apos; → engineering-manager (SPIKE track)&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;- User: &apos;Change the button color on dashboard&apos; → engineering-manager (UI-ONLY track)&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;opus&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;color&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;green&lt;/span&gt;
+&lt;span class=&quot;nn&quot;&gt;---&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;&lt;strong&gt;Step 4 — &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;full-stack-dev&lt;/code&gt; (Execution):&lt;/strong&gt; The developer received the merged Feature Implementation Brief and focused on end-to-end data flow from the PostgreSQL backend to the React Vite frontend — avoiding N+1 queries in JPA and using proper React state management.&lt;/p&gt;
+&lt;p&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;model: opus&lt;/code&gt; assignment matters. The engineering-manager runs on Claude Opus — it needs to reason about track classification, synthesise outputs from two parallel agents into a single Feature Brief, and manage stakeholder gates. All other agents run on Sonnet to reduce token cost while still having the domain knowledge they need.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;Step 5 — &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ux-ui-designer&lt;/code&gt; (Anti-Vibe Coding Audit):&lt;/strong&gt; By explicitly avoiding UI MCPs, I forced Claude to rely on strict UX heuristics. This agent reviewed React code strictly against WCAG 2.1 AA standards and Fitts’s Law spacing (touch targets ≥ 44px).&lt;/p&gt;
+&lt;p&gt;Each specialist agent’s description tells Claude Code exactly which pipeline phase it belongs to and what triggers it:&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;Step 6 — &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;qa-automation-tester&lt;/code&gt; (The Gatekeeper):&lt;/strong&gt; This agent wrote integration tests via JUnit and MockMvc, utilized &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;axe-core&lt;/code&gt; for accessibility enforcement, and refused to complete until &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;./gradlew test&lt;/code&gt; passed in the terminal.&lt;/p&gt;
+&lt;div class=&quot;language-markdown highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nn&quot;&gt;---&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;personal-finance-analyst&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;description&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;|&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;Use this agent for domain analysis work on the personal finance tracker software.&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;This is Phase 1A of the feature delivery pipeline — runs in parallel with tech-lead (Phase 1B),&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;reads DOMAIN-OWNERSHIP.md, applies financial domain rules, and produces the Domain Brief&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;(acceptance criteria, data model changes, edge cases, financial correctness concerns)&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;that feeds the engineering-manager convergence step (Phase 1C).&lt;/span&gt;
 
-&lt;p&gt;&lt;strong&gt;Step 7 — &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;devops-engineer&lt;/code&gt; (Infrastructure):&lt;/strong&gt; Configured Testcontainers (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;postgres:15.2&lt;/code&gt;), wrote multi-stage Dockerfiles with Alpine JRE layers, and managed GitHub Actions caching to slash build times.&lt;/p&gt;
+  &lt;span class=&quot;s&quot;&gt;Examples:&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;- engineering-manager: &quot;Analyze domain rules for budget rollover&quot; → personal-finance-analyst&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;- User: &quot;What constraints apply to soft-deleting a category with active transactions?&quot;&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;sonnet&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;color&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;red&lt;/span&gt;
+&lt;span class=&quot;nn&quot;&gt;---&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The body of each agent file is its full system prompt — role definition, output format, domain rules, anti-patterns, and a pointer to its own persistent memory directory. This is what the agent reads before every response.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-agent-contract&quot;&gt;The Agent Contract&lt;/h3&gt;
+
+&lt;p&gt;Every agent declares exactly what it owns, which pipeline phase(s) it participates in, what it reads, and what it writes. The class hierarchy below maps the full agent roster:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-mermaid&quot;&gt;%%{init: {&apos;theme&apos;: &apos;dark&apos;, &apos;themeVariables&apos;: {&apos;primaryColor&apos;: &apos;#313244&apos;, &apos;primaryTextColor&apos;: &apos;#CDD6F4&apos;, &apos;primaryBorderColor&apos;: &apos;#89B4FA&apos;, &apos;lineColor&apos;: &apos;#A6ADC8&apos;, &apos;secondaryColor&apos;: &apos;#1E1E2E&apos;, &apos;background&apos;: &apos;#1E1E2E&apos;, &apos;mainBkg&apos;: &apos;#313244&apos;, &apos;clusterBkg&apos;: &apos;#24243E&apos;, &apos;clusterBorder&apos;: &apos;#45475A&apos;, &apos;titleColor&apos;: &apos;#CDD6F4&apos;, &apos;edgeLabelBackground&apos;: &apos;#1E1E2E&apos;, &apos;fontFamily&apos;: &apos;JetBrains Mono, monospace&apos;, &apos;fontSize&apos;: &apos;15px&apos;}}}%%
+classDiagram
+    class ClaudeCodeAgent {
+        +name: str
+        +description: str
+        +model: opus | sonnet
+        +color: str
+        +memory_dir: path
+        +system_prompt: text
+    }
+
+    class engineering_manager {
+        +model: opus
+        +tracks: FEATURE | HOTFIX | CHORE | SPIKE | UI-ONLY
+        +phases: 1C · 1D · all gates
+        +reads: all agent outputs
+        +writes: feature-briefs/*.md
+    }
+
+    class personal_finance_analyst {
+        +model: sonnet
+        +phase: 1A — parallel with tech-lead
+        +reads: DOMAIN-OWNERSHIP.md
+        +writes: Domain Brief
+    }
+
+    class tech_lead {
+        +model: sonnet
+        +phases: 1B · 3A · 3D · 3E LGTM
+        +reads: architecture-decisions.md
+        +writes: Architecture Brief · merge gate
+    }
+
+    class full_stack_dev {
+        +model: sonnet
+        +phases: 2A backend · 2C frontend
+        +reads: Feature Brief · design spec
+        +writes: production code
+    }
+
+    class ux_ui_designer {
+        +model: sonnet
+        +phases: 2B design · 4B a11y review
+        +reads: Feature Brief · component files
+        +writes: design spec · WCAG report
+    }
+
+    class security_reviewer {
+        +model: sonnet
+        +phase: 3B — parallel with 3A 3C 3D
+        +checks: auth gaps · data exposure · SQL injection
+    }
+
+    class performance_reviewer {
+        +model: sonnet
+        +phase: 3C — parallel with 3A 3B 3D
+        +checks: N+1 queries · missing indexes · bundle size
+    }
+
+    class qa_automation_tester {
+        +model: sonnet
+        +phase: 4A — parallel with ux-ui-designer
+        +writes: unit tests · MockMvc integration tests
+    }
+
+    class devops_engineer {
+        +model: sonnet
+        +phases: 2 branch setup · 6 deploy
+        +manages: Docker · GitHub Actions · smoke test
+    }
+
+    ClaudeCodeAgent &amp;lt;|-- engineering_manager
+    ClaudeCodeAgent &amp;lt;|-- personal_finance_analyst
+    ClaudeCodeAgent &amp;lt;|-- tech_lead
+    ClaudeCodeAgent &amp;lt;|-- full_stack_dev
+    ClaudeCodeAgent &amp;lt;|-- ux_ui_designer
+    ClaudeCodeAgent &amp;lt;|-- security_reviewer
+    ClaudeCodeAgent &amp;lt;|-- performance_reviewer
+    ClaudeCodeAgent &amp;lt;|-- qa_automation_tester
+    ClaudeCodeAgent &amp;lt;|-- devops_engineer
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Every subclass declares:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;description&lt;/code&gt; — natural-language trigger guide that tells Claude Code which requests route here&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;model&lt;/code&gt; — &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;opus&lt;/code&gt; for the engineering-manager (reasoning-heavy orchestration), &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sonnet&lt;/code&gt; for all specialists (domain work at lower cost)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;memory_dir&lt;/code&gt; — each agent has its own &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.claude/agent-memory/&amp;lt;name&amp;gt;/&lt;/code&gt; directory it reads and writes across sessions&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;five-hooks--each-targeting-a-different-failure-mode&quot;&gt;Five Hooks — Each Targeting a Different Failure Mode&lt;/h3&gt;
+
+&lt;p&gt;The project uses five hooks, each with a specific trigger type. Together they eliminate entire categories of mistakes before they reach a build or test cycle.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Hook 1 — &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pipeline-guard.sh&lt;/code&gt; (UserPromptSubmit)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This hook fires on every single user message. It injects the track routing rules directly into Claude’s context so the engineering-manager classification step is never skipped:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/usr/bin/env bash&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# .claude/hooks/pipeline-guard.sh — fires on EVERY user message&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;cat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sh&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;REMINDER&lt;/span&gt;&lt;span class=&quot;sh&quot;&gt;&apos;
+[PIPELINE ENFORCER — mandatory, read before responding]
+
+TRACK CLASSIFICATION (pick exactly one):
+  FEATURE  → new capability, domain change, new endpoint, new page
+             MUST start with: engineering-manager (full 6-phase pipeline)
+  HOTFIX   → production bug, data integrity issue, startup failure
+             MUST start with: engineering-manager (accelerated pipeline)
+  CHORE    → dependency upgrade, refactor, rename, no domain change
+             MUST start with: engineering-manager (abbreviated pipeline)
+  SPIKE    → research, investigation, ADR — output is a doc, NEVER code
+             MUST start with: engineering-manager (research pipeline)
+  UI-ONLY  → visual/copy change, no API contract change
+             MUST start with: engineering-manager (design-first pipeline)
+
+engineering-manager is the ONLY entry point. Never route directly to any other agent.
+
+HARD RULES:
+  1. Gate 1D → user must approve Feature Brief before any code is written.
+  2. Gate 3E → tech-lead LGTM required before PR merges.
+  3. Gate 4C → all tests must pass before Phase 5.
+  4. Parallel phases → 1A+1B, 2A+2B, 3A+3B+3C+3D, 4A+4B must run simultaneously.
+&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;REMINDER
+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;exit &lt;/span&gt;0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Hook 2 — &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pre-domain-purity.sh&lt;/code&gt; (PreToolUse — Edit/Write, exit 2 = block)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This is the most aggressive hook — it reads the file path and new content from the tool call JSON and hard-blocks the edit if it finds a Spring, JPA, Hibernate, Lombok, or Jackson import inside any &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;domain/&lt;/code&gt; package. ArchUnit catches violations at build time; this catches them at edit time, before a single character lands on disk:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# .claude/hooks/pre-domain-purity.sh&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Exit 2 = Claude Code cancels the tool call with an error message&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;FORBIDDEN&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;import org.springframework&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;import jakarta.persistence&quot;&lt;/span&gt;
+           &lt;span class=&quot;s2&quot;&gt;&quot;import lombok&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;@Service&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;@Component&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;@Entity&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;@Autowired&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# Only checks .java files inside a domain/ package&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[[&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$FILE_PATH&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;~ /domain/[^/]+&lt;span class=&quot;se&quot;&gt;\.&lt;/span&gt;java&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then
+    for &lt;/span&gt;pattern &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;FORBIDDEN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[@]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do
+        if &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$NEW_CONTENT&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-qF&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$pattern&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then
+            &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;BLOCKED: Domain purity violation — &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$pattern&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Domain classes must be pure Java. Move Spring/JPA to adapter/.&quot;&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;exit &lt;/span&gt;2
+        &lt;span class=&quot;k&quot;&gt;fi
+    done
+fi&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Hook 3 — &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pre-migration-guard.sh&lt;/code&gt; (PreToolUse — Edit, exit 2 = block)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Liquibase migrations are append-only. If Claude attempts to modify an existing &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.yml&lt;/code&gt; migration file, this hook hard-blocks the edit and suggests the correct next sequence number:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# .claude/hooks/pre-migration-guard.sh&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[[&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$FILE_PATH&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;~ /db&lt;span class=&quot;se&quot;&gt;\.&lt;/span&gt;changelog/changes/[^/]+&lt;span class=&quot;se&quot;&gt;\.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;yml|yaml&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then
+    if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[[&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$FILE_PATH&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then
+        &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;NEXT_NUM&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;ls&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;dirname&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$FILE_PATH&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-oE&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&apos;^[0-9]+&apos;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+                   | &lt;span class=&quot;nb&quot;&gt;sort&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;tail&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt; | xargs &lt;span class=&quot;nt&quot;&gt;-I&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;printf&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;%03d&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;$((&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;BLOCKED: Migration file is immutable: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;basename&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$FILE_PATH&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+        &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Create a new file: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;dirname&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$FILE_PATH&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;NEXT_NUM&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;_&amp;lt;description&amp;gt;.yml&quot;&lt;/span&gt;
+        &lt;span class=&quot;nb&quot;&gt;exit &lt;/span&gt;2
+    &lt;span class=&quot;k&quot;&gt;fi
+fi&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Hook 4 — &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;post-edit-lint.sh&lt;/code&gt; (PostToolUse — Edit/Write)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Fires after every TypeScript file edit and runs ESLint auto-fix silently. This keeps the frontend lint-clean without Claude having to think about formatting:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# .claude/hooks/post-edit-lint.sh&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[[&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$FILE_PATH&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;~ &lt;span class=&quot;se&quot;&gt;\.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ts|tsx&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then
+    &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ESLINT_BIN&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;./frontend/node_modules/.bin/eslint&quot;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[[&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ESLINT_BIN&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then
+        &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;frontend &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ESLINT_BIN&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--fix&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$FILE_PATH&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--quiet&lt;/span&gt; 2&amp;gt;/dev/null &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;true
+    &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;fi
+fi&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Hook 5 — &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;verify-app-health.sh&lt;/code&gt; (manual, run at end of every track)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Not a Claude Code hook in the trigger sense — this is a script the engineering-manager is instructed to run after every pipeline track completes. It checks 5 layers in sequence and exits non-zero if any fail:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Layer 1 — Backend compiles        ./gradlew :application:compileJava
+Layer 2 — All tests pass          ./gradlew :application:test
+Layer 3 — Frontend builds clean   npm run build
+Layer 4 — All 3 containers up     docker compose ps
+Layer 5 — API smoke test          curl localhost:8080/api/v1/auth/login (expects 401)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The engineering-manager is instructed: &lt;strong&gt;do not close any request until all 5 layers are green&lt;/strong&gt;. This makes “it works on my machine” impossible — the definition of done is a running application.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-agent-handoff-in-practice&quot;&gt;The Agent Handoff in Practice&lt;/h3&gt;
+
+&lt;p&gt;The magic of the pipeline is that agents communicate through files, not through shared memory or direct calls. This enforces a clean separation: each agent reads only what it needs and writes only what it owns.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-mermaid&quot;&gt;%%{init: {&apos;theme&apos;: &apos;dark&apos;, &apos;themeVariables&apos;: {&apos;primaryColor&apos;: &apos;#313244&apos;, &apos;primaryTextColor&apos;: &apos;#CDD6F4&apos;, &apos;primaryBorderColor&apos;: &apos;#89B4FA&apos;, &apos;lineColor&apos;: &apos;#A6ADC8&apos;, &apos;secondaryColor&apos;: &apos;#1E1E2E&apos;, &apos;background&apos;: &apos;#1E1E2E&apos;, &apos;mainBkg&apos;: &apos;#313244&apos;, &apos;clusterBkg&apos;: &apos;#24243E&apos;, &apos;clusterBorder&apos;: &apos;#45475A&apos;, &apos;titleColor&apos;: &apos;#CDD6F4&apos;, &apos;edgeLabelBackground&apos;: &apos;#1E1E2E&apos;, &apos;fontFamily&apos;: &apos;JetBrains Mono, monospace&apos;, &apos;fontSize&apos;: &apos;15px&apos;}}}%%
+flowchart TD
+    classDef entry   fill:#1A3A2A,stroke:#A6E3A1,color:#A6E3A1
+    classDef orch    fill:#1A2A3A,stroke:#89B4FA,color:#89B4FA
+    classDef gate    fill:#3A1A2A,stroke:#F38BA8,color:#F38BA8
+    classDef analyst fill:#2A2A1A,stroke:#F9E2AF,color:#F9E2AF
+    classDef arch    fill:#1A1A3A,stroke:#89B4FA,color:#89B4FA
+    classDef dev     fill:#2A1A0A,stroke:#FAB387,color:#FAB387
+    classDef design  fill:#2A1A3A,stroke:#CBA6F7,color:#CBA6F7
+    classDef sec     fill:#3A1A1A,stroke:#F38BA8,color:#F38BA8
+    classDef done    fill:#1A3A2A,stroke:#A6E3A1,color:#A6E3A1
+
+    U([&quot;User Prompt&quot;]):::entry --&amp;gt; EM[&quot;engineering-manager&amp;lt;br/&amp;gt;— model: opus —&amp;lt;br/&amp;gt;classifies track · owns delivery&quot;]:::orch
+
+    subgraph P1 [&quot;Phase 1 — Discovery (parallel)&quot;]
+        PFA[&quot;personal-finance-analyst&amp;lt;br/&amp;gt;Domain Brief&quot;]:::analyst
+        TL1[&quot;tech-lead&amp;lt;br/&amp;gt;Architecture Brief&quot;]:::arch
+    end
+
+    EM --&amp;gt;|&quot;spawns in parallel&quot;| PFA
+    EM --&amp;gt;|&quot;spawns in parallel&quot;| TL1
+    PFA --&amp;gt;|&quot;Domain Brief&quot;| EM
+    TL1 --&amp;gt;|&quot;Architecture Brief&quot;| EM
+    EM --&amp;gt;|&quot;synthesises → Feature Brief saved to&amp;lt;br/&amp;gt;agent-memory/engineering-manager/feature-briefs/&quot;| GATE[&quot;🚦 Stakeholder Gate&amp;lt;br/&amp;gt;user approves before any code&quot;]:::gate
+
+    subgraph P2 [&quot;Phase 2 — Implementation (parallel start)&quot;]
+        FSD_B[&quot;full-stack-dev&amp;lt;br/&amp;gt;Backend 2A&quot;]:::dev
+        UXD[&quot;ux-ui-designer&amp;lt;br/&amp;gt;Design Spec 2B&quot;]:::design
+    end
+
+    GATE --&amp;gt;|&quot;approved&quot;| FSD_B
+    GATE --&amp;gt;|&quot;approved&quot;| UXD
+    FSD_B --&amp;gt;|&quot;API contract stable&quot;| FSD_F[&quot;full-stack-dev&amp;lt;br/&amp;gt;Frontend 2C&quot;]:::dev
+
+    subgraph P3 [&quot;Phase 3 — Review (all parallel)&quot;]
+        R1[&quot;tech-lead&amp;lt;br/&amp;gt;Architecture 3A&quot;]:::arch
+        R2[&quot;security-reviewer&amp;lt;br/&amp;gt;Auth + Data 3B&quot;]:::sec
+        R3[&quot;performance-reviewer&amp;lt;br/&amp;gt;N+1 + Indexes 3C&quot;]:::analyst
+        R4[&quot;tech-lead&amp;lt;br/&amp;gt;Dependencies 3D&quot;]:::arch
+    end
+
+    FSD_F --&amp;gt;|&quot;triggers&quot;| R1
+    FSD_F --&amp;gt;|&quot;triggers&quot;| R2
+    FSD_F --&amp;gt;|&quot;triggers&quot;| R3
+    FSD_F --&amp;gt;|&quot;triggers&quot;| R4
+    R1 &amp;amp; R2 &amp;amp; R3 &amp;amp; R4 --&amp;gt;|&quot;all findings consolidated&quot;| LGTM[&quot;🚦 tech-lead LGTM&amp;lt;br/&amp;gt;all blockers resolved&quot;]:::gate
+
+    subgraph P4 [&quot;Phase 4 — QA (parallel)&quot;]
+        QA[&quot;qa-automation-tester&amp;lt;br/&amp;gt;Tests 4A&quot;]:::design
+        UXD2[&quot;ux-ui-designer&amp;lt;br/&amp;gt;a11y Review 4B&quot;]:::design
+    end
+
+    LGTM --&amp;gt; QA
+    LGTM --&amp;gt; UXD2
+    QA &amp;amp; UXD2 --&amp;gt;|&quot;4C gate: all tests green&quot;| DE[&quot;devops-engineer&amp;lt;br/&amp;gt;Deploy + Smoke Test&quot;]:::dev
+    DE --&amp;gt; HEALTH[&quot;✅ verify-app-health.sh&amp;lt;br/&amp;gt;5 layers must pass&quot;]:::done
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The Feature Brief — written by the engineering-manager after Phase 1 — is the single source of truth that all downstream agents read. It is saved to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;agent-memory/engineering-manager/feature-briefs/[feature-name].md&lt;/code&gt; and never discarded, giving the team a complete audit trail of every feature decision.&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;h2 id=&quot;3-engineering-strict-guardrails&quot;&gt;3. Engineering Strict Guardrails&lt;/h2&gt;
+&lt;h2 id=&quot;3-the-9-agent-5-track-pipeline&quot;&gt;3. The 9-Agent, 5-Track Pipeline&lt;/h2&gt;
+
+&lt;p&gt;The project has nine agents and five pipeline tracks. Every request — feature, hotfix, refactor, research, or UI-only change — is first classified into a track by the engineering-manager, which then runs the appropriate pipeline. This prevented ad-hoc “just fix it” shortcuts that would have eroded architecture over time.&lt;/p&gt;
+
+&lt;h3 id=&quot;five-tracks-one-entry-point&quot;&gt;Five Tracks, One Entry Point&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-mermaid&quot;&gt;%%{init: {&apos;theme&apos;: &apos;dark&apos;, &apos;themeVariables&apos;: {&apos;primaryColor&apos;: &apos;#313244&apos;, &apos;primaryTextColor&apos;: &apos;#CDD6F4&apos;, &apos;primaryBorderColor&apos;: &apos;#89B4FA&apos;, &apos;lineColor&apos;: &apos;#A6ADC8&apos;, &apos;secondaryColor&apos;: &apos;#1E1E2E&apos;, &apos;background&apos;: &apos;#1E1E2E&apos;, &apos;mainBkg&apos;: &apos;#313244&apos;, &apos;clusterBkg&apos;: &apos;#24243E&apos;, &apos;clusterBorder&apos;: &apos;#45475A&apos;, &apos;titleColor&apos;: &apos;#CDD6F4&apos;, &apos;edgeLabelBackground&apos;: &apos;#1E1E2E&apos;, &apos;fontFamily&apos;: &apos;JetBrains Mono, monospace&apos;, &apos;fontSize&apos;: &apos;15px&apos;}}}%%
+flowchart TD
+    classDef entry   fill:#1A3A2A,stroke:#A6E3A1,color:#A6E3A1
+    classDef orch    fill:#1A2A3A,stroke:#89B4FA,color:#89B4FA
+    classDef feature fill:#1A3A2A,stroke:#A6E3A1,color:#A6E3A1
+    classDef hotfix  fill:#3A1A1A,stroke:#F38BA8,color:#F38BA8
+    classDef chore   fill:#1A1A3A,stroke:#89B4FA,color:#89B4FA
+    classDef spike   fill:#2A2A1A,stroke:#F9E2AF,color:#F9E2AF
+    classDef ui      fill:#2A1A3A,stroke:#CBA6F7,color:#CBA6F7
+    classDef pipe    fill:#313244,stroke:#45475A,color:#A6ADC8
+
+    U([&quot;Any Request&quot;]):::entry --&amp;gt; EM[&quot;engineering-manager&amp;lt;br/&amp;gt;classifies track&quot;]:::orch
+
+    EM --&amp;gt; T1[&quot;FEATURE&amp;lt;br/&amp;gt;new capability / new endpoint&quot;]:::feature
+    EM --&amp;gt; T2[&quot;HOTFIX&amp;lt;br/&amp;gt;production broken / data at risk&quot;]:::hotfix
+    EM --&amp;gt; T3[&quot;CHORE&amp;lt;br/&amp;gt;refactor / dependency upgrade&quot;]:::chore
+    EM --&amp;gt; T4[&quot;SPIKE&amp;lt;br/&amp;gt;research only → ADR doc, never code&quot;]:::spike
+    EM --&amp;gt; T5[&quot;UI-ONLY&amp;lt;br/&amp;gt;visual change / no API change&quot;]:::ui
+
+    T1 --&amp;gt; FULL[&quot;Full 6-phase pipeline&amp;lt;br/&amp;gt;phases 1→6&quot;]:::pipe
+    T2 --&amp;gt; ACCEL[&quot;Accelerated pipeline&amp;lt;br/&amp;gt;tech-lead diagnose → fix → QA → deploy&quot;]:::pipe
+    T3 --&amp;gt; ABBREV[&quot;Abbreviated pipeline&amp;lt;br/&amp;gt;implement → arch check → regression → deploy&quot;]:::pipe
+    T4 --&amp;gt; SPIKE_OUT[&quot;Investigation only&amp;lt;br/&amp;gt;outputs an ADR, zero code&quot;]:::pipe
+    T5 --&amp;gt; DESIGN[&quot;Design-first pipeline&amp;lt;br/&amp;gt;ux-ui-designer spec → implement → a11y review&quot;]:::pipe
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pipeline-guard.sh&lt;/code&gt; hook injects these routing rules on every single message, so the engineering-manager classification step can never be silently skipped.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-feature-track-six-phases-four-parallel-streams&quot;&gt;The FEATURE Track: Six Phases, Four Parallel Streams&lt;/h3&gt;
+
+&lt;p&gt;A FEATURE request — the most common track — runs through six phases. What makes it genuinely different from sequential AI assistance is &lt;strong&gt;three separate points of parallel execution&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Phase 1 — Discovery (1A + 1B run in parallel)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The engineering-manager spawns &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;personal-finance-analyst&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tech-lead&lt;/code&gt; simultaneously in the same message. They work independently from different angles:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;personal-finance-analyst&lt;/code&gt; reads &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DOMAIN-OWNERSHIP.md&lt;/code&gt; and produces the &lt;strong&gt;Domain Brief&lt;/strong&gt;: numbered acceptance criteria, data model changes, financial edge cases (NUMERIC(19,4) enforcement, sign conventions, soft-delete rules), and validation error codes.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tech-lead&lt;/code&gt; reads &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;architecture-decisions.md&lt;/code&gt; and produces the &lt;strong&gt;Architecture Brief&lt;/strong&gt;: bounded contexts affected, exact port interface method signatures, Liquibase migration strategy, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@Transactional&lt;/code&gt; placement, N+1 risks, and a dependency graph for implementation order.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;After both complete, the engineering-manager runs Phase 1C: it synthesises both outputs into a single &lt;strong&gt;Feature Brief&lt;/strong&gt; and saves it to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;agent-memory/engineering-manager/feature-briefs/[feature-name].md&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Then comes &lt;strong&gt;Phase 1D — the Stakeholder Gate&lt;/strong&gt;: the engineering-manager presents the Feature Brief to the user and explicitly asks: &lt;em&gt;Are the acceptance criteria complete? Is the scope right? Any compliance concerns?&lt;/em&gt; No code is written until the user approves. This is the cheapest point in the pipeline to catch scope problems.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Phase 2 — Implementation (2A + 2B run in parallel)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Once approved, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;full-stack-dev&lt;/code&gt; (backend, Phase 2A) and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ux-ui-designer&lt;/code&gt; (design spec, Phase 2B) start simultaneously. The full-stack-dev implements the backend in strict dependency order — DB migration → domain model → ports → domain service → JPA entity/mapper → persistence adapter → REST controller → Config wiring — and only after the API contract is stable does Phase 2C begin: the full-stack-dev implements the frontend using the design spec from 2B.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Phase 3 — Review (3A + 3B + 3C + 3D run in parallel)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;All four review streams fire simultaneously the moment Phase 2C is complete:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Stream&lt;/th&gt;
+      &lt;th&gt;Agent&lt;/th&gt;
+      &lt;th&gt;Checks&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;3A — Architecture&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tech-lead&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;Hexagonal boundary violations, @Service on domain, @Entity on domain models&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;3B — Security&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;security-reviewer&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;Auth token on every endpoint, cross-user 404 not 403, no financial data in logs&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;3C — Performance&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;performance-reviewer&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;N+1 queries, missing DB indexes, unbounded list queries, bundle size&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;3D — Dependencies&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tech-lead&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;CVEs, licence compatibility, justified new packages&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;All hard blockers from all four streams must be fixed before the Phase 3E LGTM — the tech-lead’s explicit merge approval.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Phases 4, 5, 6 — QA, Docs, Deploy&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Phase 4 runs &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;qa-automation-tester&lt;/code&gt; (domain unit tests + MockMvc controller integration tests) and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ux-ui-designer&lt;/code&gt; (WCAG 2.1 AA + 375px mobile review) in parallel. Phase 5 writes OpenAPI spec updates, CHANGELOG entry, and any new ADRs. Phase 6 runs &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;devops-engineer&lt;/code&gt; for the deploy, followed by the mandatory &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;verify-app-health.sh&lt;/code&gt; five-layer check.&lt;/p&gt;
+
+&lt;h3 id=&quot;what-each-agent-owns&quot;&gt;What Each Agent Owns&lt;/h3&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Agent&lt;/th&gt;
+      &lt;th&gt;Model&lt;/th&gt;
+      &lt;th&gt;Primary Responsibility&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;engineering-manager&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;Opus&lt;/td&gt;
+      &lt;td&gt;Track classification, Feature Brief synthesis, stakeholder gates, pipeline ownership&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;personal-finance-analyst&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;Sonnet&lt;/td&gt;
+      &lt;td&gt;Domain rules, acceptance criteria, financial edge cases, data integrity&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tech-lead&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;Sonnet&lt;/td&gt;
+      &lt;td&gt;Architecture brief, 3A/3D review, Phase 3E LGTM, ADRs&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;full-stack-dev&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;Sonnet&lt;/td&gt;
+      &lt;td&gt;Backend + frontend implementation (2A, 2C), bug fixes&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ux-ui-designer&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;Sonnet&lt;/td&gt;
+      &lt;td&gt;Design spec (2B), WCAG 2.1 AA + mobile review (4B)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;qa-automation-tester&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;Sonnet&lt;/td&gt;
+      &lt;td&gt;Domain unit tests, MockMvc integration tests, coverage gates&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;security-reviewer&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;Sonnet&lt;/td&gt;
+      &lt;td&gt;Auth gaps, data exposure, injection risks (3B)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;performance-reviewer&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;Sonnet&lt;/td&gt;
+      &lt;td&gt;N+1 queries, missing indexes, bundle size (3C)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;devops-engineer&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;Sonnet&lt;/td&gt;
+      &lt;td&gt;Docker, GitHub Actions, deploy, smoke test (Phase 6)&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;4-engineering-strict-guardrails&quot;&gt;4. Engineering Strict Guardrails&lt;/h2&gt;
 
 &lt;p&gt;To ensure the CLI didn’t drift as the conversation grew, I enforced architectural purity with &lt;strong&gt;hard automated constraints&lt;/strong&gt; rather than hoping Claude would follow instructions.&lt;/p&gt;
 
@@ -1377,6 +2627,36 @@ solution-planner (Orchestrator)
                 &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;resideInAnyPackage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;org.springframework..&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;jakarta.persistence..&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;lombok..&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
                 &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;as&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Domain classes must not depend on Spring, JPA, Jackson, or Lombok&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The ArchUnit rule enforces the following layer boundary at build time:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-mermaid&quot;&gt;%%{init: {&apos;theme&apos;: &apos;dark&apos;, &apos;themeVariables&apos;: {&apos;primaryColor&apos;: &apos;#313244&apos;, &apos;primaryTextColor&apos;: &apos;#CDD6F4&apos;, &apos;primaryBorderColor&apos;: &apos;#89B4FA&apos;, &apos;lineColor&apos;: &apos;#A6ADC8&apos;, &apos;secondaryColor&apos;: &apos;#1E1E2E&apos;, &apos;background&apos;: &apos;#1E1E2E&apos;, &apos;mainBkg&apos;: &apos;#313244&apos;, &apos;clusterBkg&apos;: &apos;#24243E&apos;, &apos;clusterBorder&apos;: &apos;#45475A&apos;, &apos;titleColor&apos;: &apos;#CDD6F4&apos;, &apos;edgeLabelBackground&apos;: &apos;#1E1E2E&apos;, &apos;fontFamily&apos;: &apos;JetBrains Mono, monospace&apos;, &apos;fontSize&apos;: &apos;15px&apos;}}}%%
+graph LR
+    classDef adapter fill:#2A1A0A,stroke:#FAB387,color:#FAB387
+    classDef port    fill:#1A2A3A,stroke:#89B4FA,color:#89B4FA
+    classDef domain  fill:#1A3A2A,stroke:#A6E3A1,color:#A6E3A1
+
+    subgraph ADAPT[&quot;Adapters — Infrastructure&quot;]
+        REST[&quot;REST Controller&quot;]:::adapter
+        JPA[&quot;JPA Adapter&quot;]:::adapter
+        EVT[&quot;Event Publisher&quot;]:::adapter
+    end
+    subgraph PORTS[&quot;Ports — Boundary Interfaces&quot;]
+        IN[&quot;AccountCommandPort&amp;lt;br/&amp;gt;Inbound&quot;]:::port
+        OP1[&quot;AccountPersistencePort&amp;lt;br/&amp;gt;Outbound&quot;]:::port
+        OP2[&quot;AccountEventPublisherPort&amp;lt;br/&amp;gt;Outbound&quot;]:::port
+    end
+    subgraph DOM[&quot;Domain — Pure Java · No Spring · No JPA&quot;]
+        SVC[&quot;AccountCommandService&quot;]:::domain
+    end
+
+    REST --&amp;gt;|&quot;HTTP call&quot;| IN
+    IN --&amp;gt; SVC
+    SVC --&amp;gt; OP1
+    SVC --&amp;gt; OP2
+    OP1 -.-&amp;gt;|&quot;implements&quot;| JPA
+    OP2 -.-&amp;gt;|&quot;implements&quot;| EVT
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h3 id=&quot;guardrail-b-clean-wiring-without-framework-pollution&quot;&gt;Guardrail B: Clean Wiring Without Framework Pollution&lt;/h3&gt;
 
@@ -1422,9 +2702,32 @@ solution-planner (Orchestrator)
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
+&lt;p&gt;No direct class import crosses the context boundary. The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;budget&lt;/code&gt; module only knows the port interface — the adapter that fulfils it lives entirely inside the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;transaction&lt;/code&gt; module:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-mermaid&quot;&gt;%%{init: {&apos;theme&apos;: &apos;dark&apos;, &apos;themeVariables&apos;: {&apos;primaryColor&apos;: &apos;#313244&apos;, &apos;primaryTextColor&apos;: &apos;#CDD6F4&apos;, &apos;primaryBorderColor&apos;: &apos;#89B4FA&apos;, &apos;lineColor&apos;: &apos;#A6ADC8&apos;, &apos;secondaryColor&apos;: &apos;#1E1E2E&apos;, &apos;background&apos;: &apos;#1E1E2E&apos;, &apos;mainBkg&apos;: &apos;#313244&apos;, &apos;clusterBkg&apos;: &apos;#24243E&apos;, &apos;clusterBorder&apos;: &apos;#45475A&apos;, &apos;titleColor&apos;: &apos;#CDD6F4&apos;, &apos;edgeLabelBackground&apos;: &apos;#1E1E2E&apos;, &apos;fontFamily&apos;: &apos;JetBrains Mono, monospace&apos;, &apos;fontSize&apos;: &apos;15px&apos;}}}%%
+flowchart LR
+    classDef domain fill:#1A3A2A,stroke:#A6E3A1,color:#A6E3A1
+    classDef port   fill:#1A2A3A,stroke:#89B4FA,color:#89B4FA
+    classDef adapt  fill:#2A1A0A,stroke:#FAB387,color:#FAB387
+    classDef store  fill:#2A2A1A,stroke:#F9E2AF,color:#F9E2AF
+
+    subgraph BC1[&quot;budget context&quot;]
+        BQS[&quot;BudgetQueryService&quot;]:::domain
+        TSP[&quot;TransactionSummaryPort&amp;lt;br/&amp;gt;«outbound interface»&quot;]:::port
+    end
+    subgraph BC2[&quot;transaction context&quot;]
+        TSA[&quot;TransactionSummaryAdapter&amp;lt;br/&amp;gt;«implements port»&quot;]:::adapt
+        TR[(&quot;TransactionRepository&quot;)]:::store
+    end
+
+    BQS --&amp;gt; TSP
+    TSP -.-&amp;gt;|&quot;implemented by&quot;| TSA
+    TSA --&amp;gt; TR
+&lt;/code&gt;&lt;/pre&gt;
+
 &lt;hr /&gt;
 
-&lt;h2 id=&quot;4-feature-spotlight-dynamic-budget-aggregation&quot;&gt;4. Feature Spotlight: Dynamic Budget Aggregation&lt;/h2&gt;
+&lt;h2 id=&quot;5-feature-spotlight-dynamic-budget-aggregation&quot;&gt;5. Feature Spotlight: Dynamic Budget Aggregation&lt;/h2&gt;
 
 &lt;p&gt;&lt;strong&gt;The Challenge:&lt;/strong&gt; Storing a physical &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;spentAmount&lt;/code&gt; column on a Budget table is a classic beginner mistake — if you delete a transaction from 3 weeks ago, the budget’s &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;spentAmount&lt;/code&gt; goes out of sync.&lt;/p&gt;
 
@@ -2194,95 +3497,4 @@ BUILD SUCCESSFUL &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;3s
 
 &lt;h2 id=&quot;key-takeaway&quot;&gt;Key Takeaway&lt;/h2&gt;
 
-&lt;p&gt;Virtual threads don’t replace platform threads — they complement them. For the vast majority of server-side Java applications that spend most time waiting on I/O, virtual threads offer a dramatic scalability improvement with minimal code changes. Project Loom effectively brings the simplicity of synchronous code to the scale of asynchronous systems.&lt;/p&gt;</content><author><name>Shanmuga Sundaram Natarajan (Shan)</name></author><category term="engineering" /><category term="java" /><category term="java" /><category term="concurrency" /><category term="virtual-threads" /><category term="project-loom" /><category term="performance" /><summary type="html"></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://shanmuga-sundaram-n.github.io/assets/images/blog/java-virtual-threads.jpg" /><media:content medium="image" url="https://shanmuga-sundaram-n.github.io/assets/images/blog/java-virtual-threads.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Why is Kafka So Fast? Unveiling the Secrets Behind Kafka’s Speed</title><link href="https://shanmuga-sundaram-n.github.io/blog/2024/10/17/why-kafka-is-so-fast/" rel="alternate" type="text/html" title="Why is Kafka So Fast? Unveiling the Secrets Behind Kafka’s Speed" /><published>2024-10-17T17:30:00+05:30</published><updated>2024-10-17T17:30:00+05:30</updated><id>https://shanmuga-sundaram-n.github.io/blog/2024/10/17/why-kafka-is-so-fast</id><content type="html" xml:base="https://shanmuga-sundaram-n.github.io/blog/2024/10/17/why-kafka-is-so-fast/">&lt;p&gt;&lt;img src=&quot;/assets/images/blog/kafka-speed.jpg&quot; alt=&quot;Why is Kafka So Fast?&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Apache Kafka is renowned for its extraordinary throughput and low latency. But what actually makes it so fast? The answer lies in a combination of deliberate engineering decisions that work together to minimize overhead at every layer.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;1-sequential-io-optimizing-disk-access&quot;&gt;1. Sequential I/O: Optimizing Disk Access&lt;/h2&gt;
-
-&lt;p&gt;Kafka employs an &lt;strong&gt;append-only log&lt;/strong&gt; architecture that leverages sequential rather than random disk access. Messages are written in the order they arrive and stored sequentially — data is continuously appended to the end of the log file.&lt;/p&gt;
-
-&lt;p&gt;This approach minimizes seek time on mechanical drives. When handling thousands of messages per second from IoT sensors, each new entry simply gets added to the log’s end, avoiding the expensive physical movement of disk read/write heads.&lt;/p&gt;
-
-&lt;p&gt;Sequential reads and writes are orders of magnitude faster than random access — Kafka exploits this at the core of its storage design.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;2-zero-copy-principle-efficient-data-transfer&quot;&gt;2. Zero-Copy Principle: Efficient Data Transfer&lt;/h2&gt;
-
-&lt;p&gt;Traditionally, transferring data from disk to network involves multiple copies through kernel and user-space buffers. Kafka bypasses this with &lt;strong&gt;zero-copy&lt;/strong&gt; using system calls like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sendfile()&lt;/code&gt; on Linux.&lt;/p&gt;
-
-&lt;p&gt;This technique instructs the kernel to move data directly from the disk buffer to the network socket buffer — eliminating unnecessary intermediate copies, reducing CPU overhead, and maximizing delivery throughput.&lt;/p&gt;
-
-&lt;p&gt;The practical benefit: transferring a 1 GB batch of logs bypasses the costly round-trip through user space entirely.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;3-message-compression-reducing-transmission-size&quot;&gt;3. Message Compression: Reducing Transmission Size&lt;/h2&gt;
-
-&lt;p&gt;Kafka supports compression algorithms including &lt;strong&gt;GZIP, Snappy, and LZ4&lt;/strong&gt; at the producer level. Compression is applied to message batches before transmission, then decompressed by consumers.&lt;/p&gt;
-
-&lt;p&gt;This is particularly valuable when handling repetitive data like application logs, where compression ratios can be significant — reducing both network bandwidth and storage requirements.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;4-message-batching-efficient-processing&quot;&gt;4. Message Batching: Efficient Processing&lt;/h2&gt;
-
-&lt;p&gt;Rather than handling individual messages one at a time, Kafka groups multiple messages into &lt;strong&gt;batches&lt;/strong&gt; before disk writes or network transmission. Grouping 100 metrics into a single batch:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Reduces the number of I/O operations&lt;/li&gt;
-  &lt;li&gt;Decreases network round-trips&lt;/li&gt;
-  &lt;li&gt;Lowers broker CPU load&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;This amortises the fixed overhead of each operation across many messages, dramatically improving throughput.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;5-efficient-memory-management-and-caching&quot;&gt;5. Efficient Memory Management and Caching&lt;/h2&gt;
-
-&lt;p&gt;Kafka maintains &lt;strong&gt;in-memory indexes&lt;/strong&gt; and leverages the OS page cache for recently accessed log segments. This enables rapid message retrieval without frequent disk reads — particularly when consumers request recently produced messages, which are almost always already in the page cache.&lt;/p&gt;
-
-&lt;p&gt;Kafka intentionally relies on the OS page cache rather than implementing its own heap-based caching, keeping JVM garbage collection pressure low.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;key-takeaway&quot;&gt;Key Takeaway&lt;/h2&gt;
-
-&lt;p&gt;Kafka’s performance is not the result of a single trick — it’s a comprehensive engineering approach:&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Technique&lt;/th&gt;
-      &lt;th&gt;Benefit&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Sequential I/O&lt;/td&gt;
-      &lt;td&gt;Eliminates random disk seek time&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Zero-copy&lt;/td&gt;
-      &lt;td&gt;Removes redundant data copies&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Compression&lt;/td&gt;
-      &lt;td&gt;Reduces bandwidth and storage&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Batching&lt;/td&gt;
-      &lt;td&gt;Amortises I/O overhead across messages&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Page cache&lt;/td&gt;
-      &lt;td&gt;Fast reads without disk access&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;Together, these decisions make Kafka capable of handling millions of messages per second with consistently low latency — a system designed from the ground up for high-throughput streaming.&lt;/p&gt;</content><author><name>Shanmuga Sundaram Natarajan (Shan)</name></author><category term="engineering" /><category term="distributed-systems" /><category term="kafka" /><category term="performance" /><category term="distributed-systems" /><category term="streaming" /><category term="backend" /><summary type="html"></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://shanmuga-sundaram-n.github.io/assets/images/blog/kafka-speed.jpg" /><media:content medium="image" url="https://shanmuga-sundaram-n.github.io/assets/images/blog/kafka-speed.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry></feed>
+&lt;p&gt;Virtual threads don’t replace platform threads — they complement them. For the vast majority of server-side Java applications that spend most time waiting on I/O, virtual threads offer a dramatic scalability improvement with minimal code changes. Project Loom effectively brings the simplicity of synchronous code to the scale of asynchronous systems.&lt;/p&gt;</content><author><name>Shanmuga Sundaram Natarajan (Shan)</name></author><category term="engineering" /><category term="java" /><category term="java" /><category term="concurrency" /><category term="virtual-threads" /><category term="project-loom" /><category term="performance" /><summary type="html"></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://shanmuga-sundaram-n.github.io/assets/images/blog/java-virtual-threads.jpg" /><media:content medium="image" url="https://shanmuga-sundaram-n.github.io/assets/images/blog/java-virtual-threads.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry></feed>

@@ -1,4 +1,48 @@
+- title: "SDLC Factory: Autonomous Software Delivery with AI Agents"
+  date: "2026-06-06"
+  opensource: true
+  description: "An autonomous multi-agent pipeline that transforms plain-English product ideas into production-ready software through 10 specialized AI agents, enforced JSON artifact contracts, parallel dev threads, a QA auto-fix loop, and human-in-the-loop governance gates. Built with Python, FastAPI, and SQLite."
+  image: "/assets/images/projects/sdlc-factory-pipeline.png"
+  github: "https://github.com/shanmuga-sundaram-n/sdlc-factory"
+  blog: "/blog/2026/06/06/sdlc-factory-autonomous-multi-agent-pipeline/"
+  technologies:
+    - Multi-Agent AI
+    - Python
+    - FastAPI
+    - SQLite
+    - Claude
+    - Agentic AI
+    - DevOps
+
+- title: "Portfolio Website"
+  date: "2026-05-01"
+  description: "Modern, responsive personal portfolio website built with Jekyll and hosted on GitHub Pages. Features custom CSS theming, dark/light mode, multi-agent blog content, and a full-text search powered by Fuse.js."
+  image: "/assets/images/projects/portfolio.png"
+  github: "https://github.com/shanmuga-sundaram-n/shanmuga-sundaram-n.github.io"
+  technologies:
+    - Jekyll
+    - SCSS
+    - GitHub Pages
+    - Responsive Design
+    - Fuse.js
+
+- title: "Personal Finance Tracker"
+  date: "2026-03-20"
+  description: "Production-ready full-stack finance app built entirely via Claude Code CLI using a 7-agent spec-driven pipeline. Features Hexagonal Architecture, double-entry accounting, dynamic budget aggregation, and WCAG 2.1 AA compliance — built without any UI MCP tools."
+  image: "/assets/images/projects/personal-finance-tracker.webp"
+  github: "https://github.com/shanmuga-sundaram-n/personal-finance-tracker"
+  blog: "/blog/2026/03/20/zero-vibe-coding-finance-tracker/"
+  technologies:
+    - Claude Code
+    - Multi-Agent AI
+    - Spring Boot
+    - React
+    - PostgreSQL
+    - Hexagonal Architecture
+    - Java
+
 - title: "AutoClassifier: AI-Powered Car Identification"
+  date: "2024-06-01"
   description: "Deep learning-based car identification model using computer vision for automotive surveillance. Processes 16,185 images across 196 car classes, classifying cars by make, model, and year using CNNs and RCNN for precise vehicle detection and localization."
   image: "/assets/images/projects/autoclassifier.png"
   technologies:
@@ -10,6 +54,7 @@
     - MobileNetV2
 
 - title: "Support Ticket Categorization"
+  date: "2024-05-01"
   description: "NLP-based machine learning model using transformers for automatic support ticket classification. Accurately predicts ticket categories, assigns priorities, and estimates resolution times through advanced text classification and prompt engineering."
   image: "/assets/images/projects/support-ticket.png"
   technologies:
@@ -20,6 +65,7 @@
     - Machine Learning
 
 - title: "Advanced Computer Vision: Face Detection & Recognition"
+  date: "2024-04-01"
   description: "Real-time face detection and recognition system for broadcast environments using CNNs. Implements triplet loss and Siamese networks for crew member identification in video streams, enhancing security and personalization."
   image: "/assets/images/projects/face-recognition.png"
   technologies:
@@ -30,6 +76,7 @@
     - Real-time Processing
 
 - title: "Customer Churn Prediction"
+  date: "2024-03-01"
   description: "Ensemble learning model for predicting customer churn in telecom industry. Combines random forests and XGBoost to achieve high prediction accuracy, supporting customer retention strategies through advanced predictive analytics."
   image: "/assets/images/projects/churn-prediction.png"
   technologies:
@@ -40,6 +87,7 @@
     - Classification
 
 - title: "Manufacturing Yield Prediction"
+  date: "2024-02-01"
   description: "Predictive model for semiconductor manufacturing yield optimization. Employs PCA for feature engineering and grid search for model tuning to identify factors affecting production yield and reduce operational costs."
   image: "/assets/images/projects/yield-prediction.png"
   technologies:
@@ -50,6 +98,7 @@
     - Regression
 
 - title: "Neural Networks for Predictive Modeling"
+  date: "2024-01-01"
   description: "Dual-purpose neural network project: regression model for signal quality prediction and image classifier for street-level photography. Focuses on optimization techniques, overfitting prevention, and hyperparameter tuning."
   image: "/assets/images/projects/neural-networks.png"
   technologies:
@@ -60,6 +109,7 @@
     - Deep Learning
 
 - title: "Unsupervised Learning: Vehicle Clustering"
+  date: "2023-12-01"
   description: "Clustering and classification system for vehicle segmentation based on fuel consumption and silhouette analysis. Utilizes K-means clustering and SVM to discover hidden patterns in unlabeled automotive data."
   image: "/assets/images/projects/vehicle-clustering.png"
   technologies:
@@ -70,6 +120,7 @@
     - Pattern Recognition
 
 - title: "Healthcare & Marketing Predictive Models"
+  date: "2023-11-01"
   description: "Supervised learning models for healthcare patient condition prediction and marketing customer conversion. Handles imbalanced datasets using logistic regression and SVM for accurate classification in critical domains."
   image: "/assets/images/projects/healthcare-marketing.png"
   technologies:
@@ -80,6 +131,7 @@
     - Imbalanced Data
 
 - title: "New Wheels: SQL & Data Visualization"
+  date: "2023-10-01"
   description: "Business analytics case study analyzing sales data to address declining revenue. Uses SQL queries, aggregation, and visualization to generate actionable insights for customer retention and product optimization strategies."
   image: "/assets/images/projects/new-wheels.png"
   technologies:
@@ -90,6 +142,7 @@
     - Decision Support
 
 - title: "Applied Statistics for Decision-Making"
+  date: "2023-09-01"
   description: "Statistical analysis project applying hypothesis testing, data visualization, and statistical inference to industry problems. Analyzes sports tournaments and startup success rates to provide strategic investment insights."
   image: "/assets/images/projects/statistics.png"
   technologies:
@@ -98,26 +151,3 @@
     - Data Visualization
     - Statistical Inference
     - Business Intelligence
-
-- title: "Personal Finance Tracker"
-  description: "Production-ready full-stack finance app built entirely via Claude Code CLI using a 7-agent spec-driven pipeline. Features Hexagonal Architecture, double-entry accounting, dynamic budget aggregation, and WCAG 2.1 AA compliance — built without any UI MCP tools."
-  image: "/assets/images/projects/personal-finance-tracker.webp"
-  github: "https://github.com/shanmuga-sundaram-n/personal-finance-tracker"
-  technologies:
-    - Claude Code
-    - Multi-Agent AI
-    - Spring Boot
-    - React
-    - PostgreSQL
-    - Hexagonal Architecture
-    - Java
-
-- title: "Portfolio Website"
-  description: "Modern, responsive personal portfolio website built with Jekyll and hosted on GitHub Pages. Features a clean design with blog integration."
-  image: "/assets/images/projects/portfolio.png"
-  technologies:
-    - Jekyll
-    - SCSS
-    - GitHub Pages
-    - Responsive Design
-

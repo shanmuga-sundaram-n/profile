@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en" data-mode="dark" data-theme="orange-red">
+
+<head>
+  <meta charset="UTF-8">
+
+  <!-- ⚡ Anti-FOUC: read theme from localStorage and apply BEFORE any render -->
+  <script>
+    (function () {
+      var mode = localStorage.getItem('site-mode') || 'dark';
+      var html = document.documentElement;
+      html.setAttribute('data-mode', mode);
+      html.setAttribute('data-theme', 'orange-red');
+      // Suppress transition animations on first paint
+      html.classList.add('no-transitions');
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Open+Sans:wght@300;400;600;700&family=Raleway:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <title>SDLC Factory: Autonomous Software Delivery with AI Agents | Shanmuga Sundaram Natarajan's Personal Website</title>
+
+  <!-- SEO Meta Tags -->
+  <meta name="description"
+    content="A deep technical walkthrough of SDLC Factory — an autonomous AI pipeline that transforms plain-English product ideas into production-ready software through 10 specialized agents, structured artifact contracts, and human-in-the-loop governance gates.">
+  <meta name="author" content="Shanmuga Sundaram Natarajan (Shan)">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="SDLC Factory: Autonomous Software Delivery with AI Agents">
+  <meta property="og:description"
+    content="A deep technical walkthrough of SDLC Factory — an autonomous AI pipeline that transforms plain-English product ideas into production-ready software through 10 specialized agents, structured artifact contracts, and human-in-the-loop governance gates.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://shanmuga-sundaram-n.github.io/blog/2026/06/06/sdlc-factory-autonomous-multi-agent-pipeline/">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SDLC Factory: Autonomous Software Delivery with AI Agents">
+  <meta name="twitter:description"
+    content="A deep technical walkthrough of SDLC Factory — an autonomous AI pipeline that transforms plain-English product ideas into production-ready software through 10 specialized agents, structured artifact contracts, and human-in-the-loop governance gates.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/assets/images/projects/website-logo-matched.png">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/theme-switcher.css">
+
+  <!-- Remove no-transitions class after first paint so user interactions animate normally -->
+  <script>
+    window.addEventListener('load', function () {
+      document.documentElement.classList.remove('no-transitions');
+    });
+  </script>
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>SDLC Factory: Autonomous Software Delivery with AI Agents | Shanmuga Sundaram Natarajan’s Personal Website</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="SDLC Factory: Autonomous Software Delivery with AI Agents" />
+<meta name="author" content="Shanmuga Sundaram Natarajan (Shan)" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A deep technical walkthrough of SDLC Factory — an autonomous AI pipeline that transforms plain-English product ideas into production-ready software through 10 specialized agents, structured artifact contracts, and human-in-the-loop governance gates." />
+<meta property="og:description" content="A deep technical walkthrough of SDLC Factory — an autonomous AI pipeline that transforms plain-English product ideas into production-ready software through 10 specialized agents, structured artifact contracts, and human-in-the-loop governance gates." />
+<link rel="canonical" href="https://shanmuga-sundaram-n.github.io/blog/2026/06/06/sdlc-factory-autonomous-multi-agent-pipeline/" />
+<meta property="og:url" content="https://shanmuga-sundaram-n.github.io/blog/2026/06/06/sdlc-factory-autonomous-multi-agent-pipeline/" />
+<meta property="og:site_name" content="Shanmuga Sundaram Natarajan’s Personal Website" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-06-06T14:30:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="SDLC Factory: Autonomous Software Delivery with AI Agents" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Shanmuga Sundaram Natarajan (Shan)"},"dateModified":"2026-06-06T14:30:00+05:30","datePublished":"2026-06-06T14:30:00+05:30","description":"A deep technical walkthrough of SDLC Factory — an autonomous AI pipeline that transforms plain-English product ideas into production-ready software through 10 specialized agents, structured artifact contracts, and human-in-the-loop governance gates.","headline":"SDLC Factory: Autonomous Software Delivery with AI Agents","mainEntityOfPage":{"@type":"WebPage","@id":"https://shanmuga-sundaram-n.github.io/blog/2026/06/06/sdlc-factory-autonomous-multi-agent-pipeline/"},"url":"https://shanmuga-sundaram-n.github.io/blog/2026/06/06/sdlc-factory-autonomous-multi-agent-pipeline/"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="site-header" id="header">
+    <nav class="site-nav container">
+      <a href="/" class="site-logo">
+        <img src="/assets/images/projects/website-logo-matched.png" alt="Shanmuga Sundaram Natarajan (Shan)"
+          class="logo-img">
+        <span class="logo-text">Shan's Digital Space</span>
+      </a>
+
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+
+
+      <!-- Theme toggle rendered inline — avoids JS-injection flicker -->
+      <div id="modeToggleContainer">
+        <button class="site-search-btn" id="site-search-btn" aria-label="Search site (Ctrl+K)" title="Search (⌘K)">
+          <i class="fas fa-search"></i>
+        </button>
+        <label class="mode-switch" aria-label="Toggle dark/light mode">
+          <input type="checkbox" id="modeToggle">
+          <span class="mode-slider">
+            <i class="fas fa-sun mode-icon-sun"></i>
+            <i class="fas fa-moon mode-icon-moon"></i>
+          </span>
+        </label>
+      </div>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/" class="nav-link ">Home</a></li>
+        <li><a href="/about/"
+            class="nav-link ">About</a></li>
+        <li><a href="/projects/"
+            class="nav-link ">Projects</a></li>
+        <li><a href="/blog/"
+            class="nav-link active">Blog</a></li>
+        <li><a href="/contact/"
+            class="nav-link ">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <article class="section" style="padding-top: calc(var(--space-2xl) + 80px);">
+    <div class="container">
+        <div class="card" style="padding: var(--space-2xl); overflow: visible;">
+
+            <div class="post-meta" style="margin-bottom: var(--space-md);">
+                <span><i class="far fa-calendar"></i> June 06, 2026</span>
+                
+                <span><i class="fas fa-folder"></i> ai, engineering, agents</span>
+                
+            </div>
+
+            <h1 style="font-size: var(--font-size-4xl); margin-bottom: var(--space-xl); background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1.3;">SDLC Factory: Autonomous Software Delivery with AI Agents</h1>
+
+            <div class="post-content">
+                <p>Software delivery has a translation problem. An idea starts clear in someone’s head, gets degraded through six rounds of meetings, three Confluence pages, a Jira backlog nobody reads, and ends up as code that solves last quarter’s version of the problem. Even when teams work well together, the handoffs between product, architecture, development, and QA introduce latency and information loss at every boundary.</p>
+
+<p>I spent the last few months building something to attack this problem head-on: <strong>SDLC Factory</strong> — an autonomous multi-agent system that takes a plain-English product idea and drives it through a full software delivery pipeline using 10 specialized AI agents, enforced artifact contracts between every stage, and human approval gates where it actually matters.</p>
+
+<p>This isn’t a wrapper around a chatbot. It’s a structured pipeline with real engineering discipline baked in — parallel development threads, a QA auto-fix loop, context compression for long conversations, prompt injection scanning, multi-tenant isolation, and a cost tracker. This post walks through how I built it, the design decisions that mattered, and the things I got wrong the first time.</p>
+
+<hr />
+
+<h2 id="the-problem-with-existing-agentic-approaches">The Problem With Existing Agentic Approaches</h2>
+
+<p>Most “AI coding agents” today are either:</p>
+
+<ol>
+  <li><strong>Single-agent loops</strong> — one model doing everything: requirements, design, code, tests. It loses track of what it decided three pages ago and produces code that doesn’t match its own spec.</li>
+  <li><strong>Unstructured multi-agent systems</strong> — agents that can spawn sub-agents freely, pass arbitrary messages, and coordinate through natural language. Sounds powerful; in practice, the coordination overhead eats the gains and debugging is a nightmare.</li>
+</ol>
+
+<p>Neither of these enforces that <em>the output of one stage is a valid input to the next</em>. Requirements drift from architecture. Architecture drifts from code. There’s no contract.</p>
+
+<p>SDLC Factory enforces contracts. Every stage produces a JSON artifact validated against a schema. The next stage gets only what it needs from prior stages — no raw conversation history, no hallucinated context. Structured handoffs, like real engineering.</p>
+
+<hr />
+
+<h2 id="system-architecture-the-full-layer-map">System Architecture: The Full Layer Map</h2>
+
+<p>Before diving into individual components, here’s how the whole system fits together:</p>
+
+<pre><code class="language-mermaid">%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#313244', 'primaryTextColor': '#CDD6F4', 'primaryBorderColor': '#89B4FA', 'lineColor': '#A6ADC8', 'secondaryColor': '#1E1E2E', 'background': '#1E1E2E', 'mainBkg': '#313244', 'clusterBkg': '#24243E', 'clusterBorder': '#45475A', 'titleColor': '#CDD6F4', 'edgeLabelBackground': '#1E1E2E', 'fontFamily': 'JetBrains Mono, monospace', 'fontSize': '13px'}}}%%
+flowchart TB
+    classDef entry  fill:#1A3A2A,stroke:#A6E3A1,color:#A6E3A1
+    classDef orch   fill:#1A2A3A,stroke:#89B4FA,color:#89B4FA
+    classDef agent  fill:#2A1A3A,stroke:#CBA6F7,color:#CBA6F7
+    classDef tool   fill:#3A2A1A,stroke:#FAB387,color:#FAB387
+    classDef mem    fill:#3A1A2A,stroke:#F38BA8,color:#F38BA8
+    classDef db     fill:#2A3A1A,stroke:#A6E3A1,color:#A6E3A1
+    classDef gw     fill:#1A3A3A,stroke:#94E2D5,color:#94E2D5
+    classDef tel    fill:#3A3A1A,stroke:#F9E2AF,color:#F9E2AF
+
+    subgraph Entry["Entry Points"]
+        CLI["CLI · sdlc.py"]:::entry
+        API["Web API · FastAPI"]:::entry
+        WH["Webhook · HITL callback"]:::entry
+        QUE["Programmatic · ApprovalQueue"]:::entry
+    end
+
+    subgraph Orch["Pipeline Orchestrator  core/pipeline.py"]
+        SM["Stage machine · artifact routing\ngate evaluation · checkpoint/resume\nasync disk writer"]:::orch
+    end
+
+    subgraph AgentL["Agent Layer  agents/"]
+        BASE["BaseSDLCAgent subclasses per role\nSKILL.md system prompt · scoped toolset\nartifact producer · iteration budget"]:::agent
+    end
+
+    subgraph Runtime["Agent Runtime  core/agent_runtime.py"]
+        LOOP["Model call loop · tool dispatch\ncontext compression · OTel spans"]:::orch
+    end
+
+    subgraph Tools["Tool Pipeline  tools/"]
+        TR["Self-registering modules\nTTL-cached availability checks\nfile · terminal · pytest · docker · github · kanban"]:::tool
+    end
+
+    subgraph Mem["Shared Memory  core/memory.py"]
+        PM["Tier 1: ProjectMemory\nTier 2: ArtifactBundle\nTier 3: Kanban Blackboard\nStreamingContextScrubber\nPrompt injection scanner"]:::mem
+    end
+
+    subgraph DB["Persistence  core/session.py — SQLite WAL"]
+        TABLES["pipeline_runs · stage_artifacts · audit_log\nkanban_tasks · kanban_events · artifact_fts FTS5"]:::db
+    end
+
+    subgraph GW["HITL Gateway  gateway/hitl.py"]
+        MODES["cli · auto · slack · webhook · queue\nApprovalQueue · audit record"]:::gw
+    end
+
+    subgraph Tel["Telemetry  core/telemetry.py"]
+        OT["OpenTelemetry spans\nno-op fallback · JSON structured logs"]:::tel
+    end
+
+    Entry --&gt; Orch
+    Orch  --&gt; AgentL
+    AgentL --&gt; Runtime
+    Runtime --&gt; Tools
+    Runtime --&gt; Mem
+    Mem --&gt; DB
+    Orch --&gt; GW
+    Runtime --&gt; Tel
+</code></pre>
+
+<p>Each layer has a single responsibility and communicates upward through structured interfaces — no layer talks to a non-adjacent layer directly.</p>
+
+<hr />
+
+<h2 id="seven-stages-ten-agents">Seven Stages, Ten Agents</h2>
+
+<p>The pipeline runs seven sequential stages, with HITL gates after the four highest-stakes decisions:</p>
+
+<pre><code class="language-mermaid">%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#313244', 'primaryTextColor': '#CDD6F4', 'primaryBorderColor': '#89B4FA', 'lineColor': '#A6ADC8', 'secondaryColor': '#1E1E2E', 'background': '#1E1E2E', 'mainBkg': '#313244', 'clusterBkg': '#24243E', 'clusterBorder': '#45475A', 'titleColor': '#CDD6F4', 'edgeLabelBackground': '#1E1E2E', 'fontFamily': 'JetBrains Mono, monospace', 'fontSize': '13px'}}}%%
+flowchart TD
+    classDef stage  fill:#313244,stroke:#89B4FA,color:#CDD6F4
+    classDef gate   fill:#3A1A2A,stroke:#F38BA8,color:#F38BA8
+    classDef done   fill:#1A3A2A,stroke:#A6E3A1,color:#A6E3A1
+    classDef start  fill:#1A2A3A,stroke:#89B4FA,color:#89B4FA
+
+    I([" Idea "]):::start --&gt; D0
+
+    subgraph D0["Stage 0 · Discovery"]
+        DE["Domain Expert\n+ Product Owner"]:::stage
+    end
+    subgraph D1["Stage 1 · Requirements"]
+        BA["Business Analyst"]:::stage
+    end
+    subgraph D2["Stage 2 · Architecture"]
+        AR["Architect"]:::stage
+    end
+    subgraph D3["Stage 3 · Planning"]
+        TL["Tech Lead"]:::stage
+    end
+    subgraph D4["Stage 4 · Development  ⟨parallel⟩"]
+        BK["Backend Dev"]:::stage
+        UI["UI Dev"]:::stage
+        DO["DevOps Dev"]:::stage
+    end
+    subgraph D5["Stage 5 · Quality Gate"]
+        QA["QA Engineer"]:::stage
+    end
+    subgraph D6["Stage 6 · Delivery"]
+        RM["Release Manager"]:::stage
+    end
+
+    D0 --&gt; D1
+    D1 --&gt; G1[/"HITL Gate"/]:::gate
+    G1 --&gt;|APPROVED| D2
+    D2 --&gt; G2[/"HITL Gate"/]:::gate
+    G2 --&gt;|APPROVED| D3
+    D3 --&gt; D4
+    D4 --&gt; D5
+    D5 --&gt; G3[/"HITL Gate"/]:::gate
+    G3 --&gt;|APPROVED| D6
+    D6 --&gt; G4[/"HITL Gate"/]:::gate
+    G4 --&gt;|APPROVED| DONE(["Completed"]):::done
+</code></pre>
+
+<p>The 10 roles map onto these stages. Each is a thin subclass of <code class="language-plaintext highlighter-rouge">BaseSDLCAgent</code> with a fixed output schema:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># core/pipeline.py
+</span><span class="n">SDLC_STAGES</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">StageDefinition</span><span class="p">(</span><span class="s">"discovery"</span><span class="p">,</span>    <span class="p">[</span><span class="s">"domain_expert"</span><span class="p">,</span> <span class="s">"product_owner"</span><span class="p">]),</span>
+    <span class="n">StageDefinition</span><span class="p">(</span><span class="s">"requirements"</span><span class="p">,</span> <span class="p">[</span><span class="s">"business_analyst"</span><span class="p">],</span>         <span class="n">hitl_gate</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+    <span class="n">StageDefinition</span><span class="p">(</span><span class="s">"architecture"</span><span class="p">,</span> <span class="p">[</span><span class="s">"architect"</span><span class="p">],</span>                <span class="n">hitl_gate</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+    <span class="n">StageDefinition</span><span class="p">(</span><span class="s">"planning"</span><span class="p">,</span>     <span class="p">[</span><span class="s">"tech_lead"</span><span class="p">]),</span>
+    <span class="n">StageDefinition</span><span class="p">(</span><span class="s">"development"</span><span class="p">,</span>  <span class="p">[</span><span class="s">"developer_backend"</span><span class="p">,</span> <span class="s">"developer_ui"</span><span class="p">,</span> <span class="s">"developer_devops"</span><span class="p">],</span>
+                    <span class="n">parallel</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+    <span class="n">StageDefinition</span><span class="p">(</span><span class="s">"quality_gate"</span><span class="p">,</span> <span class="p">[</span><span class="s">"qa_engineer"</span><span class="p">],</span>             <span class="n">hitl_gate</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+    <span class="n">StageDefinition</span><span class="p">(</span><span class="s">"delivery"</span><span class="p">,</span>     <span class="p">[</span><span class="s">"release_manager"</span><span class="p">],</span>          <span class="n">hitl_gate</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+<span class="p">]</span>
+</code></pre></div></div>
+
+<h3 id="the-agent-contract">The Agent Contract</h3>
+
+<p>The agent hierarchy is the core abstraction. Every role declares exactly what it needs, what tools it can use, and what it must produce:</p>
+
+<pre><code class="language-mermaid">%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#313244', 'primaryTextColor': '#CDD6F4', 'primaryBorderColor': '#89B4FA', 'lineColor': '#A6ADC8', 'secondaryColor': '#1E1E2E', 'background': '#1E1E2E', 'mainBkg': '#313244', 'clusterBkg': '#24243E', 'clusterBorder': '#45475A', 'titleColor': '#CDD6F4', 'edgeLabelBackground': '#1E1E2E', 'fontFamily': 'JetBrains Mono, monospace', 'fontSize': '13px'}}}%%
+classDiagram
+    class BaseSDLCAgent {
+        +ROLE str
+        +OUTPUT_SCHEMA dict
+        +ENABLED_TOOLSETS list
+        +run(idea, bundle, run_id)
+        +prior_stages() list
+        -_run_loop(system_prompt, messages, budget)
+        -skill_md() str
+    }
+
+    class DomainExpertAgent {
+        +tools: web_search, read_file, memory
+    }
+    class ProductOwnerAgent {
+        +tools: read_file, memory, write_file
+    }
+    class BusinessAnalystAgent {
+        +tools: read_file, memory, write_file
+    }
+    class ArchitectAgent {
+        +tools: read_file, web_search, write_file
+    }
+    class TechLeadAgent {
+        +tools: read_file, write_file, kanban_create
+    }
+    class DeveloperBackendAgent {
+        +tools: full_stack
+    }
+    class DeveloperUIAgent {
+        +tools: full_stack, browser
+    }
+    class DeveloperDevOpsAgent {
+        +tools: full_stack, terminal
+    }
+    class QAEngineerAgent {
+        +tools: read_file, terminal, execute_code
+    }
+    class ReleaseManagerAgent {
+        +tools: read_file, write_file, terminal
+    }
+
+    BaseSDLCAgent &lt;|-- DomainExpertAgent
+    BaseSDLCAgent &lt;|-- ProductOwnerAgent
+    BaseSDLCAgent &lt;|-- BusinessAnalystAgent
+    BaseSDLCAgent &lt;|-- ArchitectAgent
+    BaseSDLCAgent &lt;|-- TechLeadAgent
+    BaseSDLCAgent &lt;|-- DeveloperBackendAgent
+    BaseSDLCAgent &lt;|-- DeveloperUIAgent
+    BaseSDLCAgent &lt;|-- DeveloperDevOpsAgent
+    BaseSDLCAgent &lt;|-- QAEngineerAgent
+    BaseSDLCAgent &lt;|-- ReleaseManagerAgent
+</code></pre>
+
+<p>Every subclass declares:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">OUTPUT_SCHEMA</code> — JSON Schema that the runtime validates the artifact against before advancing</li>
+  <li><code class="language-plaintext highlighter-rouge">ENABLED_TOOLSETS</code> — scoped tool access (read-only roles like Architect can’t call <code class="language-plaintext highlighter-rouge">terminal</code>)</li>
+  <li><code class="language-plaintext highlighter-rouge">prior_stages()</code> — which prior artifacts get injected into this agent’s context</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">prior_stages()</code> is the key. The Architect sees the glossary and business requirements. It does not see the Product Owner’s raw conversation. No noise, no hallucination amplification.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ArchitectAgent</span><span class="p">(</span><span class="n">BaseSDLCAgent</span><span class="p">):</span>
+    <span class="n">ROLE</span> <span class="o">=</span> <span class="s">"architect"</span>
+    <span class="n">ENABLED_TOOLSETS</span> <span class="o">=</span> <span class="p">{</span><span class="s">"read_file"</span><span class="p">,</span> <span class="s">"write_file"</span><span class="p">,</span> <span class="s">"skill_list"</span><span class="p">,</span> <span class="s">"skill_view"</span><span class="p">}</span>
+    <span class="n">OUTPUT_SCHEMA</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">"type"</span><span class="p">:</span> <span class="s">"object"</span><span class="p">,</span>
+        <span class="s">"required"</span><span class="p">:</span> <span class="p">[</span><span class="s">"adrs"</span><span class="p">,</span> <span class="s">"component_diagram"</span><span class="p">,</span> <span class="s">"tech_stack"</span><span class="p">],</span>
+        <span class="s">"properties"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">"adrs"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">"type"</span><span class="p">:</span> <span class="s">"array"</span><span class="p">,</span>
+                <span class="s">"items"</span><span class="p">:</span> <span class="p">{</span><span class="s">"type"</span><span class="p">:</span> <span class="s">"object"</span><span class="p">,</span> <span class="s">"required"</span><span class="p">:</span> <span class="p">[</span><span class="s">"id"</span><span class="p">,</span> <span class="s">"title"</span><span class="p">,</span> <span class="s">"context"</span><span class="p">,</span> <span class="s">"decision"</span><span class="p">,</span> <span class="s">"consequences"</span><span class="p">]}</span>
+            <span class="p">},</span>
+            <span class="s">"tech_stack"</span><span class="p">:</span> <span class="p">{</span><span class="s">"type"</span><span class="p">:</span> <span class="s">"object"</span><span class="p">,</span> <span class="s">"required"</span><span class="p">:</span> <span class="p">[</span><span class="s">"backend"</span><span class="p">,</span> <span class="s">"frontend"</span><span class="p">,</span> <span class="s">"database"</span><span class="p">,</span> <span class="s">"infra"</span><span class="p">]}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">prior_stages</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="s">"discovery"</span><span class="p">,</span> <span class="s">"requirements"</span><span class="p">]</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="three-tier-memory-system">Three-Tier Memory System</h2>
+
+<p>Instead of dumping everything into one context window, the pipeline uses a three-tier memory system that routes the right context to the right agent:</p>
+
+<pre><code class="language-mermaid">%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#313244', 'primaryTextColor': '#CDD6F4', 'primaryBorderColor': '#89B4FA', 'lineColor': '#A6ADC8', 'secondaryColor': '#1E1E2E', 'background': '#1E1E2E', 'mainBkg': '#313244', 'clusterBkg': '#24243E', 'clusterBorder': '#45475A', 'titleColor': '#CDD6F4', 'edgeLabelBackground': '#1E1E2E', 'fontFamily': 'JetBrains Mono, monospace', 'fontSize': '13px'}}}%%
+graph LR
+    classDef t1 fill:#1A3A2A,stroke:#A6E3A1,color:#A6E3A1
+    classDef t2 fill:#1A2A3A,stroke:#89B4FA,color:#89B4FA
+    classDef t3 fill:#2A1A3A,stroke:#CBA6F7,color:#CBA6F7
+    classDef ag fill:#313244,stroke:#A6ADC8,color:#CDD6F4
+
+    subgraph T1["Tier 1 — Project Glossary"]
+        PM["PROJECT_MEMORY.md\nWritten by Domain Expert once\nInjected into ALL agent system prompts\nShared vocabulary, bounded contexts"]:::t1
+    end
+
+    subgraph T2["Tier 2 — Stage Artifacts"]
+        AB["SQLite stage_artifacts\nPer-stage validated JSON\nEach agent receives only prior_stages()"]:::t2
+        SC["StreamingContextScrubber\nStrips fence tags from output\nin real time"]:::t2
+        AB --&gt; SC
+    end
+
+    subgraph T3["Tier 3 — Kanban Blackboard"]
+        KB["kanban_tasks + kanban_events\nEphemeral per run\nDev agents post task state\nParent dispatcher reads board"]:::t3
+    end
+
+    T1 --&gt;|system prompt| AG([" Agents "]):::ag
+    T2 --&gt;|context block| AG
+    T3 --&gt;|task metadata| AG
+</code></pre>
+
+<p><strong>Tier 1 — Project Memory</strong> (<code class="language-plaintext highlighter-rouge">PROJECT_MEMORY.md</code>): Written by the Domain Expert on the first turn. Contains the shared glossary, bounded contexts, and project conventions. Injected into <em>every</em> agent’s system prompt, verbatim. This is the shared language of the project.</p>
+
+<p><strong>Tier 2 — Artifact Bundle</strong> (SQLite + in-memory): Each completed stage writes a validated JSON artifact. Agents receive only the stages listed in their <code class="language-plaintext highlighter-rouge">prior_stages()</code> declaration, injected as <code class="language-plaintext highlighter-rouge">&lt;stage-context&gt;</code> fence blocks. A <code class="language-plaintext highlighter-rouge">StreamingContextScrubber</code> strips these tags from the model’s output in real-time to prevent the agent from echoing context blocks back.</p>
+
+<p><strong>Tier 3 — Kanban Blackboard</strong> (SQLite): Used by parallel development agents to coordinate without sharing message histories. Developers post task state transitions (ready → in_progress → done) and JSON comments. The parent dispatcher reads the board; individual agents never see each other’s prompts.</p>
+
+<hr />
+
+<h2 id="the-parallel-development-stage">The Parallel Development Stage</h2>
+
+<p>The development stage fans out three agents concurrently in a <code class="language-plaintext highlighter-rouge">ThreadPoolExecutor</code>:</p>
+
+<pre><code class="language-mermaid">%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#313244', 'primaryTextColor': '#CDD6F4', 'primaryBorderColor': '#89B4FA', 'lineColor': '#A6ADC8', 'secondaryColor': '#1E1E2E', 'background': '#1E1E2E', 'mainBkg': '#313244', 'clusterBkg': '#24243E', 'clusterBorder': '#45475A', 'titleColor': '#CDD6F4', 'edgeLabelBackground': '#1E1E2E', 'fontFamily': 'JetBrains Mono, monospace', 'fontSize': '13px'}}}%%
+flowchart TD
+    classDef lead  fill:#1A3A3A,stroke:#94E2D5,color:#94E2D5
+    classDef pool  fill:#313244,stroke:#A6ADC8,color:#CDD6F4
+    classDef dev   fill:#1A2A3A,stroke:#89B4FA,color:#89B4FA
+    classDef qa    fill:#2A1A3A,stroke:#CBA6F7,color:#CBA6F7
+    classDef kb    fill:#3A2A1A,stroke:#FAB387,color:#FAB387
+
+    TL["TechLeadAgent\nCreates task cards in planning stage"]:::lead --&gt;|populates| KB[(Kanban Board\nSQLite)]:::kb
+
+    KB --&gt; POOL["ThreadPoolExecutor\nmax_workers = max_concurrent_developers"]:::pool
+
+    POOL --&gt; B["DeveloperBackendAgent\nAPI task cards · Thread 1\nscoped to src/task_id/"]:::dev
+    POOL --&gt; U["DeveloperUIAgent\nUI task cards · Thread 2\nscoped to src/task_id/"]:::dev
+    POOL --&gt; D["DeveloperDevOpsAgent\nIaC task card · Thread 3\nscoped to src/task_id/"]:::dev
+
+    B --&gt;|kanban_complete| KB
+    U --&gt;|kanban_complete| KB
+    D --&gt;|kanban_complete| KB
+
+    B --&gt; JOIN["All threads joined\nDevelopment artifact merged"]:::pool
+    U --&gt; JOIN
+    D --&gt; JOIN
+
+    JOIN --&gt; QA["QAEngineerAgent\nblocked until all devs done"]:::qa
+</code></pre>
+
+<p>Each developer thread:</p>
+<ol>
+  <li>Gets a <strong>fresh message history</strong> — zero cross-agent context leak</li>
+  <li>Is scoped to <code class="language-plaintext highlighter-rouge">output/&lt;run_id&gt;/src/&lt;task_id&gt;/</code> with path traversal protection</li>
+  <li>Coordinates only via kanban task state — no direct inter-agent communication</li>
+  <li>Has <code class="language-plaintext highlighter-rouge">clarify</code>, <code class="language-plaintext highlighter-rouge">send_message</code>, and <code class="language-plaintext highlighter-rouge">delegate_task</code> tools blocked — no recursive sub-agent spawning</li>
+</ol>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># core/pipeline.py
+</span><span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+    <span class="n">futures</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">pool</span><span class="p">.</span><span class="n">submit</span><span class="p">(</span><span class="n">agent</span><span class="p">.</span><span class="n">run</span><span class="p">,</span> <span class="n">workspace</span><span class="p">,</span> <span class="n">db_session</span><span class="p">):</span> <span class="n">agent</span>
+        <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">dev_agents</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">as_completed</span><span class="p">(</span><span class="n">futures</span><span class="p">):</span>
+        <span class="n">artifacts</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">future</span><span class="p">.</span><span class="n">result</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p>The first version had all three developers writing to a shared directory. They clobbered each other’s files within the first test run. Path-scoped namespacing was the obvious fix in retrospect.</p>
+
+<hr />
+
+<h2 id="the-qa-auto-fix-loop">The QA Auto-Fix Loop</h2>
+
+<p>When QA fails, most pipelines stop and wait for a human. That’s right for some failures. It’s wrong for the 80% of failures that are fixable in one pass — a missing import, a mismatched API signature, a forgotten migration.</p>
+
+<p>The QA loop handles this automatically:</p>
+
+<pre><code class="language-mermaid">%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#313244', 'primaryTextColor': '#CDD6F4', 'primaryBorderColor': '#89B4FA', 'lineColor': '#A6ADC8', 'secondaryColor': '#1E1E2E', 'background': '#1E1E2E', 'mainBkg': '#313244', 'clusterBkg': '#24243E', 'clusterBorder': '#45475A', 'titleColor': '#CDD6F4', 'edgeLabelBackground': '#1E1E2E', 'fontFamily': 'JetBrains Mono, monospace', 'fontSize': '13px'}}}%%
+flowchart TD
+    classDef qa    fill:#2A1A3A,stroke:#CBA6F7,color:#CBA6F7
+    classDef dev   fill:#1A2A3A,stroke:#89B4FA,color:#89B4FA
+    classDef gate  fill:#3A1A2A,stroke:#F38BA8,color:#F38BA8
+    classDef done  fill:#1A3A2A,stroke:#A6E3A1,color:#A6E3A1
+
+    QA["QA Engineer\nruns full test suite"]:::qa --&gt; CHK{"All pass?"}
+
+    CHK --&gt;|yes| ADV["Advance pipeline"]:::done
+
+    CHK --&gt;|no| GRP["Group failing tests\nby owning developer task"]:::dev
+    GRP --&gt; FIX["Re-dispatch original\ndeveloper agent per group"]:::dev
+    FIX --&gt; RE["QA re-runs"]:::qa
+    RE --&gt; ITER{"Iteration ≤ 3?"}
+
+    ITER --&gt;|yes| CHK
+    ITER --&gt;|no| ESC["escalated_to_hitl = true\nPause for human review"]:::gate
+</code></pre>
+
+<p>The key is “group by owning developer task.” Each developer wrote code under their namespace. When those tests fail, the fix goes back to that developer — not to a generic fix agent that doesn’t know the codebase structure.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># core/qa_loop.py
+</span><span class="k">class</span> <span class="nc">QALoop</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qa_agent</span><span class="p">,</span> <span class="n">dev_agents</span><span class="p">,</span> <span class="n">workspace</span><span class="p">,</span> <span class="n">db</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">iteration</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">max_iterations</span><span class="p">):</span>
+            <span class="n">report</span> <span class="o">=</span> <span class="n">qa_agent</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">workspace</span><span class="p">,</span> <span class="n">db</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">report</span><span class="p">[</span><span class="s">"gate_passed"</span><span class="p">]:</span>
+                <span class="k">return</span> <span class="n">report</span>
+            <span class="n">failing_by_task</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">_group_failures</span><span class="p">(</span><span class="n">report</span><span class="p">[</span><span class="s">"failing_tests"</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">task_id</span><span class="p">,</span> <span class="n">failures</span> <span class="ow">in</span> <span class="n">failing_by_task</span><span class="p">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">dev</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">_find_owner</span><span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="n">dev_agents</span><span class="p">)</span>
+                <span class="n">dev</span><span class="p">.</span><span class="n">fix</span><span class="p">(</span><span class="n">failures</span><span class="p">,</span> <span class="n">workspace</span><span class="p">,</span> <span class="n">db</span><span class="p">)</span>
+        <span class="n">report</span><span class="p">[</span><span class="s">"escalated_to_hitl"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="n">report</span>
+</code></pre></div></div>
+
+<p>Three iterations handles almost everything I’ve tested against. If a fourth is needed, it’s usually a design issue — which means a human should look at it.</p>
+
+<hr />
+
+<h2 id="hitl-governance-five-modes-one-interface">HITL Governance: Five Modes, One Interface</h2>
+
+<p>Human-in-the-loop gates exist at Requirements, Architecture, Quality Gate, and Delivery. “Human in the loop” means different things in different contexts — CLI prompt for solo dev, Slack reaction for team review, webhook for enterprise approval systems. All five modes sit behind a single interface:</p>
+
+<pre><code class="language-mermaid">%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#313244', 'primaryTextColor': '#CDD6F4', 'primaryBorderColor': '#89B4FA', 'lineColor': '#A6ADC8', 'secondaryColor': '#1E1E2E', 'background': '#1E1E2E', 'mainBkg': '#313244', 'clusterBkg': '#24243E', 'clusterBorder': '#45475A', 'titleColor': '#CDD6F4', 'edgeLabelBackground': '#1E1E2E', 'fontFamily': 'JetBrains Mono, monospace', 'fontSize': '13px'}}}%%
+flowchart TD
+    classDef gwStyle   fill:#1A3A3A,stroke:#94E2D5,color:#94E2D5
+    classDef provStyle fill:#313244,stroke:#A6ADC8,color:#CDD6F4
+    classDef okStyle   fill:#1A3A2A,stroke:#A6E3A1,color:#A6E3A1
+    classDef failStyle fill:#3A1A2A,stroke:#F38BA8,color:#F38BA8
+    classDef chgStyle  fill:#3A2A1A,stroke:#FAB387,color:#FAB387
+    classDef recStyle  fill:#313244,stroke:#F9E2AF,color:#F9E2AF
+
+    PL[Pipeline]:::gwStyle --&gt; EVAL[PipelineGate.evaluate]:::gwStyle
+    EVAL --&gt; MODE{"Gate mode"}
+    MODE --&gt;|auto| AE[AutoEvaluator]:::provStyle
+    MODE --&gt;|cli| CL[CLI Approval]:::provStyle
+    MODE --&gt;|slack| SL[Slack Approval]:::provStyle
+    MODE --&gt;|webhook| WH[Webhook Approval]:::provStyle
+    MODE --&gt;|queue| QU[Approval Queue]:::provStyle
+    AE --&gt; DEC{"Decision"}
+    CL --&gt; DEC
+    SL --&gt; DEC
+    WH --&gt; DEC
+    QU --&gt; DEC
+    DEC --&gt;|APPROVED| ADV[Advance Pipeline]:::okStyle
+    DEC --&gt;|REJECTED| HALT[Pause Pipeline]:::failStyle
+    DEC --&gt;|AMENDED| AMD[Update Artifact]:::chgStyle
+    ADV --&gt; LOG[Audit Log]:::recStyle
+    HALT --&gt; LOG
+    AMD --&gt; LOG
+</code></pre>
+
+<p>The <code class="language-plaintext highlighter-rouge">AMENDED</code> decision is the one that makes the system practical. If a reviewer fixes an ADR or adjusts an API contract, the pipeline mutates the artifact in-place, clears downstream stages, and continues from that point. You’re not blocked waiting for the agent to regenerate something — you fix it yourself and move on. Every decision is immutably recorded with actor and rationale.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># gateway/hitl.py
+</span><span class="k">class</span> <span class="nc">HITLGateway</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">request_approval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_id</span><span class="p">,</span> <span class="n">stage</span><span class="p">,</span> <span class="n">artifact</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ApprovalResponse</span><span class="p">:</span>
+        <span class="n">mode</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">config</span><span class="p">.</span><span class="n">get_mode</span><span class="p">(</span><span class="n">stage</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">"cli"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">_cli_prompt</span><span class="p">(</span><span class="n">artifact</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">"auto"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">_auto_evaluate</span><span class="p">(</span><span class="n">artifact</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">"slack"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">_slack_poll</span><span class="p">(</span><span class="n">run_id</span><span class="p">,</span> <span class="n">stage</span><span class="p">,</span> <span class="n">artifact</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">"webhook"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">_webhook_poll</span><span class="p">(</span><span class="n">run_id</span><span class="p">,</span> <span class="n">stage</span><span class="p">,</span> <span class="n">artifact</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">"queue"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">_queue_wait</span><span class="p">(</span><span class="n">run_id</span><span class="p">,</span> <span class="n">stage</span><span class="p">,</span> <span class="n">artifact</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="context-compression-for-long-agent-conversations">Context Compression for Long Agent Conversations</h2>
+
+<p>Developer agents on large projects can burn through a context window. A backend developer writing a full REST API with auth, migrations, and tests can produce 40+ turns of tool calls and responses.</p>
+
+<p><code class="language-plaintext highlighter-rouge">ContextCompressor</code> handles this transparently:</p>
+
+<ol>
+  <li>Monitor token count after every turn</li>
+  <li>When count exceeds 80% of model limit, trigger compression</li>
+  <li>Run an auxiliary model (Haiku — fast, cheap) to summarize the middle turns</li>
+  <li>Preserve: system prompt (head) + last 2,000 tokens (tail)</li>
+  <li>Inject a structured <code class="language-plaintext highlighter-rouge">[STAGE COMPACTION]</code> block:</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[STAGE COMPACTION — turn 18 of 34]
+Resolved Requirements: user auth via JWT, PostgreSQL backend, Redis session cache
+Code Written: auth/models.py, auth/routes.py, auth/middleware.py, migrations/001_users.sql
+Open Questions: rate limiting strategy — defaulting to 100 req/min per user
+Remaining Work: unit tests, integration tests, OpenAPI docs
+</code></pre></div></div>
+
+<p>The agent continues from this compact summary without seeing the full history. The model picks up the structured summary the same way a developer picks up a standup note. In testing, quality after compaction is nearly identical to without it.</p>
+
+<hr />
+
+<h2 id="observability-otel-span-hierarchy">Observability: OTel Span Hierarchy</h2>
+
+<p>Every agent turn emits a structured JSON log to stdout:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"ts"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-06-01T10:00:00Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"run_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"run-abc123"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"stage"</span><span class="p">:</span><span class="w"> </span><span class="s2">"architecture"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"agent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"architect"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"turn"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"tool_calls"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"read_file"</span><span class="p">,</span><span class="w"> </span><span class="s2">"write_file"</span><span class="p">],</span><span class="w">
+  </span><span class="nl">"tokens_in"</span><span class="p">:</span><span class="w"> </span><span class="mi">8420</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"tokens_out"</span><span class="p">:</span><span class="w"> </span><span class="mi">1200</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"cost_usd"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.042</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"iteration_budget_used"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"iteration_budget_max"</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Optional OpenTelemetry integration adds distributed tracing across the full pipeline. The OTel SDK is an optional dependency — if not installed, a <code class="language-plaintext highlighter-rouge">_NoOpTracer</code> silently takes over with zero performance cost:</p>
+
+<pre><code class="language-mermaid">%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#313244', 'primaryTextColor': '#CDD6F4', 'primaryBorderColor': '#89B4FA', 'lineColor': '#A6ADC8', 'secondaryColor': '#1E1E2E', 'background': '#1E1E2E', 'mainBkg': '#313244', 'clusterBkg': '#24243E', 'clusterBorder': '#45475A', 'titleColor': '#CDD6F4', 'edgeLabelBackground': '#1E1E2E', 'fontFamily': 'JetBrains Mono, monospace', 'fontSize': '13px'}}}%%
+graph TD
+    classDef pipeline fill:#1A2A3A,stroke:#89B4FA,color:#89B4FA
+    classDef stage    fill:#313244,stroke:#A6ADC8,color:#CDD6F4
+    classDef agent    fill:#2A1A3A,stroke:#CBA6F7,color:#CBA6F7
+
+    PR["sdlc.pipeline.run\nrun_id · idea · outcome"]:::pipeline
+
+    PR --&gt; SD["sdlc.stage.discovery"]:::stage
+    PR --&gt; SR["sdlc.stage.requirements"]:::stage
+    PR --&gt; SA["sdlc.stage.architecture"]:::stage
+    PR --&gt; SP["sdlc.stage.planning"]:::stage
+    PR --&gt; SV["sdlc.stage.development · parallel=true"]:::stage
+    PR --&gt; SQ["sdlc.stage.quality_gate"]:::stage
+    PR --&gt; SL["sdlc.stage.delivery"]:::stage
+
+    SD --&gt; ADE["sdlc.agent.domain_expert"]:::agent
+    SD --&gt; APO["sdlc.agent.product_owner"]:::agent
+    SR --&gt; ABA["sdlc.agent.business_analyst"]:::agent
+    SA --&gt; AAR["sdlc.agent.architect"]:::agent
+    SP --&gt; ATL["sdlc.agent.tech_lead"]:::agent
+    SV --&gt; ABE["sdlc.agent.developer_backend"]:::agent
+    SV --&gt; AUI["sdlc.agent.developer_ui"]:::agent
+    SV --&gt; ADO["sdlc.agent.developer_devops"]:::agent
+    SQ --&gt; AQA["sdlc.agent.qa_engineer"]:::agent
+    SL --&gt; ARM["sdlc.agent.release_manager"]:::agent
+</code></pre>
+
+<hr />
+
+<h2 id="prompt-injection-scanning">Prompt Injection Scanning</h2>
+
+<p>Before creating a run ID, the system scans the input for injection attempts across six pattern families:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># core/memory.py
+</span><span class="n">INJECTION_PATTERNS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="sa">r</span><span class="s">"ignore (your|all) (previous|prior) instructions"</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s">"\b(act as|you are now|pretend you are)\b"</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s">"^system:\s"</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s">"&lt;stage-context&gt;"</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s">"\b(dan mode|developer mode|jailbreak)\b"</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s">"reveal your (system )?prompt"</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">scan_for_injection</span><span class="p">(</span><span class="n">idea</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">INJECTION_PATTERNS</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">re</span><span class="p">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">idea</span><span class="p">,</span> <span class="n">re</span><span class="p">.</span><span class="n">IGNORECASE</span> <span class="o">|</span> <span class="n">re</span><span class="p">.</span><span class="n">MULTILINE</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">PromptInjectionError</span><span class="p">(</span><span class="sa">f</span><span class="s">"Input rejected: matched pattern '</span><span class="si">{</span><span class="n">pattern</span><span class="si">}</span><span class="s">'"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>The scan runs before the run_id is created — no audit trail entry, no database record, no token spend.</p>
+
+<hr />
+
+<h2 id="sqlite-as-the-persistence-backbone">SQLite as the Persistence Backbone</h2>
+
+<p>I spent about ten minutes considering PostgreSQL. Then I remembered this is a pipeline, not a web server. Concurrency is bounded — a handful of parallel developer threads. SQLite in WAL mode handles this with zero setup.</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- 7 tables in pipeline.db</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">pipeline_runs</span>   <span class="p">(</span><span class="n">run_id</span><span class="p">,</span> <span class="n">idea</span><span class="p">,</span> <span class="n">config_json</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">started_at</span><span class="p">,</span> <span class="n">completed_at</span><span class="p">);</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">stage_artifacts</span> <span class="p">(</span><span class="n">run_id</span><span class="p">,</span> <span class="n">stage</span><span class="p">,</span> <span class="n">artifact_json</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">created_at</span><span class="p">,</span> <span class="n">approved_by</span><span class="p">);</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">audit_log</span>       <span class="p">(</span><span class="n">run_id</span><span class="p">,</span> <span class="n">stage</span><span class="p">,</span> <span class="n">decision</span><span class="p">,</span> <span class="n">actor</span><span class="p">,</span> <span class="n">rationale</span><span class="p">,</span> <span class="nb">timestamp</span><span class="p">);</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">kanban_tasks</span>    <span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="n">run_id</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">assignee</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">metadata_json</span><span class="p">);</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">kanban_events</span>   <span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="n">event_type</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="nb">timestamp</span><span class="p">);</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">token_usage</span>     <span class="p">(</span><span class="n">run_id</span><span class="p">,</span> <span class="n">stage</span><span class="p">,</span> <span class="n">agent</span><span class="p">,</span> <span class="n">tokens_in</span><span class="p">,</span> <span class="n">tokens_out</span><span class="p">,</span> <span class="n">cost_usd</span><span class="p">);</span>
+<span class="k">CREATE</span> <span class="n">VIRTUAL</span> <span class="k">TABLE</span> <span class="n">artifact_fts</span> <span class="k">USING</span> <span class="n">fts5</span><span class="p">(</span><span class="n">run_id</span><span class="p">,</span> <span class="n">stage</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="s1">'stage_artifacts'</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>WAL mode + jittered exponential backoff handles concurrent developer threads cleanly:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">_execute_with_retry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">(),</span> <span class="n">max_attempts</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_attempts</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">conn</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">sqlite3</span><span class="p">.</span><span class="n">OperationalError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s">"database is locked"</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+                <span class="n">time</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.05</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">attempt</span><span class="p">)</span> <span class="o">+</span> <span class="n">random</span><span class="p">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span>
+    <span class="k">raise</span> <span class="nb">RuntimeError</span><span class="p">(</span><span class="s">"DB lock not released after max retries"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>FTS5 on <code class="language-plaintext highlighter-rouge">stage_artifacts</code> lets you search all artifact content with a single query — find every run that mentioned a specific API endpoint or technology.</p>
+
+<hr />
+
+<h2 id="provider-failover-and-multi-key-rate-limit-recovery">Provider Failover and Multi-Key Rate Limit Recovery</h2>
+
+<p>Production LLM usage at pipeline scale hits rate limits. The solution is rotating across a credential pool:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># core/agent_runtime.py
+</span><span class="k">class</span> <span class="nc">CredentialPool</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">keys</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">re</span><span class="p">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s">"OPENAI_API_KEY(_\d+)?$"</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">_idx</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="p">.</span><span class="n">Lock</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">next_key</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="p">.</span><span class="n">_lock</span><span class="p">:</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">keys</span><span class="p">[</span><span class="bp">self</span><span class="p">.</span><span class="n">_idx</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">keys</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">_idx</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">return</span> <span class="n">key</span>
+</code></pre></div></div>
+
+<p>On a 429 response, rotate to the next key and retry immediately. On 5xx, exponential backoff on the same key. On auth or context-length errors, raise immediately — retrying won’t help.</p>
+
+<hr />
+
+<h2 id="model-selection-by-role">Model Selection by Role</h2>
+
+<p>Not all agents need the same model. The cost difference between Opus and Haiku is roughly 60x.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Role</th>
+      <th>Model</th>
+      <th>Reason</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Architect</td>
+      <td>claude-opus-4-8</td>
+      <td>Complex multi-step ADR reasoning, C4 diagramming</td>
+    </tr>
+    <tr>
+      <td>All developers</td>
+      <td>claude-sonnet-4-6</td>
+      <td>Best cost/quality for long code generation sessions</td>
+    </tr>
+    <tr>
+      <td>Domain Expert, BA, PM</td>
+      <td>claude-sonnet-4-6</td>
+      <td>Structured output, moderate complexity</td>
+    </tr>
+    <tr>
+      <td>Context Compressor</td>
+      <td>claude-haiku-4-5</td>
+      <td>Fast summarization, simple task, high volume</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>These are configurable per-role in <code class="language-plaintext highlighter-rouge">sdlc_config.yaml</code>. Swapping Sonnet for everything is a reasonable budget trade.</p>
+
+<hr />
+
+<h2 id="custom-roles-without-code">Custom Roles Without Code</h2>
+
+<p>Adding a new agent role requires zero Python:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># custom_roles/data_engineer.yaml</span>
+<span class="na">role</span><span class="pi">:</span> <span class="s">data_engineer</span>
+<span class="na">display_name</span><span class="pi">:</span> <span class="s">Data Engineer</span>
+<span class="na">authority_statement</span><span class="pi">:</span> <span class="pi">|</span>
+  <span class="s">You design ETL pipelines, data models, and stream processing architectures.</span>
+  <span class="s">You write production-ready PySpark, dbt, and Airflow DAGs.</span>
+<span class="na">max_iterations</span><span class="pi">:</span> <span class="m">35</span>
+<span class="na">enabled_toolsets</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">read_file</span><span class="pi">,</span> <span class="nv">write_file</span><span class="pi">,</span> <span class="nv">terminal</span><span class="pi">,</span> <span class="nv">execute_code</span><span class="pi">]</span>
+<span class="na">output_schema</span><span class="pi">:</span>
+  <span class="na">type</span><span class="pi">:</span> <span class="s">object</span>
+  <span class="na">required</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">pipeline_steps</span><span class="pi">,</span> <span class="nv">schemas_created</span><span class="pi">,</span> <span class="nv">quality_checks</span><span class="pi">]</span>
+  <span class="na">properties</span><span class="pi">:</span>
+    <span class="na">pipeline_steps</span><span class="pi">:</span>
+      <span class="na">type</span><span class="pi">:</span> <span class="s">array</span>
+      <span class="na">items</span><span class="pi">:</span>
+        <span class="na">type</span><span class="pi">:</span> <span class="s">object</span>
+        <span class="na">required</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">name</span><span class="pi">,</span> <span class="nv">source</span><span class="pi">,</span> <span class="nv">destination</span><span class="pi">,</span> <span class="nv">transformation</span><span class="pi">]</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">agents/custom_loader.py</code> walks <code class="language-plaintext highlighter-rouge">custom_roles/*.yaml</code> at startup and dynamically generates agent classes. Drop a YAML file in the directory, restart, and the new role is available for any <code class="language-plaintext highlighter-rouge">StageDefinition</code>. Teams can add roles in the language they already know.</p>
+
+<hr />
+
+<h2 id="what-the-cli-looks-like">What the CLI Looks Like</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Start a new run</span>
+python sdlc.py run <span class="s2">"Build a FastAPI todo app with user auth and PostgreSQL"</span>
+
+<span class="c"># With auto-approval and custom config</span>
+python sdlc.py run <span class="s2">"idea"</span> <span class="nt">--config</span> sdlc_config.yaml <span class="nt">--auto-approve</span>
+
+<span class="c"># Resume after a HITL pause or crash</span>
+python sdlc.py resume run-abc123
+
+<span class="c"># Approve a gate from the CLI</span>
+python sdlc.py approve run-abc123 architecture <span class="nt">--decision</span> APPROVED <span class="nt">--rationale</span> <span class="s2">"ADRs look solid"</span>
+
+<span class="c"># Amend an artifact before advancing</span>
+python sdlc.py approve run-abc123 requirements <span class="nt">--decision</span> AMENDED <span class="nt">--amended-artifact</span> requirements_v2.json
+
+<span class="c"># Check status and costs</span>
+python sdlc.py status run-abc123
+python sdlc.py cost run-abc123
+
+<span class="c"># View the kanban board</span>
+python sdlc.py kanban run-abc123
+
+<span class="c"># Launch the web dashboard</span>
+python sdlc.py ui <span class="nt">--host</span> 127.0.0.1 <span class="nt">--port</span> 7474
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="web-dashboard">Web Dashboard</h2>
+
+<p>The <code class="language-plaintext highlighter-rouge">sdlc.py ui</code> command launches a FastAPI web server with a real-time dashboard. Pipeline runs auto-refresh every few seconds — you can track status, stage progress, and cost without touching the CLI.</p>
+
+<p><img src="/assets/images/projects/sdlc-factory-ui.png" alt="SDLC Factory Dashboard — Pipeline Runs overview with status cards" /></p>
+
+<p>The dashboard shows all runs with their current stage, status badge (Running / Completed / Failed / Paused), start time, and duration. The stat cards at the top give a live count across all states so you can see at a glance what’s in-flight.</p>
+
+<p>Clicking a run opens the run detail view — a stage pipeline with clickable nodes, each revealing its artifact, kanban tasks, audit trail, and cost breakdown in tabbed panels.</p>
+
+<p><img src="/assets/images/projects/sdlc-factory-pipeline.png" alt="SDLC Factory Run Detail — stage pipeline with 7 stages, HITL gates highlighted, artifact JSON viewer" /></p>
+
+<p>The pipeline progress bar shows all 7 stages. Stages with HITL gates are marked with a ⏸ GATE label. Approved stages show who signed off (pipeline auto-approve vs. human operator) and the timestamp. The Architecture stage here was reviewed and approved via CLI with the rationale recorded.</p>
+
+<h3 id="hitl-audit-log">HITL Audit Log</h3>
+
+<p>Every gate decision — Approved, Rejected, or Amended — is timestamped and stored. The audit log view shows the full decision history for a run:</p>
+
+<p><img src="/assets/images/projects/sdlc-factory-audit.png" alt="SDLC Factory Audit Log — HITL gate decisions with timeline, actors, and rationale" /></p>
+
+<p>Rejections with <code class="language-plaintext highlighter-rouge">cli: interrupted</code> are operator-side ctrl+C interrupts before the gate prompt completed — the pipeline pauses and re-presents the gate on the next <code class="language-plaintext highlighter-rouge">resume</code>. Human approvals carry the actor name and rationale string verbatim.</p>
+
+<h3 id="kanban-blackboard">Kanban Blackboard</h3>
+
+<p>During the parallel development stage, each developer agent claims tasks from a shared kanban board backed by SQLite. The board live-updates as agents progress:</p>
+
+<p><img src="/assets/images/projects/sdlc-factory-kanban.png" alt="SDLC Factory Kanban Board — development stage tasks across Pending, In Progress, Blocked, Done columns" /></p>
+
+<p>The 20 blocked tasks here reflect a provider API error (tool_results role mismatch) that stopped the development agents mid-iteration — exactly the kind of failure the checkpoint/resume system is designed to recover from.</p>
+
+<h3 id="token-usage-and-cost">Token Usage and Cost</h3>
+
+<p>Every agent turn records tokens in, tokens out, model used, and duration. The cost tab breaks this down by stage and role:</p>
+
+<p><img src="/assets/images/projects/sdlc-factory-cost.png" alt="SDLC Factory Cost Breakdown — 49,717 tokens in, 36,307 out, $1.31 total across stages and models" /></p>
+
+<p>Architecture is the most expensive stage ($0.77) because it uses Claude Opus with a large context window loading all prior discovery and requirements artifacts. The Business Analyst (requirements) comes second at $0.28 for the longest wall-clock run (~10 minutes). Development registers $0 here because the agents failed before making any API calls — cost tracking is per-turn so partially-completed agent runs are fully accounted for.</p>
+
+<hr />
+
+<h2 id="what-i-got-wrong-and-fixed">What I Got Wrong (And Fixed)</h2>
+
+<p><strong>Shared filesystem for parallel developers.</strong> Three agents writing to the same directory clobbered each other’s files within seconds. Fix: path-scoped namespacing — each developer owns <code class="language-plaintext highlighter-rouge">output/&lt;run_id&gt;/src/&lt;task_id&gt;/</code> exclusively, with path traversal validation on every write.</p>
+
+<p><strong>Too much context injected too early.</strong> Early versions injected all prior stage artifacts into every agent. The Architect was seeing the Product Owner’s raw conversation. Context budgets burned on noise, agents hallucinated based on conversational artefacts rather than structured ones. Fix: the <code class="language-plaintext highlighter-rouge">prior_stages()</code> declaration — each agent gets only what it needs, as validated JSON.</p>
+
+<p><strong>No iteration budget.</strong> Without a turn limit, agents on ambiguous tasks would loop indefinitely — rewriting the same file, retrying the same tool call, asking clarifying questions to themselves. Fix: <code class="language-plaintext highlighter-rouge">IterationBudget</code> with role-appropriate defaults (50 turns for Architect, 30 for developers, 20 for others).</p>
+
+<p><strong>Sync SQLite under concurrent threads.</strong> Without WAL mode and retry logic, concurrent developer threads deadlocked on DB writes constantly. Fix: WAL mode at connection open, jittered exponential backoff on <code class="language-plaintext highlighter-rouge">OperationalError</code>.</p>
+
+<p><strong>No AMENDED path in HITL.</strong> Early gates had only APPROVED and REJECTED. Rejection meant restarting from scratch — far too heavy for “I want to tweak this one ADR.” Adding the AMENDED path required rebuilding the gate interface but it’s the feature that made the system practical.</p>
+
+<hr />
+
+<h2 id="checkpoint-and-resume">Checkpoint and Resume</h2>
+
+<p>Every completed stage writes artifacts to both SQLite and disk:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>output/&lt;run_id&gt;/
+  artifacts/
+    discovery.json
+    requirements.json
+    architecture.json
+    ...
+  src/
+    backend/
+    ui/
+    devops/
+</code></pre></div></div>
+
+<p>On crash or manual pause, <code class="language-plaintext highlighter-rouge">sdlc resume &lt;run_id&gt;</code> reloads all completed artifacts from SQLite and starts from the first non-completed stage. No data loss, no regeneration cost for finished work.</p>
+
+<hr />
+
+<h2 id="closing-thoughts">Closing Thoughts</h2>
+
+<p>Building SDLC Factory changed how I think about agentic systems. The instinct with AI agents is to give them maximum freedom — let them spawn sub-agents, share context freely, figure out coordination themselves. What I found is that the opposite is true for reliable pipelines: tight contracts, scoped context, enforced schemas, explicit coordination protocols.</p>
+
+<p>The complexity in this system isn’t in the agents — it’s in the connective tissue. The three-tier memory system, the artifact contracts, the HITL gateway, the QA loop, the context compressor. Each was built to solve a specific failure mode I hit in an earlier version. None of them are glamorous. All of them are necessary.</p>
+
+<p>If you’re building agentic systems for production use, start with the handoffs, not the agents. Get the contracts right first. The agents are the easy part.</p>
+
+<p>The full codebase is at <a href="https://github.com/shanmuga-sundaram-n/sdlc-factory">github.com/shanmuga-sundaram-n/sdlc-factory</a>. Questions and contributions welcome.</p>
+
+            </div>
+
+            
+            <div class="tags mt-xl">
+                
+                <span class="tag">multi-agent</span>
+                
+                <span class="tag">llm</span>
+                
+                <span class="tag">sdlc</span>
+                
+                <span class="tag">claude</span>
+                
+                <span class="tag">openai</span>
+                
+                <span class="tag">python</span>
+                
+                <span class="tag">fastapi</span>
+                
+                <span class="tag">sqlite</span>
+                
+                <span class="tag">devops</span>
+                
+                <span class="tag">agentic-ai</span>
+                
+            </div>
+            
+
+            <div class="mt-xl" style="padding-top: var(--space-xl); border-top: 1px solid var(--color-border);">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-md);">
+                    
+                    <a href="/blog/2026/04/01/why-teams-fail-at-collaboration-ddd/" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Previous Post
+                    </a>
+                    
+
+                    
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-xl">
+            <a href="/blog/" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Back to Blog
+            </a>
+        </div>
+
+        <section class="subscribe-section">
+  <div class="subscribe-inner">
+    <div class="subscribe-icon">
+      <i class="fas fa-envelope-open-text"></i>
+    </div>
+    <h2 class="subscribe-title">Stay in the loop</h2>
+    <p class="subscribe-description">
+      Get notified when I publish new articles on architecture, AI, and engineering.
+      No spam — just good technical content.
+    </p>
+
+    <form class="subscribe-form" id="subscribe-form" novalidate>
+      <div class="subscribe-input-group">
+        <input
+          type="email"
+          id="subscribe-email"
+          name="email"
+          class="subscribe-input"
+          placeholder="your@email.com"
+          autocomplete="email"
+          required
+        />
+        <button type="submit" class="subscribe-btn" id="subscribe-btn">
+          <span class="btn-text">Subscribe</span>
+          <span class="btn-loading" hidden>
+            <i class="fas fa-spinner fa-spin"></i>
+          </span>
+        </button>
+      </div>
+      <div class="subscribe-feedback" id="subscribe-feedback" hidden></div>
+    </form>
+
+    <p class="subscribe-note">
+      <i class="fas fa-rss"></i>
+      Prefer RSS? <a href="/feed.xml" target="_blank" rel="noopener">Subscribe via feed</a>
+    </p>
+  </div>
+</section>
+
+<script>
+(function () {
+  const form = document.getElementById('subscribe-form');
+  if (!form) return;
+
+  const emailInput = document.getElementById('subscribe-email');
+  const btn = document.getElementById('subscribe-btn');
+  const btnText = btn.querySelector('.btn-text');
+  const btnLoading = btn.querySelector('.btn-loading');
+  const feedback = document.getElementById('subscribe-feedback');
+
+  
+  const BUTTONDOWN_USERNAME = "shanmuga_sundaram";
+  
+
+  function showFeedback(message, isSuccess) {
+    feedback.textContent = message;
+    feedback.className = 'subscribe-feedback ' + (isSuccess ? 'subscribe-feedback--success' : 'subscribe-feedback--error');
+    feedback.hidden = false;
+  }
+
+  function setLoading(loading) {
+    btn.disabled = loading;
+    btnText.hidden = loading;
+    btnLoading.hidden = !loading;
+  }
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const email = emailInput.value.trim();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showFeedback('Please enter a valid email address.', false);
+      return;
+    }
+
+    if (!BUTTONDOWN_USERNAME) {
+      showFeedback('Subscription is not configured yet. Please try again later.', false);
+      return;
+    }
+
+    setLoading(true);
+    feedback.hidden = true;
+
+    try {
+      const formData = new FormData();
+      formData.append('email', email);
+
+      const response = await fetch(
+        'https://buttondown.email/api/emails/embed-subscribe/' + BUTTONDOWN_USERNAME,
+        { method: 'POST', body: formData }
+      );
+
+      if (response.ok || response.status === 302) {
+        showFeedback('You\'re subscribed! Check your inbox to confirm.', true);
+        emailInput.value = '';
+      } else if (response.status === 400) {
+        const data = await response.json().catch(() => ({}));
+        const msg = data.email ? data.email[0] : 'This email is already subscribed or invalid.';
+        showFeedback(msg, false);
+      } else {
+        showFeedback('Something went wrong. Please try again.', false);
+      }
+    } catch (err) {
+      showFeedback('Network error. Please check your connection and try again.', false);
+    } finally {
+      setLoading(false);
+    }
+  });
+})();
+</script>
+
+    </div>
+</article>
+
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: false, theme: 'dark', securityLevel: 'loose' });
+
+    document.querySelectorAll('pre > code.language-mermaid').forEach(function(code) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'mermaid-wrapper';
+        const div = document.createElement('div');
+        div.className = 'mermaid';
+        div.textContent = code.textContent;
+        wrapper.appendChild(div);
+        code.parentElement.replaceWith(wrapper);
+    });
+
+    await mermaid.run();
+
+    document.querySelectorAll('.mermaid-wrapper svg').forEach(function(svg) {
+        const w = svg.getAttribute('width');
+        const h = svg.getAttribute('height');
+        if (w && h && !svg.getAttribute('viewBox')) {
+            svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+        }
+        svg.removeAttribute('width');
+        svg.removeAttribute('height');
+    });
+</script>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <div class="social-links">
+          
+          <a href="https://github.com/shanmuga-sundaram-n" class="social-link" target="_blank" rel="noopener" aria-label="GitHub">
+            <i class="fab fa-github"></i>
+          </a>
+          
+          <a href="https://www.linkedin.com/in/shan-profile/" class="social-link" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <i class="fab fa-linkedin"></i>
+          </a>
+          
+          <a href="tel:+919790050474" class="social-link" aria-label="Phone">
+            <i class="fas fa-phone-alt"></i>
+          </a>
+          <a href="https://wa.me/919790050474" class="social-link" target="_blank" rel="noopener" aria-label="WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+          </a>
+        </div>
+        <p class="footer-copy">&copy; 2026 Shanmuga Sundaram Natarajan (Shan). All rights reserved.</p>
+        <div class="footer-counter">
+          <div class="counter-digits">
+            <script type='text/javascript' src='https://www.freevisitorcounters.com/auth.php?id=5eae4d5930301d43fb2dd3648a2cd2c207fb0d34'></script>
+            <script type="text/javascript" src="https://www.freevisitorcounters.com/en/home/counter/1529109/t/5"></script>
+          </div>
+          <a href='https://www.free-counters.org/' class="footer-counter-link">Visitors</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+
+    // Header scroll effect
+    const header = document.getElementById('header');
+    let lastScroll = 0;
+
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+
+      if (currentScroll > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+
+      lastScroll = currentScroll;
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+  </script>
+
+  <!-- Site Search Modal -->
+  <div id="site-search-overlay" class="site-search-overlay" role="dialog" aria-modal="true" aria-label="Site search">
+    <div class="site-search-modal">
+      <div class="site-search-header">
+        <i class="fas fa-search site-search-icon"></i>
+        <input
+          type="text"
+          id="site-search-input"
+          class="site-search-input"
+          placeholder="Search pages, posts, projects…"
+          autocomplete="off"
+          spellcheck="false"
+        >
+        <button class="site-search-close" id="site-search-close" aria-label="Close search">
+          <kbd>Esc</kbd>
+        </button>
+      </div>
+      <div id="site-search-results" class="site-search-results">
+        <p class="site-search-hint">Type to search pages, posts &amp; projects…</p>
+      </div>
+      <div class="site-search-footer">
+        <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
+        <span><kbd>↵</kbd> open</span>
+        <span><kbd>Esc</kbd> close</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Theme Switcher Script -->
+  <script src="/assets/js/theme-switcher.js"></script>
+
+  <!-- Fuse.js + Site Search -->
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
+  <script src="/assets/js/site-search.js"></script>
+
+</body>
+
+</html>

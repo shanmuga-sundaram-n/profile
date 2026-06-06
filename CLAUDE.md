@@ -67,6 +67,6 @@ serve.py             # Python dev server for static preview (serves _site/)
 ## Style Conventions
 - CSS uses BEM-like naming (`.project-card`, `.project-title`, `.project-content`)
 - CSS variables follow `--color-*`, `--space-*`, `--font-size-*`, `--radius-*` naming
-- Layouts use Liquid templating with Jekyll variables (`{{ site.* }}`, `{{ page.* }}`)
+- Layouts use Liquid templating with Jekyll variables (`{% raw %}{{ site.* }}{% endraw %}`, `{% raw %}{{ page.* }}{% endraw %}`)
 - Content pages use Markdown with YAML front matter (`layout`, `title`, `description`, `permalink`)
 - HTML in content pages uses utility classes: `grid grid-2`, `card card-glass`, `text-center`, `mt-xl`
