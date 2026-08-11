@@ -29,7 +29,7 @@ assets/
     style.scss       # Main stylesheet (~985 lines) — CSS variables, components, responsive
     theme-switcher.css  # Theme & mode toggle styles, theme color/font variables
   js/
-    theme-switcher.js   # Dark/light mode toggle + theme color switcher (purple-pink / orange-red)
+    theme-switcher.js   # Dark/light mode toggle
   images/            # Project screenshots, profile photo, logo
 index.md             # Homepage (uses home layout)
 about.md             # About page with professional experience, skills, education
@@ -44,9 +44,8 @@ serve.py             # Python dev server for static preview (serves _site/)
 ## Key Architecture Decisions
 - **No default theme** (`theme: null` in `_config.yml`) — all styling is custom CSS
 - **CSS variables** for theming — colors, spacing, typography defined in `:root`
-- **Two color themes**: `orange-red` (default) and `purple-pink`, each with distinct fonts
+- **Single color theme**: `orange-red`, set via a fixed `data-theme="orange-red"` attribute on `<html>` (no theme picker UI)
 - **Dark/light mode**: toggled via `data-mode` attribute on `<html>`, persisted in localStorage
-- **Theme switching**: toggled via `data-theme` attribute, persisted in localStorage
 - **Fixed header** with scroll effect and mobile hamburger menu
 - **Glass-morphism cards** (`card-glass`) with backdrop-filter blur
 
